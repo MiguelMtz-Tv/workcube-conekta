@@ -1,0 +1,66 @@
+<div class="flex m-4 sm:w-80 shadow-md border border-zinc-300 rounded-md bg-white">
+    <img class="w-24 object-cover rounded-l-md max-sm:hidden" draggable="false"
+        src="https://hoydirectorio.com/wp-content/uploads/cache/images/bbva-bancomer-queretaro-corregidora-hoy-directorio-qro/bbva-bancomer-queretaro-corregidora-hoy-directorio-qro-3255170922.jpg">
+    <div class="flex flex-col flex-grow rounded-r-md p-3">
+        <span class="text-lg mb-2 leading-tight">Terminación {{finishedIn}}</span>
+        <span class="text-sm text-secondary text-zinc-700">{{owner}}</span>
+        <span class="text-sm text-secondary mt-4 text-zinc-700">Vencimiento: {{expiration | mask: '00/00'}}</span>
+    </div>
+    <div class="flex p-2 relative">
+        <app-dropdown>
+            <button class="button-name" [matMenuTriggerFor]="menu">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                    stroke="currentColor" class="w-6 h-6 hover:bg-zinc-200 rounded-full transtion duration-200">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M12 6.75a.75.75 0 110-1.5.75.75 0 010 1.5zM12 12.75a.75.75 0 110-1.5.75.75 0 010 1.5zM12 18.75a.75.75 0 110-1.5.75.75 0 010 1.5z" />
+                </svg>
+            </button>
+            <mat-menu #menu="matMenu">
+                <button mat-menu-item (click)="openEditModal()"><span class="text-sm">Editar</span></button>
+                <button mat-menu-item (click)="openDeleteModal()"><span class="text-sm">Eliminar</span></button>
+            </mat-menu>
+        </app-dropdown>
+    </div>
+</div>
+
+<!-- edit modal -->
+<app-modal class="flex w-full">
+    <a #editModal class="button-name hidden">
+        Editar
+    </a>
+    <div class="modal-body pt-6">
+        <form [formGroup]="form" (ngSubmit)="onSubmit(id)" class="flex justify-center flex-col w-full">
+            <mat-form-field class="my-2">
+                <mat-label>Cambiar fecha de vencimiento</mat-label>
+                <input matInput type="text" placeholder="{{expiration | mask: '00/00'}}"
+                    formControlName="expiration" mask="00/00">
+            </mat-form-field>
+            <div class="flex justify-center">
+                <button type="button" mat-stroked-button class="m-4" (click)="closeModal()">Cancelar</button>
+                <button type="submit" [disabled]="!form.valid" mat-flat-button color="primary" class="m-4">Guardar</button>
+            </div>
+        </form>
+    </div>
+</app-modal>
+
+<!-- delete modal -->
+<app-modal class="flex w-full ">
+    <a #deleteModal class="button-name hidden">
+        Eliminar
+    </a>
+    <div class="modal-body">
+        <h2 class="font-semibold text-lg text-center">¿Seguro que deseas eliminar este metodo de pago?</h2>
+        <div class="border rounded flex flex-col justify-center items-center p-4 my-4">
+            <span>Eliminar tarjeta con terminación en: {{finishedIn}}</span>
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                stroke="currentColor" class="w-6 h-6 mt-3">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M20.25 7.5l-.625 10.632a2.25 2.25 0 01-2.247 2.118H6.622a2.25 2.25 0 01-2.247-2.118L3.75 7.5m6 4.125l2.25 2.25m0 0l2.25 2.25M12 13.875l2.25-2.25M12 13.875l-2.25 2.25M3.375 7.5h17.25c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125z" />
+            </svg>
+        </div>
+        <div class="flex justify-center">
+            <button mat-stroked-button class="m-4" (click)="closeModal()">Cancelar</button>
+            <button mat-flat-button color="primary" class="m-4" (click)="deleteCard(id)">Eliminar</button>
+        </div>
+    </div>
+</app-modal>

@@ -1,0 +1,35 @@
+<app-auth-layout>
+    <div class="flex flex-col p-4">
+        <div class="flex justify-between">
+            <img src="http://treo.workcubeapp.com/assets/images/logo/logo.svg" class="w-20" draggable="false">
+            <app-page-title title="Bienvenido" subtitle="Inicia sesión en tu cuenta"/>
+        </div>
+        <form action="">
+            <div class="flex flex-col mb-6">
+                <label class="text-sm  mb-2" for="">Correo o usuario</label>
+                <input type="text" class="p-2 border border-zinc-300 rounded" placeholder="Ingresa tu correo o usuario">
+            </div>
+            <div class="flex flex-col mb-6">
+                <label class="text-sm  mb-2" for="">Contraseña</label>
+                <input type="password" class="p-2 border border-zinc-300 rounded" placeholder="Ingresa tu contraseña">
+            </div>
+            <div class="flex justify-between mb-6">
+                <div class="flex items-center">
+                    <input type="checkbox" name="" id="remember-me" class="mr-1 w-6 h-4">
+                    <label for="remember-me" class="text-sm text-zinc-700 ">Recuerdame</label>
+                </div>
+                <div class="flex items-center">
+                    <a href="" class="text-sm text-indigo-600 ">Olvidé mi contraseña</a>
+                </div>
+            </div>
+            <div class="flex">
+                <button [routerLink]="['/servicios']" type="button" class="bg-indigo-600 rounded p-2 w-full text-white ">
+                    Iniciar sesión
+                </button>
+            </div>
+        </form>
+        <div class="flex justify-center items-center mt-4 pt-2 border-t border-t-zinc-300">
+            <p class="text-sm">¿No tienes una cuenta? <a [routerLink]="['/registro']" class=" text-indigo-600">Crea una</a></p>
+        </div>
+    </div>
+</app-auth-layout>

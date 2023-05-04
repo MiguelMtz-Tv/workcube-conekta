@@ -1,0 +1,4 @@
+/* Estilo para cubrir el fondo cuando el modal está abierto */
+.modal-open{
+    background: #1f1f205e;
+}

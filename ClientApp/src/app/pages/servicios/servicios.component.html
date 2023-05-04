@@ -1,0 +1,16 @@
+<!-- servicios disponibles -->
+<div class="m-auto md:w-3/4">
+    <app-page-title title="Mis servicios"/>
+
+    <app-service-card *ngFor="let service of services" id="{{service.id}}" name="{{service.name}}" status="{{service.status}}"
+        description="{{service.desc}}" cost="{{service.cost}}" period="{{service.period}}" startDate="{{service.startDate}}">
+    </app-service-card>
+    <!-- Cupones-->
+    <div class="flex flex-col">
+        <h2 class="font-bold text-lg">Cupones disponibles</h2>
+        <div class="flex flex-wrap h-fit">
+            <app-cupon></app-cupon>
+            <app-cupon></app-cupon>
+        </div>
+    </div>
+</div>

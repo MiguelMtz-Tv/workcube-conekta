@@ -1,0 +1,9 @@
+<body>
+  <main class="container">
+    <app-main-layout *ngIf="layout">
+      <router-outlet></router-outlet>
+    </app-main-layout>
+
+    <router-outlet *ngIf="login"></router-outlet>
+  </main>
+</body>

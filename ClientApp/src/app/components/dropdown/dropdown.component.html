@@ -1,0 +1,6 @@
+<button (click)="toggle()" class="w-full">
+    <ng-content select=".button-name" class="w-full"></ng-content>
+</button>
+<div *ngIf="isDropdownOpen">
+    <ng-content select=".dropdown-body"></ng-content>
+</div>

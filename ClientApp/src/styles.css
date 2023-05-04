@@ -1,0 +1,17 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+@import '../node_modules/@ngneat/hot-toast/src/styles/styles.css';
+@import '../node_modules/@angular/material/prebuilt-themes/indigo-pink.css';
+
+
+*::-webkit-scrollbar {
+    display: none;
+}
+
+body{
+    background: #eaecee;
+    overflow-x: hidden;
+}
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
