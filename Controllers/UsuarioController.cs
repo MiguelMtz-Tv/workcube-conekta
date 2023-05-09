@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Identity;
+
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -8,11 +10,18 @@ namespace workcube_pagos.Controllers
     [ApiController]
     public class UsuarioController : ControllerBase
     {
+        private DataContext _context;
+
+        public UsuarioController(DataContext context)
+        {
+            _context = context;
+        }
+
         // GET: api/<UsuarioController>
         [HttpGet]
-        public IEnumerable<string> Get()
+        public async Task<List<UsuarioModel>> Get()
         {
-            return new string[] { "value1", "value2" };
+            return await _context.Usuario.ToListAsync();
         }
 
         // GET api/<UsuarioController>/5
@@ -24,8 +33,25 @@ namespace workcube_pagos.Controllers
 
         // POST api/<UsuarioController>
         [HttpPost]
-        public void Post([FromBody] string value)
+        public async Task<UsuarioModel> Post(UsuarioModel usuario)
         {
+            //var NewUser = new UsuarioModel();
+
+            /*NewUser.IdCliente = usuario.IdCliente;
+            NewUser.Nombre = usuario.Nombre;
+            NewUser.ApellidoPat = usuario.ApellidoPat;
+            NewUser.ApellidoMat = usuario.ApellidoMat;
+            NewUser.Usuario = usuario.Usuario;
+
+            //hash password
+            var passwordHasher = new PasswordHasher<UsuarioModel>();
+            var password = usuario.Contrasenia;
+            var hashedPassword = passwordHasher.HashPassword(null, password);
+            NewUser.Contrasenia = hashedPassword; */
+
+            /*_context.Usuario.AddAsync(usuario);
+            await _context.SaveChangesAsync();*/
+            return usuario; 
         }
 
         // PUT api/<UsuarioController>/5

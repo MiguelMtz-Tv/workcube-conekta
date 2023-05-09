@@ -1,5 +1,5 @@
 global using workcube_pagos.Models;
-using workcube_pagos.Data;
+global using workcube_pagos.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
