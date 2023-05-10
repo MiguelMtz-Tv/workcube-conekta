@@ -42,7 +42,7 @@
                 <input type="password" class="p-2 border border-zinc-300 rounded" placeholder="Confirma tu contraseña">
             </div>
             <div class="flex">
-                <button mat-flat-button color="primary" [routerLink]="['/servicios']" type="button" class="w-full">
+                <button mat-flat-button color="primary" [routerLink]="['/servicios']" type="button" class="w-full" (click)="addUser()">
                     Crear cuenta
                 </button>
             </div>

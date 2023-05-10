@@ -1,6 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Identity;
-
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -46,13 +44,25 @@ namespace workcube_pagos.Controllers
             //hash password
             var passwordHasher = new PasswordHasher<UsuarioModel>();
             var password = usuario.Contrasenia;
-            var hashedPassword = passwordHasher.HashPassword(null, password);
+            var hashedPassword = passwordHasher.HashPassword(usuario, password);
             NewUser.Contrasenia = hashedPassword; 
 
-            _context.Usuario.AddAsync(NewUser);
+            await _context.Usuario.AddAsync(NewUser);
             await _context.SaveChangesAsync();
             return NewUser; 
         }
+
+        //POST api/<UsuarioController>/login
+        [HttpPost("login")]
+        public async Task<UsuarioModel?> getUsuario(UsuarioModel usuario)
+        {
+            var emailOrUser = usuario.Usuario;
+            var contrasenia = usuario.Contrasenia;
+            
+            var foundedUser = await _context.Usuario.Where(u => u.Correo == emailOrUser || u.Usuario == emailOrUser && u.Contrasenia == contrasenia).FirstOrDefaultAsync();
+            return foundedUser;
+        }
+
 
         // PUT api/<UsuarioController>/5
         [HttpPut("{id}")]
