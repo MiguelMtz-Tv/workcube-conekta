@@ -5,7 +5,7 @@ namespace workcube_pagos.Models
     public class ClienteModel
     {
         [Key] public int IdCliente { get; set; }
-        public UsuarioModel? Usuario { get; set; }
+        public virtual UsuarioModel? Usuario { get; set; }
         public string RFC { get; set; } = string.Empty;
         public string RazonSocial { get; set; } = string.Empty;
         public string NombreComercial { get; set; } = string.Empty;

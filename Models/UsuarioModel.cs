@@ -6,7 +6,7 @@ namespace workcube_pagos.Models
     {
         [Key] public int IdUsuario { get; set; }
         public int IdCliente { get; set; }
-        public ClienteModel? Cliente { get; set; }
+        public virtual ClienteModel? Cliente { get; set; }
         public string Usuario { get; set; } = string.Empty;
         public string Correo { get;} = string.Empty;
         public string Contrasenia { get; set; } = string.Empty;

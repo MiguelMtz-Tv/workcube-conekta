@@ -35,9 +35,9 @@ namespace workcube_pagos.Controllers
         [HttpPost]
         public async Task<UsuarioModel> Post(UsuarioModel usuario)
         {
-            //var NewUser = new UsuarioModel();
+            var NewUser = new UsuarioModel();
 
-            /*NewUser.IdCliente = usuario.IdCliente;
+            NewUser.IdCliente = usuario.IdCliente;
             NewUser.Nombre = usuario.Nombre;
             NewUser.ApellidoPat = usuario.ApellidoPat;
             NewUser.ApellidoMat = usuario.ApellidoMat;
@@ -47,11 +47,11 @@ namespace workcube_pagos.Controllers
             var passwordHasher = new PasswordHasher<UsuarioModel>();
             var password = usuario.Contrasenia;
             var hashedPassword = passwordHasher.HashPassword(null, password);
-            NewUser.Contrasenia = hashedPassword; */
+            NewUser.Contrasenia = hashedPassword; 
 
-            /*_context.Usuario.AddAsync(usuario);
-            await _context.SaveChangesAsync();*/
-            return usuario; 
+            _context.Usuario.AddAsync(NewUser);
+            await _context.SaveChangesAsync();
+            return NewUser; 
         }
 
         // PUT api/<UsuarioController>/5
