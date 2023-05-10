@@ -15,7 +15,7 @@
             </div>
             <div class="flex justify-between mb-6">
                 <div class="flex items-center">
-                    <input type="checkbox" name="" id="remember-me" class="mr-1 w-6 h-4">
+                    <mat-checkbox color="primary"></mat-checkbox>
                     <label for="remember-me" class="text-sm text-zinc-700 ">Recuerdame</label>
                 </div>
                 <div class="flex items-center">
@@ -23,7 +23,7 @@
                 </div>
             </div>
             <div class="flex">
-                <button [routerLink]="['/Servicio']" type="button" class="bg-indigo-600 rounded p-2 w-full text-white">
+                <button mat-flat-button color="primary" [routerLink]="['/servicios']" type="button" class="w-full">
                     Iniciar sesión
                 </button>
             </div>

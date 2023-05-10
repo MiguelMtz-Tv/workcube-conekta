@@ -9,6 +9,7 @@ import {MatExpansionModule} from '@angular/material/expansion';
 import {MatCardModule} from '@angular/material/card'; 
 import {MatRadioModule, MAT_RADIO_DEFAULT_OPTIONS} from '@angular/material/radio'; 
 import {MatDialogModule} from '@angular/material/dialog'; 
+import {MatCheckboxModule} from '@angular/material/checkbox'; 
 
 @NgModule({
     imports:[
@@ -22,6 +23,7 @@ import {MatDialogModule} from '@angular/material/dialog';
         MatRadioModule,
         MatCardModule,
         MatDialogModule,
+        MatCheckboxModule,
     ],
     exports:[
         MatButtonModule,
@@ -34,6 +36,7 @@ import {MatDialogModule} from '@angular/material/dialog';
         MatRadioModule,
         MatCardModule,
         MatDialogModule,
+        MatCheckboxModule,
     ],
     providers: [{
         provide: MAT_RADIO_DEFAULT_OPTIONS,
