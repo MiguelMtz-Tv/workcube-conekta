@@ -54,13 +54,29 @@ namespace workcube_pagos.Controllers
 
         //POST api/<UsuarioController>/login
         [HttpPost("login")]
-        public async Task<UsuarioModel?> getUsuario(UsuarioModel usuario)
+        public async Task<ActionResult<UsuarioModel>> getUsuario(UsuarioModel usuario)
         {
             var emailOrUser = usuario.Usuario;
             var contrasenia = usuario.Contrasenia;
+            var foundedUser = await _context.Usuario.Where(u => u.Correo == emailOrUser || u.Usuario == emailOrUser).FirstOrDefaultAsync();
             
-            var foundedUser = await _context.Usuario.Where(u => u.Correo == emailOrUser || u.Usuario == emailOrUser && u.Contrasenia == contrasenia).FirstOrDefaultAsync();
-            return foundedUser;
+            if (foundedUser == null)
+            {
+                return NotFound();
+            }
+
+            var passwordHasher = new PasswordHasher<UsuarioModel>();
+            var verifyPassword = passwordHasher.VerifyHashedPassword(foundedUser, foundedUser.Contrasenia, contrasenia);
+
+            if(verifyPassword == PasswordVerificationResult.Success)
+            {
+                return Ok(foundedUser);
+            }
+            else
+            {
+                return Unauthorized("Contraseña incorrecta");
+            }
+
         }
 
 

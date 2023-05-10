@@ -4,14 +4,14 @@
             <img src="http://treo.workcubeapp.com/assets/images/logo/logo.svg" class="w-20" draggable="false">
             <app-page-title title="Bienvenido" subtitle="Inicia sesión en tu cuenta"/>
         </div>
-        <form action="">
+        <form [formGroup]="form" (ngSubmit)="onSubmit()">
             <div class="flex flex-col mb-6">
                 <label class="text-sm  mb-2" for="">Correo o usuario</label>
-                <input type="text" class="p-2 border border-zinc-300 rounded" placeholder="Ingresa tu correo o usuario">
+                <input type="text" class="p-2 border border-zinc-300 rounded" placeholder="Ingresa tu correo o usuario" formControlName="email">
             </div>
             <div class="flex flex-col mb-6">
                 <label class="text-sm  mb-2" for="">Contraseña</label>
-                <input type="password" class="p-2 border border-zinc-300 rounded" placeholder="Ingresa tu contraseña">
+                <input type="password" class="p-2 border border-zinc-300 rounded" placeholder="Ingresa tu contraseña" formControlName="password">
             </div>
             <div class="flex justify-between mb-6">
                 <div class="flex items-center">
@@ -23,7 +23,7 @@
                 </div>
             </div>
             <div class="flex">
-                <button mat-flat-button color="primary" [routerLink]="['/servicios']" type="button" class="w-full">
+                <button mat-flat-button color="primary" type="submit" class="w-full">
                     Iniciar sesión
                 </button>
             </div>
