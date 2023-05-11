@@ -39,13 +39,18 @@ namespace workcube_pagos.Controllers
             NewUser.Nombre = usuario.Nombre;
             NewUser.ApellidoPat = usuario.ApellidoPat;
             NewUser.ApellidoMat = usuario.ApellidoMat;
-            NewUser.Usuario = usuario.Usuario;
+            NewUser.UserName = usuario.UserName;
+            NewUser.EmailConfirmed = true;
+            NewUser.PhoneNumberConfirmed = true;
+            NewUser.TwoFactorEnabled = true;
+            NewUser.LockoutEnabled = false;
+            NewUser.AccessFailedCount = 0;
 
             //hash password
             var passwordHasher = new PasswordHasher<UsuarioModel>();
-            var password = usuario.Contrasenia;
+            var password = usuario.PasswordHash;
             var hashedPassword = passwordHasher.HashPassword(usuario, password);
-            NewUser.Contrasenia = hashedPassword; 
+            NewUser.PasswordHash = hashedPassword; 
 
             await _context.Usuario.AddAsync(NewUser);
             await _context.SaveChangesAsync();
@@ -56,9 +61,9 @@ namespace workcube_pagos.Controllers
         [HttpPost("login")]
         public async Task<ActionResult<UsuarioModel>> getUsuario(UsuarioModel usuario)
         {
-            var emailOrUser = usuario.Usuario;
-            var contrasenia = usuario.Contrasenia;
-            var foundedUser = await _context.Usuario.Where(u => u.Correo == emailOrUser || u.Usuario == emailOrUser).FirstOrDefaultAsync();
+            var emailOrUser = usuario.UserName;
+            var contrasenia = usuario.PasswordHash;
+            var foundedUser = await _context.Usuario.Where(u => u.Email == emailOrUser || u.UserName == emailOrUser).FirstOrDefaultAsync();
             
             if (foundedUser == null)
             {
@@ -66,7 +71,7 @@ namespace workcube_pagos.Controllers
             }
 
             var passwordHasher = new PasswordHasher<UsuarioModel>();
-            var verifyPassword = passwordHasher.VerifyHashedPassword(foundedUser, foundedUser.Contrasenia, contrasenia);
+            var verifyPassword = passwordHasher.VerifyHashedPassword(foundedUser, foundedUser.PasswordHash, contrasenia);
 
             if(verifyPassword == PasswordVerificationResult.Success)
             {

@@ -2,7 +2,7 @@
 
 namespace workcube_pagos.Data
 {
-    public class DataContext : DbContext
+    public class DataContext : IdentityDbContext //DbContext
     {
         public DataContext(DbContextOptions<DataContext> options): base(options) 
         {}

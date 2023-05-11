@@ -13,12 +13,12 @@ export class SingupComponent {
 
   addUser(){
     this.http.post(`${this.baseUrl}api/usuario`,{
-      IdCliente: 5,
-      Usuario: 'usuario5',
-      Contrasenia: 'mypassword', 
-      Nombre: 'Sheila', 
-      ApellidoPat: 'Rodriguez', 
-      ApellidoMat: 'Leyva', 
+      IdCliente: 1,
+      UserName: 'usuario5',
+      PasswordHash: 'mypassword', 
+      Nombre: 'Miguel', 
+      ApellidoPat: 'Martinez', 
+      ApellidoMat: 'Castro', 
     }).subscribe(res => console.log(res))
   }
   

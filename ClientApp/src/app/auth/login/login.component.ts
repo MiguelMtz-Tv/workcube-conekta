@@ -20,10 +20,11 @@ export class LoginComponent {
     password: new FormControl('', [Validators.required])
   })
 
-  onSubmit(){
-    this.http.post(`${this.baseUrl}api/usuario/login`, {
-      Usuario: this.form.value.email,
-      Contrasenia: this.form.value.password
+  onSubmit() {
+    console.log({ x: this.form.value.email, y: this.form.value.password })
+    this.http.post(`${this.baseUrl}api/auth/login`, {
+      UserName: this.form.value.email,
+      Password: this.form.value.password
     }).subscribe(res => console.log(res))
   }
 

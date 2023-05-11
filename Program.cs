@@ -1,14 +1,19 @@
 global using workcube_pagos.Models;
 global using workcube_pagos.Data;
 global using Microsoft.AspNetCore.Identity;
-global using Microsoft.Extensions.Identity.Core;
+global using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-builder.Services.AddControllersWithViews();
+builder.Services.AddControllers();
+/*builder.Services.AddIdentity<IdentityUser, IdentityRole>()
+    .AddEntityFrameworkStores<DataContext>()
+    .AddDefaultTokenProviders();*/
 builder.Services.AddDbContext<DataContext>(opt => opt.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+builder.Services.AddDefaultIdentity<UsuarioModel>(options => options.SignIn.RequireConfirmedAccount = true).AddEntityFrameworkStores<DataContext>();
 
 builder.Services.Configure<IdentityOptions>(options =>
 {
@@ -52,6 +57,7 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
+app.MapControllers();
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseRouting();
