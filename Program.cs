@@ -1,54 +1,47 @@
-global using workcube_pagos.Models;
+﻿global using workcube_pagos.Models;
 global using workcube_pagos.Data;
 global using Microsoft.AspNetCore.Identity;
+global using Microsoft.AspNetCore.Authentication.JwtBearer;
 global using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
+using Workcube.JwtAutentication;
+using workcube_pagos.Services;
+using workcube_pagos.TokenHandler;
+using System.Globalization;
 
 var builder = WebApplication.CreateBuilder(args);
+//Inyecta las dependencias de JWT.
+builder.Services.AddCustomJwtAuthentication();
 
-// Add services to the container.
-
-builder.Services.AddControllers();
-/*builder.Services.AddIdentity<IdentityUser, IdentityRole>()
-    .AddEntityFrameworkStores<DataContext>()
-    .AddDefaultTokenProviders();*/
+//connection
 builder.Services.AddDbContext<DataContext>(opt => opt.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-builder.Services.AddDefaultIdentity<UsuarioModel>(options => options.SignIn.RequireConfirmedAccount = true).AddEntityFrameworkStores<DataContext>();
+//Registrar servicios
+builder.Services.AddScoped<AspNetUsersService, AspNetUsersService>();
 
-builder.Services.Configure<IdentityOptions>(options =>
+// Generador de contrase�a
+builder.Services.AddIdentity<AspNetUser, IdentityRole>(options =>
 {
-    // Password settings.
-    options.Password.RequireDigit = false;
+    options.Password.RequiredLength = 1;
     options.Password.RequireLowercase = false;
-    options.Password.RequireNonAlphanumeric = false;
     options.Password.RequireUppercase = false;
-    options.Password.RequiredLength = 6;
-    options.Password.RequiredUniqueChars = 1;
+    options.Password.RequireNonAlphanumeric = false;
+    options.Password.RequireDigit = false;
+    options.Password.RequiredUniqueChars = 0;
+})
+.AddEntityFrameworkStores<DataContext>()
+.AddDefaultTokenProviders();
 
-    // Lockout settings.
-    options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
-    options.Lockout.MaxFailedAccessAttempts = 5;
-    options.Lockout.AllowedForNewUsers = true;
-
-    // User settings.
-    options.User.AllowedUserNameCharacters =
-    "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
-    options.User.RequireUniqueEmail = false;
-});
-
-builder.Services.ConfigureApplicationCookie(options =>
-{
-    // Cookie settings
-    options.Cookie.HttpOnly = true;
-    options.ExpireTimeSpan = TimeSpan.FromMinutes(5);
-
-    options.LoginPath = "/Identity/Account/Login";
-    options.AccessDeniedPath = "/Identity/Account/AccessDenied";
-    options.SlidingExpiration = true;
-});
-
+builder.Services.AddControllers();
+builder.Services.AddSingleton<JwtTokenHandler>();
 
 var app = builder.Build();
+
+var cultureInfo = new CultureInfo("es-MX");
+
+CultureInfo.DefaultThreadCurrentCulture = cultureInfo;
+CultureInfo.DefaultThreadCurrentUICulture = cultureInfo;
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
@@ -57,13 +50,13 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
+app.UseAuthentication();
+app.UseAuthorization();
+
 app.MapControllers();
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseRouting();
-app.UseAuthentication();
-app.UseAuthorization(); 
-
 
 app.MapControllerRoute(
     name: "default",

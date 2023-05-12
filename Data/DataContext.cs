@@ -11,14 +11,14 @@ namespace workcube_pagos.Data
         {
             base.OnModelCreating(modelBuilder);
 
-            modelBuilder.Entity<UsuarioModel>()
+            modelBuilder.Entity<AspNetUser>()
                 .HasOne(u => u.Cliente)
                 .WithOne(c => c.Usuario)
-                .HasForeignKey<UsuarioModel>(u => u.IdCliente);
+                .HasForeignKey<AspNetUser>(u => u.IdCliente);
                 
         }
 
-        public DbSet<UsuarioModel> Usuario { get; set; }
-        public DbSet<ClienteModel> Cliente { get; set; }
+        public DbSet<AspNetUser> AspNetUsers { get; set; }
+        public DbSet<Cliente> Clientes { get; set; }
     }
 }

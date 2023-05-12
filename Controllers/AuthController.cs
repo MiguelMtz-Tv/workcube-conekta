@@ -1,73 +1,57 @@
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Diagnostics;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Security.Claims;
+using System.Text;
 using System.Text.Json.Nodes;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.CodeAnalysis;
 using Microsoft.Extensions.Logging;
+using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
+using workcube_pagos.Services;
+using workcube_pagos.TokenHandler;
+using workcube_pagos.ViewModel.Req;
+using workcube_pagos.ViewModel.Res;
 
 namespace workcube_pagos.Controllers
 {
-    public class usuarioAuth
-    {
-        public string UserName { get; set; }
-        public string Password { get; set; }  
-    }
-
     [Route("api/[controller]")]
-    public class AuthController : Controller
+    public class AuthController : ControllerBase
     {
-        private readonly UserManager<UsuarioModel> _userManager;
-        private readonly SignInManager<UsuarioModel> _signInManager;
-        private readonly ILogger<AuthController> _logger;
+        private readonly SignInManager<AspNetUser> _signInManager;
+        private readonly AspNetUsersService _aspNetUsersService;
+        private readonly JwtTokenHandler _jwtTokenHandler;
 
-        public AuthController(ILogger<AuthController> logger, SignInManager<UsuarioModel> signInManager, UserManager<UsuarioModel> userManager)
+        public AuthController(SignInManager<AspNetUser> signInManager, AspNetUsersService aspNetUsersService, JwtTokenHandler jwtTokenHandler)
         {
             _signInManager = signInManager;
-            _logger = logger;
-            _userManager = userManager;
+            _aspNetUsersService = aspNetUsersService;
+            _jwtTokenHandler = jwtTokenHandler;
         }
 
         [HttpPost("login")]
-        public async Task<ActionResult<dynamic>> Login(JsonObject data)
+        public async Task<ActionResult<LoginRes>> Login([FromBody] LoginReq model)
         {
-            dynamic argData = JsonConvert.DeserializeObject<object>(data.ToString()); 
+            var user = await _aspNetUsersService.FindLogin(model.UserName);
             
-
-            if (ModelState.IsValid)
+            if (user == null)
             {
-                var result = await _signInManager.PasswordSignInAsync(
-                    argData.username,
-                    argData.password,
-                    isPersistent: false,
-                    lockoutOnFailure: false
-                );
-
-                if (result.Succeeded)
-                {
-                    _logger.LogInformation("user logged in");
-                    return Ok(Redirect("/servicios"));
-                }
-                else
-                {
-                    return BadRequest("something went wrong by guel :b");
-                }
+                return Unauthorized("Usuario incorrecto o no encontrado");
             }
-            return BadRequest();
-        }
 
-        public IActionResult Index()
-        {
-            return View();
-        }
+            var result = await _signInManager.CheckPasswordSignInAsync(user, model.Password, false);
 
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
-        {
-            return View("Error!");
+            if (result.Succeeded)
+            {
+                return _jwtTokenHandler.GenerateToken(user);
+            }
+                return Unauthorized("Contraseña incorrecta");
         }
     }
 }

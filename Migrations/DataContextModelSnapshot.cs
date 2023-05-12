@@ -175,12 +175,10 @@ namespace workcube_pagos.Migrations
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
                     b.Property<string>("LoginProvider")
-                        .HasMaxLength(128)
-                        .HasColumnType("nvarchar(128)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("ProviderKey")
-                        .HasMaxLength(128)
-                        .HasColumnType("nvarchar(128)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("ProviderDisplayName")
                         .HasColumnType("nvarchar(max)");
@@ -217,12 +215,10 @@ namespace workcube_pagos.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("LoginProvider")
-                        .HasMaxLength(128)
-                        .HasColumnType("nvarchar(128)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Name")
-                        .HasMaxLength(128)
-                        .HasColumnType("nvarchar(128)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Value")
                         .HasColumnType("nvarchar(max)");
@@ -232,7 +228,7 @@ namespace workcube_pagos.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("workcube_pagos.Models.ClienteModel", b =>
+            modelBuilder.Entity("workcube_pagos.Models.Cliente", b =>
                 {
                     b.Property<int>("IdCliente")
                         .ValueGeneratedOnAdd()
@@ -241,73 +237,61 @@ namespace workcube_pagos.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdCliente"));
 
                     b.Property<string>("Code")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("CodigoPostal")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Correo")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Direccion")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
 
                     b.Property<string>("NombreComercial")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("NumeroContrato")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("RFC")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("RazonSocial")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Telefono")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("IdCliente");
 
-                    b.ToTable("Cliente");
+                    b.ToTable("Clientes");
                 });
 
-            modelBuilder.Entity("workcube_pagos.Models.UsuarioModel", b =>
+            modelBuilder.Entity("workcube_pagos.Models.AspNetUser", b =>
                 {
                     b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityUser");
 
                     b.Property<string>("ApellidoMat")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ApellidoPat")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("IdCliente")
                         .HasColumnType("int");
 
                     b.Property<string>("Nombre")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasIndex("IdCliente")
                         .IsUnique()
                         .HasFilter("[IdCliente] IS NOT NULL");
 
-                    b.HasDiscriminator().HasValue("UsuarioModel");
+                    b.HasDiscriminator().HasValue("AspNetUser");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -361,18 +345,18 @@ namespace workcube_pagos.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("workcube_pagos.Models.UsuarioModel", b =>
+            modelBuilder.Entity("workcube_pagos.Models.AspNetUser", b =>
                 {
-                    b.HasOne("workcube_pagos.Models.ClienteModel", "Cliente")
+                    b.HasOne("workcube_pagos.Models.Cliente", "Cliente")
                         .WithOne("Usuario")
-                        .HasForeignKey("workcube_pagos.Models.UsuarioModel", "IdCliente")
+                        .HasForeignKey("workcube_pagos.Models.AspNetUser", "IdCliente")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Cliente");
                 });
 
-            modelBuilder.Entity("workcube_pagos.Models.ClienteModel", b =>
+            modelBuilder.Entity("workcube_pagos.Models.Cliente", b =>
                 {
                     b.Navigation("Usuario");
                 });
