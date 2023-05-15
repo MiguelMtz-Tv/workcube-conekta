@@ -9,7 +9,7 @@ namespace workcube_pagos.Models
         [Key]
         public int IdServicioTipo { get; set; }
         public List<Servicio> Servicio { get; set; }
-        public string Name { get; set; }
+        public string Nombre { get; set; }
         public string Description { get; set;}
         [Column(TypeName = "decimal(18, 2)")]
         public decimal Costo { get; set; }
