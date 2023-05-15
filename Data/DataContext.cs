@@ -40,14 +40,14 @@ namespace workcube_pagos.Data
             modelBuilder.Entity<Cupon>()
                 .HasOne(c => c.Servicio)
                 .WithMany(s => s.Cupones)
-                .HasForeignKey(c => c.IdServicio).OnDelete(DeleteBehavior.NoAction);
+                .HasForeignKey(c => c.IdServicio).OnDelete(DeleteBehavior.Restrict);
 
 
             //relacion cupon/cliente N:1
             modelBuilder.Entity<Cupon>()
                 .HasOne(c => c.Cliente)
                 .WithMany(c => c.Cupones)
-                .HasForeignKey(c => c.IdCliente).OnDelete(DeleteBehavior.NoAction);
+                .HasForeignKey(c => c.IdCliente).OnDelete(DeleteBehavior.Restrict);
         }
 
         public DbSet<AspNetUser> AspNetUsers { get; set; }
