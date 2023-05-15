@@ -39,7 +39,7 @@ namespace workcube_pagos.Controllers
         public async Task<ActionResult<LoginRes>> Login([FromBody] LoginReq model)
         {
             var user = await _aspNetUsersService.FindLogin(model.UserName);
-            
+
             if (user == null)
             {
                 return Unauthorized("Usuario incorrecto o no encontrado");

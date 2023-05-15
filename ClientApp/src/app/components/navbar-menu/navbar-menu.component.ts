@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'app-navbar-menu',
@@ -10,7 +11,7 @@ export class NavbarMenuComponent implements OnInit {
   public href: string = ''
   public activeLink: string = '/servicios'
 
-  constructor(private router: Router){}
+  constructor(private router: Router, private auth: AuthService){}
 
   links = [
     {
@@ -28,5 +29,10 @@ export class NavbarMenuComponent implements OnInit {
         this.activeLink = e.url
       }
     })
+  }
+
+  closeSession(){
+    this.auth.removeToken();
+    this.router.navigate(['/'])
   }
 }

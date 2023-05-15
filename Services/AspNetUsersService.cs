@@ -20,9 +20,9 @@ namespace workcube_pagos.Services
             _userManager = userManager;
         }
 
-        public async Task<AspNetUser> FindLogin(string email)
+        public async Task<AspNetUser> FindLogin(string UserName)
         {
-            return await _context.AspNetUsers.Where(itemUser => itemUser.Email == email).FirstOrDefaultAsync();
+            return await _context.AspNetUsers.Where(itemUser => itemUser.UserName == UserName).FirstOrDefaultAsync();
         }
         
         //para añadir un nuevo usuario
