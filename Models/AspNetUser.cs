@@ -1,5 +1,4 @@
 ﻿using System.ComponentModel.DataAnnotations;
-
 namespace workcube_pagos.Models
 {
     public class AspNetUser : IdentityUser

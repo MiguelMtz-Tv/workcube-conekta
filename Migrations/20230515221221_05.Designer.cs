@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using workcube_pagos.Data;
 
@@ -11,9 +12,11 @@ using workcube_pagos.Data;
 namespace workcube_pagos.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20230515221221_05")]
+    partial class _05
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -457,13 +460,13 @@ namespace workcube_pagos.Migrations
                     b.HasOne("workcube_pagos.Models.Cliente", "Cliente")
                         .WithMany("Cupones")
                         .HasForeignKey("IdCliente")
-                        .OnDelete(DeleteBehavior.NoAction)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("workcube_pagos.Models.Servicio", "Servicio")
                         .WithMany("Cupones")
                         .HasForeignKey("IdServicio")
-                        .OnDelete(DeleteBehavior.NoAction)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Cliente");
@@ -474,7 +477,7 @@ namespace workcube_pagos.Migrations
             modelBuilder.Entity("workcube_pagos.Models.Servicio", b =>
                 {
                     b.HasOne("workcube_pagos.Models.Cliente", "Cliente")
-                        .WithMany("Servicios")
+                        .WithMany("Servicio")
                         .HasForeignKey("IdCliente")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -513,7 +516,7 @@ namespace workcube_pagos.Migrations
                 {
                     b.Navigation("Cupones");
 
-                    b.Navigation("Servicios");
+                    b.Navigation("Servicio");
 
                     b.Navigation("Usuario");
                 });
