@@ -41,9 +41,9 @@ namespace workcube_pagos.TokenHandler
             return new LoginRes
             {
                 Token = token,
-                //Id = objAspNetUser.Id,
+                Id = objAspNetUser.Id,
+                NombreCompleto = objAspNetUser.NombreCompleto,
                 //Expiration = tokenExpiryTimeStamp,
-                //Nombre = objAspNetUser.NombreCompleto
             };
         }
     }

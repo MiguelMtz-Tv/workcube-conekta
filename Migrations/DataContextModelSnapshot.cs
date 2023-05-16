@@ -294,7 +294,10 @@ namespace workcube_pagos.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("vigencia")
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("Vigencia")
                         .HasColumnType("datetime2");
 
                     b.HasKey("IdCupon");
@@ -341,6 +344,9 @@ namespace workcube_pagos.Migrations
 
                     b.Property<string>("KeyServicio")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
 
                     b.Property<DateTime>("Vigencia")
                         .HasColumnType("datetime2");

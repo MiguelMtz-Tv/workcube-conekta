@@ -12,8 +12,8 @@ using workcube_pagos.Data;
 namespace workcube_pagos.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20230515224423_11")]
-    partial class _11
+    [Migration("20230516152258_01")]
+    partial class _01
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -297,7 +297,10 @@ namespace workcube_pagos.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("vigencia")
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("Vigencia")
                         .HasColumnType("datetime2");
 
                     b.HasKey("IdCupon");
@@ -345,6 +348,9 @@ namespace workcube_pagos.Migrations
                     b.Property<string>("KeyServicio")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
                     b.Property<DateTime>("Vigencia")
                         .HasColumnType("datetime2");
 
@@ -373,7 +379,7 @@ namespace workcube_pagos.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Name")
+                    b.Property<string>("Nombre")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("IdServicioTipo");
@@ -460,13 +466,13 @@ namespace workcube_pagos.Migrations
                     b.HasOne("workcube_pagos.Models.Cliente", "Cliente")
                         .WithMany("Cupones")
                         .HasForeignKey("IdCliente")
-                        .OnDelete(DeleteBehavior.NoAction)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("workcube_pagos.Models.Servicio", "Servicio")
                         .WithMany("Cupones")
                         .HasForeignKey("IdServicio")
-                        .OnDelete(DeleteBehavior.NoAction)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Cliente");

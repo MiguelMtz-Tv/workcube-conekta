@@ -14,16 +14,17 @@ namespace workcube_pagos.Models
         public List<Cupon> Cupones { get; set; }
         public DateTime Vigencia { get; set; }
         [EnumDataType(typeof(Status))]
+        public Status Status { get; set; }
         public string KeyServicio { get; set; }
     }
 
     public enum Status
     {
-        [Display(Name = "Vigente")]
+        [Display(Name = "Vigente")] //0
         Vigente,
-        [Display(Name = "Vencido")]
+        [Display(Name = "Vencido")] //1
         Vencido,
-        [Display(Name = "Cancelado")]
+        [Display(Name = "Cancelado")] //2
         Cancelado
     }
 }

@@ -17,7 +17,8 @@ namespace workcube_pagos.Models
         [Column(TypeName = "decimal(18, 2)")]
         public decimal Monto { get; set; }
         [EnumDataType(typeof(CuponStatus))]
-        public DateTime vigencia { get; set; }
+        public CuponStatus Status { get; set; }
+        public DateTime Vigencia { get; set; }
     }
 
     public enum CuponStatus

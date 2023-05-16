@@ -10,24 +10,36 @@ export class AuthService {
   private baseUrl: string = getBaseUrl();
 
 
-  constructor(private _httpClient: HttpClient) {
+  constructor(private http: HttpClient) {
     this._authenticated = false
   }
 
   //setter anf getter for acces token 
 
   login(objUser: any) {
-    this._httpClient.post<any>(`${this.baseUrl}api/auth/login`, objUser /*{UserName, Password}*/).subscribe(res => this.storeToken(res.token));
+    this.http.post<any>(this.baseUrl+'api/auth/login', objUser /*{UserName, Password}*/).subscribe(res => this.storeData(res.token, res.id, res.nombreCompleto));
   }
 
   //store token 
-  storeToken(token : string){
+  storeData(token: string, id: string, NombreCompleto: string){
     localStorage.setItem('token', token)
+    localStorage.setItem('Id', id)
+    localStorage.setItem('NombreCompleto', NombreCompleto)
   }
 
   //get token
   getToken(){
     return localStorage.getItem('token')
+  }
+
+  //get Id
+  getId(){
+    return localStorage.getItem('id')
+  }
+
+  //get nombreCompleto
+  getNombreCompleto(){
+    return localStorage.getItem('nombreCompleto')
   }
 
   //remove token (close session)
