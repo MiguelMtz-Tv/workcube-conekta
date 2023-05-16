@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { AspNetUserService } from 'src/app/services/asp-net-user.service';
 import { FormGroup, FormControl } from '@angular/forms';
+import { HotToastService } from '@ngneat/hot-toast';
 
 @Component({
   selector: 'app-perfil',
@@ -8,28 +9,33 @@ import { FormGroup, FormControl } from '@angular/forms';
   styleUrls: ['./perfil.component.css']
 })
 export class PerfilComponent {
-  userData: any
 
-  constructor(private objUSerService: AspNetUserService){ 
-    this.objUSerService.getUserFullName().subscribe(res => {
-      this.setUserData(res)
+  constructor(private objUSerService: AspNetUserService, private toast: HotToastService){ 
+    this.objUSerService.getUserFullName().subscribe(res =>{
+      this.form.setValue({
+          Nombre: res.nombre || '',
+          ApellidoPat: res.apellidoPat || '',
+          ApellidoMat: res.apellidoMat || ''
+      })
     })
   }
 
-  //get names
-  setUserData(res : any){
-    this.userData = res
-  }
-
   form = new FormGroup({
-    Nombre: new FormControl(''),
-    ApellidoPat: new FormControl(''),
-    ApellidoMat: new FormControl(''),
+    Nombre: new FormControl(),
+    ApellidoPat: new FormControl(),
+    ApellidoMat: new FormControl(),
   })
 
   onSubmit(){
     console.log(this.form.value)
-    this.objUSerService.updateUser(this.form.value).subscribe(res => res)
+    this.objUSerService.updateUser(this.form.value).subscribe(res =>{
+      this.toast.success('Usuario actualizado', {
+        style: {
+          margin: '100px',
+        },
+        position: 'top-right'
+      })
+    })
   }
 
 
