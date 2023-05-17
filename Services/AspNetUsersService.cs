@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using workcube_pagos.ViewModel.Req;
 using workcube_pagos.ViewModel.Statics;
@@ -7,13 +8,17 @@ namespace workcube_pagos.Services
 {
     public class AspNetUsersService
     {
+        private readonly SignInManager<AspNetUser> _signInManager;
         private readonly DataContext _context;
         private readonly UserManager<AspNetUser> _userManager;
+        private PasswordHasher<AspNetUser> _passwordHasher;
 
-        public AspNetUsersService(DataContext context, UserManager<AspNetUser> userManager)
+        public AspNetUsersService(DataContext context, UserManager<AspNetUser> userManager, SignInManager<AspNetUser> signInManager, PasswordHasher<AspNetUser> passwordHasher)
         {
             _context = context;
             _userManager = userManager;
+            _signInManager = signInManager;
+            _passwordHasher = passwordHasher;
         }
 
         public async Task<AspNetUser> FindLogin(string UserName)
@@ -53,6 +58,27 @@ namespace workcube_pagos.Services
             await _context.SaveChangesAsync();
             return user;
 
+        }
+
+        //actualizar contraseña
+        public async Task<AspNetUser> UpdatePassword(string id, UpdatePasswordReq password)
+        {
+            var user = await _context.AspNetUsers.Where(user => user.Id == id).FirstOrDefaultAsync();
+            if (user == null)
+            {
+                return null;
+            }
+           
+            var result = await _signInManager.CheckPasswordSignInAsync(user, password.OldPassword, false);
+            if(result.Succeeded)
+            {
+                var newPass = _passwordHasher.HashPassword(null, password.NewPassword);
+                user.PasswordHash = newPass;
+                await _context.SaveChangesAsync();
+                return user;
+            }
+
+            return null;
         }
         
         //para añadir un nuevo usuario

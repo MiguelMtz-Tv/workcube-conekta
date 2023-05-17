@@ -17,4 +17,8 @@ export class AspNetUserService {
   updateUser(objUser : any){
     return this.http.put<any>(this.baseUrl+'api/aspnetuser/update/'+this.idUser, objUser)
   }
+
+  updatePassword(objPass : any){
+    return this.http.put<any>(this.baseUrl+'api/aspnetuser/updatepass/'+this.idUser, objPass)
+  }
 }

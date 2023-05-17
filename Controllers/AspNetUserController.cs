@@ -42,5 +42,16 @@ namespace workcube_pagos.Controllers
             }
             return Ok(updatedUser);
         }
+
+        [HttpPut("updatepass/{id}")] //actualizar contraseña
+        public async Task<ActionResult> UpdatePassword(string id, [FromBody] UpdatePasswordReq passwordReq)
+        {   
+            var updatePassword = await _usersService.UpdatePassword(id, passwordReq);
+            if(updatePassword == null)
+            {
+                return BadRequest("la contraseña es incorrecta");
+            }
+            return Ok("Contraseña actualizada");
+        }
     }
 }

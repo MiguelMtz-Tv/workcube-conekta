@@ -12,8 +12,9 @@ import { Router } from '@angular/router';
 })
 export class LoginComponent {
   baseUrl: string = getBaseUrl()
+  isLoading: boolean = false
 
-  constructor(private http: HttpClient, private auth: AuthService, private router: Router) {
+  constructor(private auth: AuthService, private router: Router) {
   }
 
   form = new FormGroup({
@@ -22,8 +23,19 @@ export class LoginComponent {
   })
 
   onSubmit() {
-    this.auth.login(this.form.value)
-    this.router.navigate(['/servicios'])
+    this.isLoading = true
+    this.auth.login(this.form.value).subscribe(
+      res => {
+        this.auth.storeData(res.token, res.id, res.nombreCompleto)
+        this.router.navigate(['/servicios'])
+      },
+      error => {
+        this.isLoading = false
+      },
+      () => {
+        this.isLoading = false
+      }
+    )
   }
 
 }

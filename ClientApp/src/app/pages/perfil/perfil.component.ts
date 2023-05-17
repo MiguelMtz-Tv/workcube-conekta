@@ -1,43 +1,113 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { AspNetUserService } from 'src/app/services/asp-net-user.service';
-import { FormGroup, FormControl } from '@angular/forms';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { HotToastService } from '@ngneat/hot-toast';
+import { catchError } from 'rxjs/operators';
+import { throwError } from 'rxjs';
 
 @Component({
   selector: 'app-perfil',
   templateUrl: './perfil.component.html',
   styleUrls: ['./perfil.component.css']
 })
-export class PerfilComponent {
+export class PerfilComponent implements OnInit {
+  userIsLoading: boolean = false
+  passwordIsLoading: boolean = false
+  isuserFormDirty: boolean = false;
 
-  constructor(private objUSerService: AspNetUserService, private toast: HotToastService){ 
-    this.objUSerService.getUserFullName().subscribe(res =>{
-      this.form.setValue({
-          Nombre: res.nombre || '',
-          ApellidoPat: res.apellidoPat || '',
-          ApellidoMat: res.apellidoMat || ''
+  constructor(private objUSerService: AspNetUserService, private toast: HotToastService) {}
+
+  ngOnInit(): void {
+    this.objUSerService.getUserFullName().subscribe(res => {
+      this.userForm.setValue({
+        Nombre: res.nombre || '',
+        ApellidoPat: res.apellidoPat || '',
+        ApellidoMat: res.apellidoMat || ''
       })
     })
   }
 
-  form = new FormGroup({
-    Nombre: new FormControl(),
-    ApellidoPat: new FormControl(),
-    ApellidoMat: new FormControl(),
+  //user form logic
+  userForm = new FormGroup({
+    Nombre: new FormControl('', Validators['required']),
+    ApellidoPat: new FormControl('', Validators['required']),
+    ApellidoMat: new FormControl('', Validators['required']),
   })
 
-  onSubmit(){
-    console.log(this.form.value)
-    this.objUSerService.updateUser(this.form.value).subscribe(res =>{
-      this.toast.success('Usuario actualizado', {
+  onSubmitUserForm() {
+    this.userIsLoading = true
+    this.objUSerService.updateUser(this.userForm.value)
+      .pipe(
+        catchError(error => {
+          this.toast.error('No se pudo actualizar el usuario',{
+            style: {
+              margin: '100px 20px',
+              padding: '15px'
+            },
+            position: 'top-right'
+          })
+          return throwError(error)
+        })
+      )
+      .subscribe(res => {
+        this.toast.success('Usuario actualizado!', {
+          style: {
+            margin: '100px 20px',
+            padding: '15px'
+          },
+          iconTheme: {
+            primary: '#3F51B5'
+          },
+          position: 'top-right'
+        })
+        this.userIsLoading = false
+      })
+  }
+
+  //password form logic
+  setPassword: string = ''
+  confirmPassword: string = ''
+  canConfirm: boolean = false
+
+  passwordForm = new FormGroup({
+    oldPassword: new FormControl('', Validators['required']),
+    NewPassword: new FormControl('', Validators['required']),
+    ConfirmPassword: new FormControl('', Validators['required'])
+  })
+
+  comparePassword(){
+    if(this.setPassword === this.confirmPassword){
+      this.canConfirm = true
+    }else{
+      this.canConfirm = false
+    }
+  }
+
+  onSubmitPasswordForm(){
+    this.objUSerService.updatePassword(this.passwordForm.value).pipe(
+      catchError(error => {
+        this.toast.error('No se pudo actualizar la contraseña',{
+          style: {
+            margin: '100px 20px',
+            padding: '15px'
+          },
+          position: 'top-right'
+        })
+        return throwError(error)
+      })
+    )
+    .subscribe(res => {
+      this.toast.success('Contraseña actualizada!', {
         style: {
-          margin: '100px',
+          margin: '100px 20px',
+          padding: '15px'
+        },
+        iconTheme: {
+          primary: '#3F51B5'
         },
         position: 'top-right'
       })
+      this.userIsLoading = false
     })
   }
-
-
-  
 }

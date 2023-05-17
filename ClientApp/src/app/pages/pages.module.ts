@@ -11,6 +11,7 @@ import { ComponentsModule } from '../components/components.module'
 import { LoginComponent } from '../auth/login/login.component'
 import { SingupComponent } from '../auth/singup/singup.component'
 import { LayoutsModule } from '../layouts/layout.module'
+import { FormsModule } from '@angular/forms'
 
 @NgModule({
     declarations:[
@@ -27,7 +28,8 @@ import { LayoutsModule } from '../layouts/layout.module'
         LibrariesModule,
         MaterialModule,
         ComponentsModule,
-        LayoutsModule
+        LayoutsModule,
+        FormsModule,
     ],
     exports:[
         HistorialPagosComponent,

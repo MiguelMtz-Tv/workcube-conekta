@@ -10,6 +10,7 @@ import {MatCardModule} from '@angular/material/card';
 import {MatRadioModule, MAT_RADIO_DEFAULT_OPTIONS} from '@angular/material/radio'; 
 import {MatDialogModule} from '@angular/material/dialog'; 
 import {MatCheckboxModule} from '@angular/material/checkbox'; 
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 @NgModule({
     imports:[
@@ -24,6 +25,7 @@ import {MatCheckboxModule} from '@angular/material/checkbox';
         MatCardModule,
         MatDialogModule,
         MatCheckboxModule,
+        MatProgressSpinnerModule,
     ],
     exports:[
         MatButtonModule,
@@ -37,6 +39,7 @@ import {MatCheckboxModule} from '@angular/material/checkbox';
         MatCardModule,
         MatDialogModule,
         MatCheckboxModule,
+        MatProgressSpinnerModule,
     ],
     providers: [{
         provide: MAT_RADIO_DEFAULT_OPTIONS,
