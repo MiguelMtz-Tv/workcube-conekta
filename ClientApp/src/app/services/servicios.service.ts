@@ -7,6 +7,12 @@ import { HttpClient } from '@angular/common/http';
 })
 export class ServiciosService {
   baseUrl: string = getBaseUrl()
+  idUser: any = ''
 
-  constructor() { }
+  constructor(private http: HttpClient) { this.idUser = localStorage.getItem('IdCliente') }
+
+  getUserServices(){
+    return this.http.get(this.baseUrl+'api/servicio/clientservices/'+this.idUser)
+    
+  }
 }

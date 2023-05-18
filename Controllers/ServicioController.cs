@@ -8,30 +8,24 @@ namespace workcube_pagos.Controllers
     [Route("api/[controller]")]
     public class ServicioController : ControllerBase
     {
-        public DataContext _context;
+        
+        readonly ServiciosService _serviciosService;
 
-        public ServicioController( DataContext context)
+        public ServicioController( ServiciosService serviciosService)
         {
-            _context = context;
+            _serviciosService = serviciosService;
         }
 
         [HttpGet("clientservices/{id}")]
-        public async Task<List<Servicio>> GetClientServices(int Id)
+        public async Task<ActionResult> GetClientServices(int Id)
         {
-            var services = await _context.Servicios.Where(services => services.IdCliente == Id).ToListAsync();
+            var services = await _serviciosService.GetClientServices(Id);
 
             if (services == null)
             {
                 return null;
             }
-            return services;
-        }
-        
-        [HttpGet]
-        public async Task<List<Servicio>> GetAll()
-        {
-            var services = await _context.Servicios.ToListAsync();
-            return services;
+            return Ok(services);
         }
     }
 }

@@ -44,7 +44,7 @@ namespace workcube_pagos.TokenHandler
                 Id = objAspNetUser.Id,
                 NombreCompleto = objAspNetUser.NombreCompleto,
                 IdCliente = objAspNetUser.IdCliente,
-                //Expiration = tokenExpiryTimeStamp,
+            //Expiration = tokenExpiryTimeStamp,
             };
         }
     }

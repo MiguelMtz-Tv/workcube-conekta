@@ -19,6 +19,7 @@ builder.Services.AddDbContext<DataContext>(opt => opt.UseSqlServer(builder.Confi
 
 //Registrar servicios
 builder.Services.AddScoped<AspNetUsersService, AspNetUsersService>();
+builder.Services.AddScoped<ServiciosService,  ServiciosService>();
 
 // Generador de contrase�a
 builder.Services.AddIdentity<AspNetUser, IdentityRole>(options =>

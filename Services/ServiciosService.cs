@@ -11,9 +11,9 @@ namespace workcube_pagos.Services
             _context = context;
         }
 
-        public async Task<List<Servicio>> GetClientServices(int idCliente)
+        public async Task<List<Servicio>> GetClientServices(int Id)
         {
-            var services = await _context.Servicios.Where(services => services.IdCliente == idCliente).ToListAsync();
+            var services = await _context.Servicios.Where(services => services.IdCliente == Id).ToListAsync();
             if(services == null)
             {
                 return null;
