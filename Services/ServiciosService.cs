@@ -22,5 +22,21 @@ namespace workcube_pagos.Services
 
         }
 
+        public async Task<List<Servicio>> GetView()
+        {
+            var query = from s in _context.Servicios
+                        join st in _context.ServicioTipos on s.IdServicioTipo equals st.IdServicioTipo
+                        join c in _context.Clientes on s.IdCliente equals c.IdCliente
+                        join p in _context.Periodos on s.IdPeriodo equals p.IdPeriodo
+                        select new Servicio
+                        {
+                            IdServicio = s.IdServicio,
+                            IdServicioTipo = st.IdServicioTipo,
+                            IdCliente = c.IdCliente,
+                            IdPeriodo = p.IdPeriodo
+                        };
+            return query.ToList();
+        }
+
     }
 }
