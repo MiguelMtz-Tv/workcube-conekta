@@ -19,16 +19,18 @@ export class AuthService {
     return this.http.post<any>(this.baseUrl+'api/auth/login', objUser /*{UserName, Password}*/);
   }
 
-  storeData(token: string, id: string, NombreCompleto: string){
+  storeData(token: string, id: string, NombreCompleto: string, IdCliente: string){
     localStorage.setItem('token', token)
     localStorage.setItem('Id', id)
-    localStorage.setItem('NombreCompleto', NombreCompleto)
+    localStorage.setItem('NombreCompleto', NombreCompleto),
+    localStorage.setItem('IdCliente', IdCliente)
   }
 
   removeToken(){
     localStorage.removeItem('token')
     localStorage.removeItem('Id')
     localStorage.removeItem('NombreCompleto')
+    localStorage.removeItem('IdCliente')
   }
 
   getToken(){

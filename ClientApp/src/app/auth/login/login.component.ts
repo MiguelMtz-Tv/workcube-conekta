@@ -26,7 +26,7 @@ export class LoginComponent {
     this.isLoading = true
     this.auth.login(this.form.value).subscribe(
       res => {
-        this.auth.storeData(res.token, res.id, res.nombreCompleto)
+        this.auth.storeData(res.token, res.id, res.nombreCompleto, res.IdCliente)
         this.router.navigate(['/servicios'])
       },
       error => {

@@ -11,14 +11,12 @@ namespace workcube_pagos.Services
         private readonly SignInManager<AspNetUser> _signInManager;
         private readonly DataContext _context;
         private readonly UserManager<AspNetUser> _userManager;
-        private PasswordHasher<AspNetUser> _passwordHasher;
 
-        public AspNetUsersService(DataContext context, UserManager<AspNetUser> userManager, SignInManager<AspNetUser> signInManager, PasswordHasher<AspNetUser> passwordHasher)
+        public AspNetUsersService(DataContext context, UserManager<AspNetUser> userManager, SignInManager<AspNetUser> signInManager)
         {
             _context = context;
             _userManager = userManager;
             _signInManager = signInManager;
-            _passwordHasher = passwordHasher;
         }
 
         public async Task<AspNetUser> FindLogin(string UserName)
@@ -72,7 +70,8 @@ namespace workcube_pagos.Services
             var result = await _signInManager.CheckPasswordSignInAsync(user, password.OldPassword, false);
             if(result.Succeeded)
             {
-                var newPass = _passwordHasher.HashPassword(null, password.NewPassword);
+                var passHasher = new PasswordHasher<AspNetUser>();
+                var newPass = passHasher.HashPassword(null, password.NewPassword);
                 user.PasswordHash = newPass;
                 await _context.SaveChangesAsync();
                 return user;

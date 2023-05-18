@@ -38,6 +38,15 @@ export class ServiciosComponent implements OnInit {
       status: "",
       startDate: "2023-03-23",
       period: "Mensual"
+    },
+    {
+      id: '3',
+      name: 'Netflix',
+      cost: "25000",
+      desc: "Netflix, Inc. es una empresa de entretenimiento y una plataforma de streaming estadounidense.",
+      status: "",
+      startDate: "2027-03-23",
+      period: "Mensual"
     }
   ]
 

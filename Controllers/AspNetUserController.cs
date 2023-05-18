@@ -10,7 +10,7 @@ namespace workcube_pagos.Controllers
     {
         AspNetUsersService _usersService;
         public AspNetUserController(AspNetUsersService aspNetUsersService) {
-            this._usersService = aspNetUsersService;
+            _usersService = aspNetUsersService;
         }
 
         [HttpPost] //creacion de usuario
@@ -51,7 +51,7 @@ namespace workcube_pagos.Controllers
             {
                 return BadRequest("la contraseña es incorrecta");
             }
-            return Ok("Contraseña actualizada");
+            return Ok();
         }
     }
 }

@@ -70,7 +70,7 @@ export class PerfilComponent implements OnInit {
   canConfirm: boolean = false
 
   passwordForm = new FormGroup({
-    oldPassword: new FormControl('', Validators['required']),
+    OldPassword: new FormControl('', Validators['required']),
     NewPassword: new FormControl('', Validators['required']),
     ConfirmPassword: new FormControl('', Validators['required'])
   })
@@ -86,7 +86,7 @@ export class PerfilComponent implements OnInit {
   onSubmitPasswordForm(){
     this.objUSerService.updatePassword(this.passwordForm.value).pipe(
       catchError(error => {
-        this.toast.error('No se pudo actualizar la contraseña',{
+        this.toast.error('Contraseña incorrecta',{
           style: {
             margin: '100px 20px',
             padding: '15px'
@@ -108,6 +108,7 @@ export class PerfilComponent implements OnInit {
         position: 'top-right'
       })
       this.userIsLoading = false
+      console.log(res)
     })
   }
 }

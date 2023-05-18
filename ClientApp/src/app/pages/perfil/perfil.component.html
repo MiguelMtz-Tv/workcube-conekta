@@ -61,7 +61,7 @@
           </div>
         </div>
         <div class="border-t-2 border-zinc-200 flex p-4 pr-3 pb-3 justify-end">
-          <button type="submit" mat-flat-button color="primary" [disabled]="!canConfirm || !passwordForm.valid">Actualizar</button>
+          <button type="submit" mat-flat-button color="primary" [disabled]="!passwordForm.valid || !canConfirm">Actualizar</button>
         </div>
       </form>
     </div>
