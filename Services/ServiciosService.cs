@@ -3,6 +3,7 @@ using System.Text.Json.Serialization;
 using System.Text.Json;
 using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel;
+using workcube_pagos.ViewModel.Req;
 
 namespace workcube_pagos.Services
 {
@@ -20,17 +21,19 @@ namespace workcube_pagos.Services
             return await _context.Servicios.Where(s => s.IdCliente == Id).ToListAsync();
         }
 
-        public async Task<Servicio> CancelService(int Id)
+        public async Task<Servicio> CancelService(CancelServiceReq model) 
         {
-            var serviceToCancel = await _context.Servicios.FindAsync(Id);
-            if (serviceToCancel != null)
+            var serviceToCancel = await _context.Servicios.Where(s => s.IdCliente == model.IdCliente && s.IdServicio == model.IdServicio).FirstOrDefaultAsync();
+
+            if (serviceToCancel == null)
             {
-                serviceToCancel.IdServicioEstatus = 3;  
-                serviceToCancel.ServicioEstatusName = "Cancelado";
-                _context.SaveChanges();
-                return serviceToCancel;
+                return null;
             }
-            return null;
+            
+            serviceToCancel.IdServicioEstatus = 3;  
+                serviceToCancel.ServicioEstatusName = "Cancelado";
+                await _context.SaveChangesAsync();
+                return serviceToCancel;
         }
 
     }

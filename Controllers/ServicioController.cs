@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Workcube.Libraries;
 using workcube_pagos.Models;
 using workcube_pagos.Services;
+using workcube_pagos.ViewModel.Req;
 
 namespace workcube_pagos.Controllers
 {
@@ -18,9 +19,12 @@ namespace workcube_pagos.Controllers
         }
 
         [HttpPut("cancel")]
-        public async Task<ActionResult> CancelService([FromBody] int Id)
+        public async Task<ActionResult> CancelService([FromBody] CancelServiceReq model)
         {
-            var serviceToCancel = await _serviciosService.CancelService(Id);
+            var serviceToCancel = await _serviciosService.CancelService(model);
+            if (serviceToCancel == null) {
+                return BadRequest("servicio no encontrado");
+            }
             return Ok(serviceToCancel);
         }
 

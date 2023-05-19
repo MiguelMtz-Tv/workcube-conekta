@@ -20,6 +20,7 @@ export class ServiceCardComponent implements OnInit, OnChanges{
   @Input() period= ''
   @Input() startDate= ''
   @Input() id = ''
+
   color = 'bg-gray-500'
   days= '0'
   canPay = false
@@ -78,12 +79,16 @@ export class ServiceCardComponent implements OnInit, OnChanges{
   }
 
   /* to cancel service */
-  openCancelModal(enterAnimationDuration: string, exitAnimationDuration: string , id: any){
+  openCancelModal(enterAnimationDuration: string, exitAnimationDuration: string , idServicio: any){
     this.dialog.open(CancelServiceComponent,{
       width: '90%',
       maxWidth: '500px',
       enterAnimationDuration,
-      exitAnimationDuration
+      exitAnimationDuration,
+      data: {
+        IdServicio: idServicio,
+        IdCliente: localStorage.getItem('IdCliente')
+      }
     } )
   }
   cancelService(){
