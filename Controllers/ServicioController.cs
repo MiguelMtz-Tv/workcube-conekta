@@ -17,6 +17,13 @@ namespace workcube_pagos.Controllers
             _serviciosService = serviciosService; 
         }
 
+        [HttpPut("cancel")]
+        public async Task<ActionResult> CancelService([FromBody] int Id)
+        {
+            var serviceToCancel = await _serviciosService.CancelService(Id);
+            return Ok(serviceToCancel);
+        }
+
         [HttpGet("clientservices/{id}")]
         public async Task<ActionResult> GetClientServices(int Id)
         {

@@ -17,7 +17,7 @@
                         </button>
                         <mat-menu #options="matMenu">
                             <a mat-menu-item [routerLink]="['/historial']"><span class="text-sm">Historial de pagos</span></a>
-                            <a mat-menu-item (click)="openCancelModal()"><span class="text-sm">Cancelar</span></a>
+                            <a mat-menu-item (click)="openCancelModal('150ms','150ms', id)"><span class="text-sm">Cancelar</span></a>
                         </mat-menu>
                     </div>
                     
@@ -43,16 +43,3 @@
         </div>
     </div>
 </div>
-
-<!-- modal para realizar cancelación -->
-<app-modal>
-    <div #cancelModal class="button-name hidden">
-    </div>
-    <div class="modal-body pt-4">
-        <h2 class="font-semibold text.lg">¿Seguro que deseas cancelar {{name}} de tus servicios?</h2>
-        <div class="flex justify-center">
-            <button mat-stroked-button class="m-4 text-indigo-600" (click)="closeModal()"><span class="text-sm">Cancelar</span></button>
-            <button mat-flat-button color="primary" class="m-4" (click)="cancelService(id)"><span class="text-sm">Confirmar</span></button>
-        </div>
-    </div>
-</app-modal>

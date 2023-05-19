@@ -1,4 +1,7 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+
 namespace workcube_pagos.Models
 {
     public class Servicio
@@ -9,7 +12,9 @@ namespace workcube_pagos.Models
         public virtual ServicioTipo ServicioTipo    { get; set; }
         public int IdServicioTipo                   { get; set; } 
         public string ServicioTipoName              { get; set; } 
-        public string ServicioTipoDescripcion       { get; set; } 
+        public string ServicioTipoDescripcion       { get; set; }
+        [Column(TypeName = "decimal(18, 2)")]
+        //public decimal servicioTipoCosto            { get; set; }
         
         public virtual Cliente Cliente              { get; set; }
         public int IdCliente                        { get; set; }

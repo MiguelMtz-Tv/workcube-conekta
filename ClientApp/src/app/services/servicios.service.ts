@@ -13,6 +13,9 @@ export class ServiciosService {
 
   getUserServices(){
     return this.http.get(this.baseUrl+'api/servicio/clientservices/'+this.idUser)
-    
+  }
+
+  cancelService(serviceData : any){
+    return this.http.put(this.baseUrl+'api/servicio/clientservices/', serviceData)
   }
 }
