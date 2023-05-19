@@ -17,7 +17,6 @@ export class ServiciosComponent implements OnInit {
       this.services = res
       console.log(res)
     });
-    console.log(this.services)
   }
 
   ngOnInit(): void {

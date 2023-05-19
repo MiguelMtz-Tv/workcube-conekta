@@ -14,12 +14,12 @@ export class SingupComponent {
   addUser(){
     this.http.post(`${this.baseUrl}api/AspNetUser`,{
       IdCliente: 1,
-      UserName: 'usuario2',
+      UserName: 'usuario1',
       Password: 'password', 
       Nombre: 'Martha', 
       ApellidoPat: 'Avalos', 
       ApellidoMat: 'Isidro', 
-      Email: 'usuario2@email.com'
+      Email: 'usuario1@email.com'
     }).subscribe(res => console.log(res))
   }
   

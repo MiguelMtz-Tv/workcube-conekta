@@ -12,8 +12,8 @@ using workcube_pagos.Data;
 namespace workcube_pagos.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20230516152258_01")]
-    partial class _01
+    [Migration("20230519172333_1")]
+    partial class _1
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

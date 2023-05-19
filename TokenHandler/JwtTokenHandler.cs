@@ -32,7 +32,7 @@ namespace workcube_pagos.TokenHandler
             {
                 Subject = claimsIdentity,
                 SigningCredentials = signingCredentials,
-                Expires = tokenExpiryTimeStamp
+               //Expires = tokenExpiryTimeStamp
             };
 
             var jwtSecurityTokenHandler = new JwtSecurityTokenHandler();
