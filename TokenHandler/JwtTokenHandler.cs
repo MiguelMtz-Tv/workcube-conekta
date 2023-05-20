@@ -9,7 +9,7 @@ namespace workcube_pagos.TokenHandler
 {
     public class JwtTokenHandler
     {
-        private const int JWT_TOKEN_VALIDITY_MINS = 1440;
+        private const int JWT_TOKEN_VALIDITY_MINS = 1;
 
         public JwtTokenHandler() { }
 
@@ -31,7 +31,8 @@ namespace workcube_pagos.TokenHandler
             var securityTokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = claimsIdentity,
-                SigningCredentials = signingCredentials
+                SigningCredentials = signingCredentials,
+               //Expires = tokenExpiryTimeStamp
             };
 
             var jwtSecurityTokenHandler = new JwtSecurityTokenHandler();
@@ -41,9 +42,10 @@ namespace workcube_pagos.TokenHandler
             return new LoginRes
             {
                 Token = token,
-                //Id = objAspNetUser.Id,
+                Id = objAspNetUser.Id,
+                NombreCompleto = objAspNetUser.NombreCompleto,
+                IdCliente = objAspNetUser.IdCliente,
                 //Expiration = tokenExpiryTimeStamp,
-                //Nombre = objAspNetUser.NombreCompleto
             };
         }
     }

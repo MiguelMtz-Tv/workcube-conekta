@@ -1,6 +1,5 @@
 import { NgModule} from '@angular/core';
 import { AppComponent } from './app.component';
-
 import { AppRoutingModule } from './app-routing.module';
 import { CommonModule } from '@angular/common';
 import { LayoutsModule } from './layouts/layout.module';
@@ -12,7 +11,7 @@ import { LayoutsModule } from './layouts/layout.module';
   imports: [
     CommonModule,
     AppRoutingModule,
-    LayoutsModule
+    LayoutsModule,
   ],
   exports:[
   ],

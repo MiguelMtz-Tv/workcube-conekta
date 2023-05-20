@@ -1,0 +1,9 @@
+<div class="text-center p-8">
+    <div class="mb-8">
+        <span class="text-lg">¿Deseas cancelar este servicio?</span>
+    </div>
+    <div class="flex justify-between w-1/2 m-auto">
+        <button mat-stroked-button mat-dialog-close color="primary">Regresar</button>
+        <button mat-flat-button mat-dialog-close color="primary" [routerLink]="['/servicios']" (click)="confirmCancel()">confirmar</button>
+    </div>
+</div>

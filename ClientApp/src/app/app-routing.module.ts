@@ -9,15 +9,16 @@ import { PerfilComponent } from './pages/perfil/perfil.component'
 import { HistorialPagosComponent } from './pages/historial-pagos/historial-pagos.component'
 import { PagarComponent } from './pages/pagar/pagar.component'
 import { PagesModule } from './pages/pages.module'
+import { AuthGuard } from './guards/auth.guard'
 
 const pahts: Routes = [
     { path: '', component: LoginComponent, pathMatch: 'full' },
     { path: 'registro', component: SingupComponent },
-    { path: 'servicios', component: ServiciosComponent },
-    { path: 'tarjetas', component: TarjetasComponent },
-    { path: 'perfil', component: PerfilComponent },
-    { path: 'historial', component: HistorialPagosComponent },
-    { path: 'pagar', component: PagarComponent },
+    { path: 'servicios', component: ServiciosComponent, canActivate:[AuthGuard] },
+    { path: 'tarjetas', component: TarjetasComponent, canActivate:[AuthGuard] },
+    { path: 'perfil', component: PerfilComponent, canActivate:[AuthGuard] },
+    { path: 'historial', component: HistorialPagosComponent, canActivate:[AuthGuard] },
+    { path: 'pagar', component: PagarComponent, canActivate:[AuthGuard] },
 ]
 
 

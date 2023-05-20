@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace workcube_pagos.Migrations
 {
     /// <inheritdoc />
-    public partial class initial : Migration
+    public partial class _1 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -45,6 +45,34 @@ namespace workcube_pagos.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Clientes", x => x.IdCliente);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Periodos",
+                columns: table => new
+                {
+                    IdPeriodo = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    PeriodoName = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Periodos", x => x.IdPeriodo);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ServicioTipos",
+                columns: table => new
+                {
+                    IdServicioTipo = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Nombre = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Costo = table.Column<decimal>(type: "decimal(18,2)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ServicioTipos", x => x.IdServicioTipo);
                 });
 
             migrationBuilder.CreateTable(
@@ -101,6 +129,42 @@ namespace workcube_pagos.Migrations
                         column: x => x.IdCliente,
                         principalTable: "Clientes",
                         principalColumn: "IdCliente",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Servicios",
+                columns: table => new
+                {
+                    IdServicio = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    IdServicioTipo = table.Column<int>(type: "int", nullable: false),
+                    IdCliente = table.Column<int>(type: "int", nullable: false),
+                    IdPeriodo = table.Column<int>(type: "int", nullable: false),
+                    Vigencia = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Status = table.Column<int>(type: "int", nullable: false),
+                    KeyServicio = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Servicios", x => x.IdServicio);
+                    table.ForeignKey(
+                        name: "FK_Servicios_Clientes_IdCliente",
+                        column: x => x.IdCliente,
+                        principalTable: "Clientes",
+                        principalColumn: "IdCliente",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Servicios_Periodos_IdPeriodo",
+                        column: x => x.IdPeriodo,
+                        principalTable: "Periodos",
+                        principalColumn: "IdPeriodo",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Servicios_ServicioTipos_IdServicioTipo",
+                        column: x => x.IdServicioTipo,
+                        principalTable: "ServicioTipos",
+                        principalColumn: "IdServicioTipo",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -189,6 +253,37 @@ namespace workcube_pagos.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "Cupones",
+                columns: table => new
+                {
+                    IdCupon = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Descripcion = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    IdServicio = table.Column<int>(type: "int", nullable: false),
+                    IdCliente = table.Column<int>(type: "int", nullable: false),
+                    Monto = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    Status = table.Column<int>(type: "int", nullable: false),
+                    Vigencia = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Cupones", x => x.IdCupon);
+                    table.ForeignKey(
+                        name: "FK_Cupones_Clientes_IdCliente",
+                        column: x => x.IdCliente,
+                        principalTable: "Clientes",
+                        principalColumn: "IdCliente",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Cupones_Servicios_IdServicio",
+                        column: x => x.IdServicio,
+                        principalTable: "Servicios",
+                        principalColumn: "IdServicio",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
                 table: "AspNetRoleClaims",
@@ -234,6 +329,31 @@ namespace workcube_pagos.Migrations
                 column: "NormalizedUserName",
                 unique: true,
                 filter: "[NormalizedUserName] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Cupones_IdCliente",
+                table: "Cupones",
+                column: "IdCliente");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Cupones_IdServicio",
+                table: "Cupones",
+                column: "IdServicio");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Servicios_IdCliente",
+                table: "Servicios",
+                column: "IdCliente");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Servicios_IdPeriodo",
+                table: "Servicios",
+                column: "IdPeriodo");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Servicios_IdServicioTipo",
+                table: "Servicios",
+                column: "IdServicioTipo");
         }
 
         /// <inheritdoc />
@@ -255,13 +375,25 @@ namespace workcube_pagos.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
+                name: "Cupones");
+
+            migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
 
             migrationBuilder.DropTable(
+                name: "Servicios");
+
+            migrationBuilder.DropTable(
                 name: "Clientes");
+
+            migrationBuilder.DropTable(
+                name: "Periodos");
+
+            migrationBuilder.DropTable(
+                name: "ServicioTipos");
         }
     }
 }

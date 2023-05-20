@@ -12,8 +12,8 @@ using workcube_pagos.Data;
 namespace workcube_pagos.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20230512193505_initial")]
-    partial class initial
+    [Migration("20230519172333_1")]
+    partial class _1
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -274,6 +274,119 @@ namespace workcube_pagos.Migrations
                     b.ToTable("Clientes");
                 });
 
+            modelBuilder.Entity("workcube_pagos.Models.Cupon", b =>
+                {
+                    b.Property<int>("IdCupon")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdCupon"));
+
+                    b.Property<string>("Descripcion")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("IdCliente")
+                        .HasColumnType("int");
+
+                    b.Property<int>("IdServicio")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("Monto")
+                        .HasColumnType("decimal(18, 2)");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("Vigencia")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("IdCupon");
+
+                    b.HasIndex("IdCliente");
+
+                    b.HasIndex("IdServicio");
+
+                    b.ToTable("Cupones");
+                });
+
+            modelBuilder.Entity("workcube_pagos.Models.Periodo", b =>
+                {
+                    b.Property<int>("IdPeriodo")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdPeriodo"));
+
+                    b.Property<string>("PeriodoName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("IdPeriodo");
+
+                    b.ToTable("Periodos");
+                });
+
+            modelBuilder.Entity("workcube_pagos.Models.Servicio", b =>
+                {
+                    b.Property<int>("IdServicio")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdServicio"));
+
+                    b.Property<int>("IdCliente")
+                        .HasColumnType("int");
+
+                    b.Property<int>("IdPeriodo")
+                        .HasColumnType("int");
+
+                    b.Property<int>("IdServicioTipo")
+                        .HasColumnType("int");
+
+                    b.Property<string>("KeyServicio")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("Vigencia")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("IdServicio");
+
+                    b.HasIndex("IdCliente");
+
+                    b.HasIndex("IdPeriodo");
+
+                    b.HasIndex("IdServicioTipo");
+
+                    b.ToTable("Servicios");
+                });
+
+            modelBuilder.Entity("workcube_pagos.Models.ServicioTipo", b =>
+                {
+                    b.Property<int>("IdServicioTipo")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdServicioTipo"));
+
+                    b.Property<decimal>("Costo")
+                        .HasColumnType("decimal(18, 2)");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Nombre")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("IdServicioTipo");
+
+                    b.ToTable("ServicioTipos");
+                });
+
             modelBuilder.Entity("workcube_pagos.Models.AspNetUser", b =>
                 {
                     b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityUser");
@@ -348,6 +461,52 @@ namespace workcube_pagos.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("workcube_pagos.Models.Cupon", b =>
+                {
+                    b.HasOne("workcube_pagos.Models.Cliente", "Cliente")
+                        .WithMany("Cupones")
+                        .HasForeignKey("IdCliente")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("workcube_pagos.Models.Servicio", "Servicio")
+                        .WithMany("Cupones")
+                        .HasForeignKey("IdServicio")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Cliente");
+
+                    b.Navigation("Servicio");
+                });
+
+            modelBuilder.Entity("workcube_pagos.Models.Servicio", b =>
+                {
+                    b.HasOne("workcube_pagos.Models.Cliente", "Cliente")
+                        .WithMany("Servicios")
+                        .HasForeignKey("IdCliente")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("workcube_pagos.Models.Periodo", "Periodo")
+                        .WithMany("Servicio")
+                        .HasForeignKey("IdPeriodo")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("workcube_pagos.Models.ServicioTipo", "ServicioTipo")
+                        .WithMany("Servicio")
+                        .HasForeignKey("IdServicioTipo")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Cliente");
+
+                    b.Navigation("Periodo");
+
+                    b.Navigation("ServicioTipo");
+                });
+
             modelBuilder.Entity("workcube_pagos.Models.AspNetUser", b =>
                 {
                     b.HasOne("workcube_pagos.Models.Cliente", "Cliente")
@@ -361,7 +520,26 @@ namespace workcube_pagos.Migrations
 
             modelBuilder.Entity("workcube_pagos.Models.Cliente", b =>
                 {
+                    b.Navigation("Cupones");
+
+                    b.Navigation("Servicios");
+
                     b.Navigation("Usuario");
+                });
+
+            modelBuilder.Entity("workcube_pagos.Models.Periodo", b =>
+                {
+                    b.Navigation("Servicio");
+                });
+
+            modelBuilder.Entity("workcube_pagos.Models.Servicio", b =>
+                {
+                    b.Navigation("Cupones");
+                });
+
+            modelBuilder.Entity("workcube_pagos.Models.ServicioTipo", b =>
+                {
+                    b.Navigation("Servicio");
                 });
 #pragma warning restore 612, 618
         }

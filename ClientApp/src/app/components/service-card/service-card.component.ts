@@ -3,6 +3,8 @@ import { add } from 'date-fns';
 import differenceInDays from 'date-fns/differenceInDays';
 import { DataService } from 'src/app/services/data.service';
 import { HotToastService } from '@ngneat/hot-toast';
+import {MatDialog, MatDialogRef} from '@angular/material/dialog';
+import { CancelServiceComponent } from '../dialogs/cancel-service/cancel-service.component';
 
 @Component({
   selector: 'app-service-card',
@@ -18,13 +20,14 @@ export class ServiceCardComponent implements OnInit, OnChanges{
   @Input() period= ''
   @Input() startDate= ''
   @Input() id = ''
+
   color = 'bg-gray-500'
   days= '0'
   canPay = false
 
   @ViewChild('cancelModal') cancelModal: ElementRef | undefined
 
-  constructor(private dataService: DataService, private toast: HotToastService) { }
+  constructor(private dataService: DataService, private toast: HotToastService, private dialog: MatDialog) { }
 
   //set status color
   setStatusColor(){
@@ -76,11 +79,20 @@ export class ServiceCardComponent implements OnInit, OnChanges{
   }
 
   /* to cancel service */
-  openCancelModal(){
-    this.cancelModal?.nativeElement.click()
+  openCancelModal(enterAnimationDuration: string, exitAnimationDuration: string , idServicio: any){
+    this.dialog.open(CancelServiceComponent,{
+      width: '90%',
+      maxWidth: '500px',
+      enterAnimationDuration,
+      exitAnimationDuration,
+      data: {
+        IdServicio: idServicio,
+        IdCliente: localStorage.getItem('IdCliente')
+      }
+    } )
   }
-  cancelService(id: any){
-    this.dataService.setCancelService(id)
+  cancelService(){
+    
   }
 
   closeModal(){

@@ -16,9 +16,9 @@ export class SingupComponent {
       IdCliente: 1,
       UserName: 'usuario1',
       Password: 'password', 
-      Nombre: 'Miguel', 
-      ApellidoPat: 'Martinez', 
-      ApellidoMat: 'Castro', 
+      Nombre: 'Martha', 
+      ApellidoPat: 'Avalos', 
+      ApellidoMat: 'Isidro', 
       Email: 'usuario1@email.com'
     }).subscribe(res => console.log(res))
   }

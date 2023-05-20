@@ -3,6 +3,7 @@ import { Component } from '@angular/core';
 import { getBaseUrl } from 'src/main';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { AuthService } from 'src/app/services/auth.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -11,28 +12,31 @@ import { AuthService } from 'src/app/services/auth.service';
 })
 export class LoginComponent {
   baseUrl: string = getBaseUrl()
+  isLoading: boolean = false
 
-  constructor(private http: HttpClient, private auth: AuthService) {
+  constructor(private auth: AuthService, private router: Router) {
   }
 
   form = new FormGroup({
-    email: new FormControl('', [Validators.required, Validators.email]),
-    password: new FormControl('', [Validators.required])
+    UserName: new FormControl('', [Validators.required, Validators.email]),
+    Password: new FormControl('', [Validators.required])
   })
 
   onSubmit() {
-    console.log({ x: this.form.value.email, y: this.form.value.password })
-    this.http.post(`${this.baseUrl}api/auth/login`, {
-      UserName: this.form.value.email,
-      Password: this.form.value.password
-    }).subscribe(res => console.log(res))
-  }
-
-  getUser(){
-    this.http.post(`${this.baseUrl}api/usuario/login`, {
-      Usuario: 'usuario2',
-      Contrasenia: '1234'
-    }).subscribe(res => console.log(res))
+    this.isLoading = true
+    this.auth.login(this.form.value).subscribe(
+      res => {
+        console.log(res)
+        this.auth.storeData(res.token, res.id, res.nombreCompleto, res.idCliente)
+        this.router.navigate(['/servicios'])
+      },
+      error => {
+        this.isLoading = false
+      },
+      () => {
+        this.isLoading = false
+      }
+    )
   }
 
 }

@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using System.Reflection.Metadata.Ecma335;
 using workcube_pagos.Services;
-using workcube_pagos.ViewModel;
 using workcube_pagos.ViewModel.Req;
 
 namespace workcube_pagos.Controllers
@@ -9,15 +9,49 @@ namespace workcube_pagos.Controllers
     public class AspNetUserController : ControllerBase
     {
         AspNetUsersService _usersService;
-        public AspNetUserController(AspNetUsersService aspNetUsersService) { 
-            this._usersService = aspNetUsersService;
+        public AspNetUserController(AspNetUsersService aspNetUsersService) {
+            _usersService = aspNetUsersService;
         }
 
-        [HttpPost]
+        [HttpPost] //creacion de usuario
         public async Task<ActionResult> AddUser([FromBody] SingUpReq user)
         {
             await _usersService.AddUser(user);
             return Ok("usuario añadido");
+        }
+
+        [HttpGet("client/{id}")] //obtener un usuario (solo nombre y apellidos)
+        public async Task<ActionResult> GetUserNames(string id)
+        {
+            var user = await _usersService.GetUser(id);
+            if(user == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(user);
+        }
+        
+        [HttpPut("update/{id}")] //actaulizar un usuario
+        public async Task<ActionResult> UpdateUser(string id, [FromBody] UpdateUserReq user)
+        {
+            var updatedUser = await _usersService.UpdateUser(id, user);
+            if(updatedUser == null)
+            {
+                return BadRequest("El usuario no existe o se ha eliminado");
+            }
+            return Ok(updatedUser);
+        }
+
+        [HttpPut("updatepass/{id}")] //actualizar contraseña
+        public async Task<ActionResult> UpdatePassword(string id, [FromBody] UpdatePasswordReq passwordReq)
+        {   
+            var updatePassword = await _usersService.UpdatePassword(id, passwordReq);
+            if(updatePassword == null)
+            {
+                return BadRequest("la contraseña es incorrecta");
+            }
+            return Ok();
         }
     }
 }
