@@ -1,9 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using System.Text.Json.Serialization;
-using System.Text.Json;
-using Microsoft.AspNetCore.Mvc;
-using System.ComponentModel;
-using workcube_pagos.ViewModel.Req;
+﻿using workcube_pagos.ViewModel.Req;
 
 namespace workcube_pagos.Services
 {
@@ -16,11 +11,14 @@ namespace workcube_pagos.Services
             _context = context;
         }
 
+
+        //para obtener los servicios de un cliente
         public async Task<List<Servicio>> GetClientServices(int Id)
         {
             return await _context.Servicios.Where(s => s.IdCliente == Id).ToListAsync();
         }
 
+        //para cancelar un servicio
         public async Task<Servicio> CancelService(CancelServiceReq model) 
         {
             var serviceToCancel = await _context.Servicios.Where(s => s.IdCliente == model.IdCliente && s.IdServicio == model.IdServicio).FirstOrDefaultAsync();
@@ -34,6 +32,30 @@ namespace workcube_pagos.Services
                 serviceToCancel.ServicioEstatusName = "Cancelado";
                 await _context.SaveChangesAsync();
                 return serviceToCancel;
+        }
+
+        //Verificar la fecha de un servicio y asignar su estatus
+        public async Task<List<Servicio>> UpdateStatusService()
+        {
+            DateTime FechaActual = DateTime.Now;
+
+            var ServiciosVencidos = await _context.Servicios
+                .Where(s => s.Vigencia.Date <= FechaActual.Date && s.IdServicioEstatus == 1)
+                .ToListAsync();
+
+            if(ServiciosVencidos.Any() )
+            {
+                foreach(var servicio in ServiciosVencidos)
+                {
+                    servicio.IdServicioEstatus = 2;
+                    servicio.ServicioEstatusName = "Vencido";
+
+                    await _context.SaveChangesAsync();
+                }
+                return ServiciosVencidos;
+            }
+
+            return null;
         }
 
     }

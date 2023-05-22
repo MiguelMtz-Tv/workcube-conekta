@@ -1,9 +1,8 @@
-import { Component, Input, OnInit, OnChanges, ViewChild, ElementRef, SimpleChanges } from '@angular/core';
+import { Component, Input, OnInit, OnChanges, SimpleChanges } from '@angular/core';
 import { add } from 'date-fns';
 import differenceInDays from 'date-fns/differenceInDays';
-import { DataService } from 'src/app/services/data.service';
 import { HotToastService } from '@ngneat/hot-toast';
-import {MatDialog, MatDialogRef} from '@angular/material/dialog';
+import { MatDialog } from '@angular/material/dialog';
 import { CancelServiceComponent } from '../dialogs/cancel-service/cancel-service.component';
 
 @Component({
@@ -21,13 +20,11 @@ export class ServiceCardComponent implements OnInit, OnChanges{
   @Input() startDate= ''
   @Input() id = ''
 
-  color = 'bg-gray-500'
+  color = 'bg-gray-500' //on error default
   days= '0'
   canPay = false
 
-  @ViewChild('cancelModal') cancelModal: ElementRef | undefined
-
-  constructor(private dataService: DataService, private toast: HotToastService, private dialog: MatDialog) { }
+  constructor(private toast: HotToastService, private dialog: MatDialog) { }
 
   //set status color
   setStatusColor(){
@@ -41,22 +38,6 @@ export class ServiceCardComponent implements OnInit, OnChanges{
       case 'Cancelado':
         this.color = 'bg-yellow-500'
         break
-    } 
-  }
-
-  ngOnChanges(changes: SimpleChanges): void {
-    if (changes.status && this.status === 'Cancelado') {
-      this.setStatusColor()
-      this.canPay = false
-      this.toast.success('Servicio cancelado', {
-        style: {
-          margin: '90px'
-        },
-        iconTheme: {
-          primary: '#5e15c2',
-          secondary: '#fff',
-        }
-    })
     }
   }
 
@@ -65,17 +46,22 @@ export class ServiceCardComponent implements OnInit, OnChanges{
     let closeDate = add(new Date(this.startDate), { days: 30 })
     let daysToDate = differenceInDays(closeDate, new Date())
     if(daysToDate > 0){
-      this.days = 'Quedan '+daysToDate+' día(s)';
-      this.status = 'Vigente';
+      this.days = 'Quedan '+ daysToDate +' día(s)';
     }else{
-      this.days = 'Venció hace '+(daysToDate*-1)+' día(s)'
-      this.status = 'Vencido'
+      this.days = 'Venció hace '+ (daysToDate * -1) +' día(s)'
     }
     //set initial status color
     this.setStatusColor()
 
     //set pyament button
     this.status != 'Vigente' ? this.canPay = true : null
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes.status && this.status === 'Cancelado') {
+      this.setStatusColor()
+      this.canPay = false
+    }
   }
 
   /* to cancel service */
@@ -89,14 +75,12 @@ export class ServiceCardComponent implements OnInit, OnChanges{
         IdServicio: idServicio,
         IdCliente: localStorage.getItem('IdCliente')
       }
-    } )
-  }
-  cancelService(){
-    
+    })
   }
 
-  closeModal(){
-    this.dataService.setModalClose('close')
+  /* to request reactivation */
+  requestReactivation(){
+    console.log('proxima actualización :p')
   }
 
 }

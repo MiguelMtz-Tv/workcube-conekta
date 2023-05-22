@@ -34,7 +34,7 @@ export class NavbarMenuComponent {
   }
 
   closeSession(){
-    this.auth.removeToken();
+    this.auth.removeData();
     this.router.navigate(['/'])
   }
 }

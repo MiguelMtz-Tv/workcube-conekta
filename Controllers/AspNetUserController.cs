@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using System.Reflection.Metadata.Ecma335;
 using workcube_pagos.Services;
 using workcube_pagos.ViewModel.Req;
@@ -20,6 +21,7 @@ namespace workcube_pagos.Controllers
             return Ok("usuario añadido");
         }
 
+        [Authorize]
         [HttpGet("client/{id}")] //obtener un usuario (solo nombre y apellidos)
         public async Task<ActionResult> GetUserNames(string id)
         {
@@ -31,7 +33,8 @@ namespace workcube_pagos.Controllers
 
             return Ok(user);
         }
-        
+
+        [Authorize]
         [HttpPut("update/{id}")] //actaulizar un usuario
         public async Task<ActionResult> UpdateUser(string id, [FromBody] UpdateUserReq user)
         {
@@ -43,6 +46,7 @@ namespace workcube_pagos.Controllers
             return Ok(updatedUser);
         }
 
+        [Authorize]
         [HttpPut("updatepass/{id}")] //actualizar contraseña
         public async Task<ActionResult> UpdatePassword(string id, [FromBody] UpdatePasswordReq passwordReq)
         {   

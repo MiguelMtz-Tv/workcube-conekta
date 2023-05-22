@@ -9,6 +9,8 @@ using Workcube.JwtAutentication;
 using workcube_pagos.Services;
 using workcube_pagos.TokenHandler;
 using System.Globalization;
+using Quartz;
+using workcube_pagos.Jobs;
 
 var builder = WebApplication.CreateBuilder(args);
 //Inyecta las dependencias de JWT.
@@ -37,6 +39,23 @@ builder.Services.AddIdentity<AspNetUser, IdentityRole>(options =>
 builder.Services.AddControllers();
 builder.Services.AddSingleton<JwtTokenHandler>();
 
+//Configuracion de Quartz
+builder.Services.AddQuartz(q =>
+{
+    q.UseMicrosoftDependencyInjectionScopedJobFactory();
+    // Just use the name of your job that you created in the Jobs folder.
+    var jobKey = new JobKey("VerifyServiceExpiration");
+    q.AddJob<VerifyServicesExpiration>(opts => opts.WithIdentity(jobKey));
+
+    q.AddTrigger(opts => opts
+        .ForJob(jobKey)
+        .WithIdentity("VerifyServiceExpiration-trigger")
+        //This Cron interval can be described as "run every minute" (when second is zero)
+        .WithCronSchedule("0 * * ? * *")
+    );
+});
+//builder.Services.AddQuartzHostedService(q => q.WaitForJobsToComplete = true);
+
 var app = builder.Build();
 
 var cultureInfo = new CultureInfo("es-MX");
@@ -51,13 +70,13 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
-app.UseAuthentication();
-app.UseAuthorization();
-
 app.MapControllers();
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseRouting();
+
+app.UseAuthentication();
+app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",

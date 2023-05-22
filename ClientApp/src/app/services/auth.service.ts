@@ -26,7 +26,7 @@ export class AuthService {
     localStorage.setItem('IdCliente', IdCliente)
   }
 
-  removeToken(){
+  removeData(){
     localStorage.removeItem('token')
     localStorage.removeItem('Id')
     localStorage.removeItem('NombreCompleto')

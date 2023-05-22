@@ -17,7 +17,8 @@
                         </button>
                         <mat-menu #options="matMenu">
                             <a mat-menu-item [routerLink]="['/historial']"><span class="text-sm">Historial de pagos</span></a>
-                            <a mat-menu-item (click)="openCancelModal('150ms','150ms', id)"><span class="text-sm">Cancelar</span></a>
+                            <a mat-menu-item (click)="openCancelModal('150ms','150ms', id)" *ngIf="status != 'Cancelado'"><span class="text-sm">Cancelar</span></a>
+                            <a mat-menu-item (click)="requestReactivation()" *ngIf="status == 'Cancelado'"><span class="text-sm">Solicitar reactivación</span></a>
                         </mat-menu>
                     </div>
                     

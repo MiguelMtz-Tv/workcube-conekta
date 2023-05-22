@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { getBaseUrl } from 'src/main';
+import { Sessions } from '../applicationConfig/application-service';
 
 @Injectable({
   providedIn: 'root'
@@ -11,14 +12,14 @@ export class AspNetUserService {
   constructor(private http: HttpClient) { this.baseUrl = getBaseUrl(), this.idUser = localStorage.getItem('Id') }
 
   getUserFullName(){
-    return this.http.get<any>(this.baseUrl+'api/aspnetuser/client/'+this.idUser)
+    return this.http.get<any>(this.baseUrl+'api/aspnetuser/client/'+this.idUser, Sessions.header())
   }
 
   updateUser(objUser : any){
-    return this.http.put<any>(this.baseUrl+'api/aspnetuser/update/'+this.idUser, objUser)
+    return this.http.put<any>(this.baseUrl+'api/aspnetuser/update/'+this.idUser, objUser, Sessions.header())
   }
 
   updatePassword(objPass : any){
-    return this.http.put<any>(this.baseUrl+'api/aspnetuser/updatepass/'+this.idUser, objPass)
+    return this.http.put<any>(this.baseUrl+'api/aspnetuser/updatepass/'+this.idUser, objPass, Sessions.header())
   }
 }

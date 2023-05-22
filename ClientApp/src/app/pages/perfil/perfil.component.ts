@@ -84,7 +84,8 @@ export class PerfilComponent implements OnInit {
   }
 
   onSubmitPasswordForm(){
-    this.objUSerService.updatePassword(this.passwordForm.value).pipe(
+    this.objUSerService.updatePassword(this.passwordForm.value)
+    .pipe(
       catchError(error => {
         this.toast.error('Contraseña incorrecta',{
           style: {

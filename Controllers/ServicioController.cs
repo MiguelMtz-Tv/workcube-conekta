@@ -1,6 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using System.Text.Json.Nodes;
 using Workcube.Libraries;
 using workcube_pagos.Models;
 using workcube_pagos.Services;
@@ -18,6 +20,7 @@ namespace workcube_pagos.Controllers
             _serviciosService = serviciosService; 
         }
 
+        [Authorize]
         [HttpPut("cancel")]
         public async Task<ActionResult> CancelService([FromBody] CancelServiceReq model)
         {
@@ -28,31 +31,36 @@ namespace workcube_pagos.Controllers
             return Ok(serviceToCancel);
         }
 
-        [HttpGet("clientservices/{id}")]
-        public async Task<ActionResult> GetClientServices(int Id)
+        [HttpPost("List")]
+        [Authorize]
+        public async Task<ActionResult> List(JsonObject data)
         {
-            var services = await _serviciosService.GetClientServices(Id);
-            return Ok(services);
+            JsonReturn objReturn = new JsonReturn();
+            
+            try
+            {
+                dynamic argData = Globals.JsonData(data);
 
-            //JsonReturn objReturn = new JsonReturn();
-            //try
-            //{
-            //    var services = await _serviciosService.GetClientServices(Id);
+                int idCliente = Globals.ParseInt(argData.idUser);
 
-            //    objReturn.Result = services;
-            //    objReturn.Title     = "Consulta satisfactoria";
-            //    objReturn.Message   = "Se encontraron datos";
-            //}
-            //catch (AppException exception)
-            //{
-            //    objReturn.Exception(exception);
-            //}
-            //catch (Exception exception)
-            //{
-            //    objReturn.Exception(ExceptionMessage.RawException(exception));
-            //}
+                var services = await _serviciosService.GetClientServices(idCliente);
 
-            //return objReturn.build();
+                objReturn.Result = services;
+                //objReturn.Result = new { list = services };
+
+                objReturn.Title = "Consulta satisfactoria";
+                objReturn.Message = "Se encontraron datos";
+            }
+            catch (AppException exception)
+            {
+                objReturn.Exception(exception);
+            }
+            catch (Exception exception)
+            {
+                objReturn.Exception(ExceptionMessage.RawException(exception));
+            }
+
+            return objReturn.build();
         }
     }
 }
