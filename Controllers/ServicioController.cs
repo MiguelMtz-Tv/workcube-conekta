@@ -31,8 +31,8 @@ namespace workcube_pagos.Controllers
             return Ok(serviceToCancel);
         }
 
-        [HttpPost("List")]
         [Authorize]
+        [HttpPost("List")]
         public async Task<ActionResult> List(JsonObject data)
         {
             JsonReturn objReturn = new JsonReturn();

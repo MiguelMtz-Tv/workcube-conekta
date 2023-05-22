@@ -5,14 +5,13 @@ using System.Text;
 using Workcube.JwtAutentication;
 using workcube_pagos.ViewModel.Res;
 using System.Text.Json;
-using System.Security.Cryptography;
 
 namespace workcube_pagos.TokenHandler
 {
     public class JwtTokenHandler
     {
         private const int JWT_TOKEN_VALIDITY_MINS = 60; // Tiempo de validez del token en minutos
-        private const string JWT_SECURITY_KEY = "jdiosajdoks";
+        private const string JWT_SECURITY_KEY = "veryVerySecret1!~_^";
 
         public JwtTokenHandler() { }
 
@@ -21,13 +20,8 @@ namespace workcube_pagos.TokenHandler
             var tokenIssuedAt = DateTime.UtcNow;
             var tokenExpiration = tokenIssuedAt.AddMinutes(JWT_TOKEN_VALIDITY_MINS);
 
-            using var rsa = RSA.Create();
-
-            // Generar una clave privada RSA válida
-            var privateKey = new RSACryptoServiceProvider();
-            privateKey.ImportParameters(rsa.ExportParameters(true));
-
-            var signingCredentials = new SigningCredentials(new RsaSecurityKey(privateKey), SecurityAlgorithms.RsaSha256);
+            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(JWT_SECURITY_KEY));
+            var signingCredentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
 
             var claims = new List<Claim>
             {
