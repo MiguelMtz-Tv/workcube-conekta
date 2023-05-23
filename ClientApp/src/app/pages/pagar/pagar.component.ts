@@ -3,6 +3,7 @@ import {MatDialog} from '@angular/material/dialog';
 import { AddCardComponent } from 'src/app/components/dialogs/add-card/add-card.component';
 import { ConfirmarPagoComponent } from 'src/app/components/dialogs/confirmar-pago/confirmar-pago.component';
 import { DataService } from 'src/app/services/data.service';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-pagar',
@@ -11,8 +12,10 @@ import { DataService } from 'src/app/services/data.service';
 })
 export class PagarComponent implements OnInit {
   selectedCard: string = '5771'
+  id: number = 0
 
-  constructor(private dialog: MatDialog, private dataService: DataService){ }
+
+  constructor(private dialog: MatDialog, private dataService: DataService, private route: ActivatedRoute){ }
 
   cards: any = [
     {
@@ -56,6 +59,11 @@ export class PagarComponent implements OnInit {
   }
 
   ngOnInit() {
+    //obtener id
+    this.id = Number(this.route.snapshot.paramMap.get('id'));
+    console.log(Number(this.route.snapshot.paramMap.get('id')))
+    console.log(this.id)
+
     this.dataService.getCardDataService().subscribe((form)=>{
       let newId= this.cards.length + 1
       let lastFour = form.numTarjeta.slice(form.numTarjeta.length-4)

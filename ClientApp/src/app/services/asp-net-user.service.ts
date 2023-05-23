@@ -12,14 +12,14 @@ export class AspNetUserService {
   constructor(private http: HttpClient) { this.baseUrl = getBaseUrl(), this.idUser = localStorage.getItem('Id') }
 
   getUserFullName(){
-    return this.http.get<any>(this.baseUrl+'api/aspnetuser/client/'+this.idUser, Sessions.header())
+    return this.http.get<any>(this.baseUrl+'api/aspnetuser/client/'+this.idUser)
   }
 
   updateUser(objUser : any){
-    return this.http.put<any>(this.baseUrl+'api/aspnetuser/update/'+this.idUser, objUser, Sessions.header())
+    return this.http.put<any>(this.baseUrl+'api/aspnetuser/update/'+this.idUser, objUser)
   }
 
   updatePassword(objPass : any){
-    return this.http.put<any>(this.baseUrl+'api/aspnetuser/updatepass/'+this.idUser, objPass, Sessions.header())
+    return this.http.put<any>(this.baseUrl+'api/aspnetuser/updatepass/'+this.idUser, objPass)
   }
 }

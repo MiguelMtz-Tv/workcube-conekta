@@ -14,16 +14,15 @@ export class ServiciosService {
   constructor(private http: HttpClient) { this.idUser = localStorage.getItem('IdCliente'), this.baseUrl = Server.base() }
 
   getUserServices(){
-    return this.http.post<any>(this.baseUrl+'api/servicio/list/', { idUser : this.idUser }, {
-      headers:{
-        'Content-Type'      : 'application/json',
-        'Authorization'     : 'Bearer ' + localStorage.getItem('token')
-      }
-    })
+    return this.http.get<any>(this.baseUrl+'api/Servicio/List/' + this.idUser)
+  }
+
+  getServiceDetails(serviceData : any){
+    return this.http.post<any>(this.baseUrl + 'api/Servicio/', serviceData)
   }
 
   cancelService(serviceData : any){
-    return this.http.put<any>(this.baseUrl+'api/servicio/cancel/', serviceData, Sessions.header())
+    return this.http.put<any>(this.baseUrl+'api/servicio/cancel/', serviceData)
   }
 }
 

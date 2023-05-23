@@ -2,16 +2,15 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using Workcube.JwtAutentication;
 using workcube_pagos.ViewModel.Res;
-using System.Text.Json;
+
 
 namespace workcube_pagos.TokenHandler
 {
     public class JwtTokenHandler
     {
         private const int JWT_TOKEN_VALIDITY_MINS = 60; // Tiempo de validez del token en minutos
-        private const string JWT_SECURITY_KEY = "veryVerySecret1!~_^";
+        private const string JWT_SECURITY_KEY = "yPkCqn4kSWLtaJwXvN2jGzpQRyTZ3gdXkt7FeBJP";
 
         public JwtTokenHandler() { }
 
@@ -37,24 +36,20 @@ namespace workcube_pagos.TokenHandler
                 IssuedAt = tokenIssuedAt,
                 NotBefore = tokenIssuedAt,
                 Expires = tokenExpiration,
-                SigningCredentials = signingCredentials
+                SigningCredentials = signingCredentials,
             };
 
             var jwtSecurityTokenHandler = new JwtSecurityTokenHandler();
             var securityToken = jwtSecurityTokenHandler.CreateToken(securityTokenDescriptor);
             var token = jwtSecurityTokenHandler.WriteToken(securityToken);
 
-            var loginResJson = JsonSerializer.Serialize(new LoginRes
+            return new LoginRes
             {
                 Token = token,
                 Id = objAspNetUser.Id,
                 NombreCompleto = objAspNetUser.NombreCompleto,
                 IdCliente = objAspNetUser.IdCliente
-            });
-
-            var loginRes = JsonSerializer.Deserialize<LoginRes>(loginResJson);
-
-            return loginRes;
+            };
         }
     }
 }

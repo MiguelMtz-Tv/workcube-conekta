@@ -18,6 +18,12 @@ namespace workcube_pagos.Services
             return await _context.Servicios.Where(s => s.IdCliente == Id).ToListAsync();
         }
 
+        //para obtener los detalles de un servicio
+        public async Task<Servicio> GetService(int Id)
+        {
+            return await _context.Servicios.FindAsync(Id);
+        }
+
         //para cancelar un servicio
         public async Task<Servicio> CancelService(CancelServiceReq model) 
         {

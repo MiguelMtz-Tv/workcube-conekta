@@ -1,10 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
-using System.Text.Json.Nodes;
-using Workcube.Libraries;
-using workcube_pagos.Models;
 using workcube_pagos.Services;
 using workcube_pagos.ViewModel.Req;
 
@@ -20,47 +15,45 @@ namespace workcube_pagos.Controllers
             _serviciosService = serviciosService; 
         }
 
-        [Authorize]
+        [Authorize(AuthenticationSchemes = "Bearer")]
         [HttpPut("cancel")]
         public async Task<ActionResult> CancelService([FromBody] CancelServiceReq model)
         {
             var serviceToCancel = await _serviciosService.CancelService(model);
+            
             if (serviceToCancel == null) {
                 return BadRequest("servicio no encontrado");
             }
             return Ok(serviceToCancel);
         }
 
-        [Authorize]
-        [HttpPost("List")]
-        public async Task<ActionResult> List(JsonObject data)
+        [Authorize(AuthenticationSchemes = "Bearer")]
+        [HttpGet("List/{id}")]
+        public async Task<ActionResult> List(int id)
         {
-            JsonReturn objReturn = new JsonReturn();
+            var result = await _serviciosService.GetClientServices(id);
             
-            try
-            {
-                dynamic argData = Globals.JsonData(data);
-
-                int idCliente = Globals.ParseInt(argData.idUser);
-
-                var services = await _serviciosService.GetClientServices(idCliente);
-
-                objReturn.Result = services;
-                //objReturn.Result = new { list = services };
-
-                objReturn.Title = "Consulta satisfactoria";
-                objReturn.Message = "Se encontraron datos";
-            }
-            catch (AppException exception)
-            {
-                objReturn.Exception(exception);
-            }
-            catch (Exception exception)
-            {
-                objReturn.Exception(ExceptionMessage.RawException(exception));
+            if (result == null) { 
+                return NotFound("al parecer el usuario no tiene servicios contratados");
             }
 
-            return objReturn.build();
+            return Ok(result);
         }
+
+        [Authorize(AuthenticationSchemes = "Bearer")]
+        [HttpGet("{id}")]
+        public async Task<ActionResult> GetService(int id)
+        {
+            var result = await _serviciosService.GetService(id);
+
+            if (result == null)
+            {
+                return NotFound("servicio no encontrado");
+            }
+
+            return Ok(result);
+        }
+
+
     }
 }

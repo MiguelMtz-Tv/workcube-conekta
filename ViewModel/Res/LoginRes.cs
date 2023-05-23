@@ -1,6 +1,4 @@
-﻿using MimeKit.Cryptography;
-
-namespace workcube_pagos.ViewModel.Res
+﻿namespace workcube_pagos.ViewModel.Res
 {
     public class LoginRes
     {

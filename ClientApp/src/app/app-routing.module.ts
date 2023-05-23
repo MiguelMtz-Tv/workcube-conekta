@@ -9,7 +9,7 @@ import { PerfilComponent } from './pages/perfil/perfil.component'
 import { HistorialPagosComponent } from './pages/historial-pagos/historial-pagos.component'
 import { PagarComponent } from './pages/pagar/pagar.component'
 import { PagesModule } from './pages/pages.module'
-import { AuthGuard } from './guards/auth.guard'
+import { AuthGuard } from './auth/guards/auth.guard'
 
 const pahts: Routes = [
     { path: '', component: LoginComponent, pathMatch: 'full' },
@@ -18,7 +18,7 @@ const pahts: Routes = [
     { path: 'tarjetas', component: TarjetasComponent, canActivate:[AuthGuard] },
     { path: 'perfil', component: PerfilComponent, canActivate:[AuthGuard] },
     { path: 'historial', component: HistorialPagosComponent, canActivate:[AuthGuard] },
-    { path: 'pagar', component: PagarComponent, canActivate:[AuthGuard] },
+    { path: 'pagar/:id', component: PagarComponent, canActivate:[AuthGuard] },
 ]
 
 

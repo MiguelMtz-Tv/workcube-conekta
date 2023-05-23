@@ -21,7 +21,7 @@ namespace workcube_pagos.Controllers
             return Ok("usuario añadido");
         }
 
-        [Authorize]
+        [Authorize(AuthenticationSchemes = "Bearer")]
         [HttpGet("client/{id}")] //obtener un usuario (solo nombre y apellidos)
         public async Task<ActionResult> GetUserNames(string id)
         {
@@ -34,7 +34,7 @@ namespace workcube_pagos.Controllers
             return Ok(user);
         }
 
-        [Authorize]
+        [Authorize(AuthenticationSchemes = "Bearer")]
         [HttpPut("update/{id}")] //actaulizar un usuario
         public async Task<ActionResult> UpdateUser(string id, [FromBody] UpdateUserReq user)
         {
@@ -46,7 +46,7 @@ namespace workcube_pagos.Controllers
             return Ok(updatedUser);
         }
 
-        [Authorize]
+        [Authorize(AuthenticationSchemes = "Bearer")]
         [HttpPut("updatepass/{id}")] //actualizar contraseña
         public async Task<ActionResult> UpdatePassword(string id, [FromBody] UpdatePasswordReq passwordReq)
         {   

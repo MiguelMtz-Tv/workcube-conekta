@@ -1,20 +1,35 @@
 ﻿global using workcube_pagos.Models;
 global using workcube_pagos.Data;
 global using Microsoft.AspNetCore.Identity;
-global using Microsoft.AspNetCore.Authentication.JwtBearer;
 global using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
-using System.Text;
-using Workcube.JwtAutentication;
 using workcube_pagos.Services;
 using workcube_pagos.TokenHandler;
 using System.Globalization;
 using Quartz;
-using workcube_pagos.Jobs;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
-//Inyecta las dependencias de JWT.
-builder.Services.AddCustomJwtAuthentication();
+
+//inject jwt authentication
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+})
+.AddJwtBearer(options =>
+{
+    options.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuer = false, // Validar el emisor
+        ValidateAudience = false, // Validar la audiencia
+        ValidateLifetime = true, // Validar el tiempo de vida del token
+        ValidateIssuerSigningKey = true, // Validar la firma
+
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("yPkCqn4kSWLtaJwXvN2jGzpQRyTZ3gdXkt7FeBJP"))
+    };
+});
 
 //connection
 builder.Services.AddDbContext<DataContext>(opt => opt.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
@@ -39,29 +54,16 @@ builder.Services.AddIdentity<AspNetUser, IdentityRole>(options =>
 builder.Services.AddControllers();
 builder.Services.AddSingleton<JwtTokenHandler>();
 
-//Configuracion de Quartz
-builder.Services.AddQuartz(q =>
-{
-    q.UseMicrosoftDependencyInjectionScopedJobFactory();
-    // Just use the name of your job that you created in the Jobs folder.
-    var jobKey = new JobKey("VerifyServiceExpiration");
-    q.AddJob<VerifyServicesExpiration>(opts => opts.WithIdentity(jobKey));
-
-    q.AddTrigger(opts => opts
-        .ForJob(jobKey)
-        .WithIdentity("VerifyServiceExpiration-trigger")
-        //This Cron interval can be described as "run every minute" (when second is zero)
-        .WithCronSchedule("0 * * ? * *")
-    );
-});
-//builder.Services.AddQuartzHostedService(q => q.WaitForJobsToComplete = true);
-
 var app = builder.Build();
 
 var cultureInfo = new CultureInfo("es-MX");
 
 CultureInfo.DefaultThreadCurrentCulture = cultureInfo;
 CultureInfo.DefaultThreadCurrentUICulture = cultureInfo;
+
+//
+var jwtSecurityKey = "TuClaveDeFirmaSecreta";
+var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSecurityKey));
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())

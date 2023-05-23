@@ -27,8 +27,6 @@ export class ServiciosComponent implements OnInit {
       objST.Name : "Serv1",
       objST.Descripcion : ""
     }; */
-
-    console.log(Sessions.header())
   }
 
 }
