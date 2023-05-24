@@ -4,6 +4,9 @@ import { AddCardComponent } from 'src/app/components/dialogs/add-card/add-card.c
 import { ConfirmarPagoComponent } from 'src/app/components/dialogs/confirmar-pago/confirmar-pago.component';
 import { DataService } from 'src/app/services/data.service';
 import { ActivatedRoute } from '@angular/router';
+import { ServiciosService } from 'src/app/services/servicios.service';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { CuponesService } from 'src/app/services/cupones.service';
 
 @Component({
   selector: 'app-pagar',
@@ -12,69 +15,93 @@ import { ActivatedRoute } from '@angular/router';
 })
 export class PagarComponent implements OnInit {
   selectedCard: string = '5771'
+
   id: number = 0
+  servicio: string = ''
+  servicioCosto: number = 0
+  descuento: number = 0
+  total: number = 0
 
+ 
+  constructor(
+    private dialog: MatDialog, 
+    private dataService: DataService, 
+    private route: ActivatedRoute, 
+    private serviciosService: ServiciosService,
+    private cuponesService: CuponesService
+    )
+    { 
+    this.id = Number(this.route.snapshot.paramMap.get('id')) 
+    }
 
-  constructor(private dialog: MatDialog, private dataService: DataService, private route: ActivatedRoute){ }
+  ngOnInit() {
+    this.serviciosService.getServiceDetails(this.id).subscribe(res => {
+      this.servicio =         res.servicioTipoName
+      this.servicioCosto =    res.servicioTipoCosto 
+    })
+
+    this.dataService.getCardDataService().subscribe((form)=>{
+      let newId=          this.cards.length + 1
+      let lastFour =      form.numTarjeta.slice(form.numTarjeta.length-4)
+      let data = {
+        id: newId,
+        finishedIn:       form.numTarjeta,
+        owner:            form.nombreTitular,
+        expiration:       form.vencimiento,
+        lastFour:         lastFour,
+      }
+      this.cards.push(data);
+    })
+  }
 
   cards: any = [
     {
-      id: '1',
+      id:         '1',
       finishedIn: '4152313451205771',
-      owner: 'Miguel Martinez Castro',
+      owner:      'Miguel Martinez Castro',
       expiration: '07/24',
-      lastFour: '5771',
+      lastFour:   '5771',
     },
     {
-      id: '2',
+      id:         '2',
       finishedIn: '4152313451204489',
-      owner: 'Carlos Rivera Lopez',
+      owner:      'Carlos Rivera Lopez',
       expiration: '07/23',
-      lastFour: '4489',
+      lastFour:   '4489',
     },
     {
-      id: '3',
+      id:         '3',
       finishedIn: '4152313451202213',
-      owner: 'Martín Mendez Loeza',
+      owner:      'Martín Mendez Loeza',
       expiration: '07/21',
-      lastFour: '2213',
+      lastFour:   '2213',
     }
   ]
 
   addCard(enterAnimationDuration: string, exitAnimationDuration: string): void{
     this.dialog.open(AddCardComponent,{
-      width: '90%',
-      maxWidth: '700px',
+      width:                    '90%',
+      maxWidth:                 '700px',
       enterAnimationDuration,
       exitAnimationDuration
     })
   }
   confirmPay(enterAnimationDuration: string, exitAnimationDuration: string): void{
     this.dialog.open(ConfirmarPagoComponent,{
-      width: '90%',
-      maxWidth: '500px',
+      width:                    '90%',
+      maxWidth:                 '500px',
       enterAnimationDuration,
       exitAnimationDuration
     })
-  }
+  } 
 
-  ngOnInit() {
-    //obtener id
-    this.id = Number(this.route.snapshot.paramMap.get('id'));
-    console.log(Number(this.route.snapshot.paramMap.get('id')))
-    console.log(this.id)
+  cuponForm = new FormGroup({
+    code: new FormControl('', Validators['required'])
+  })
 
-    this.dataService.getCardDataService().subscribe((form)=>{
-      let newId= this.cards.length + 1
-      let lastFour = form.numTarjeta.slice(form.numTarjeta.length-4)
-      let data = {
-        id: newId,
-        finishedIn: form.numTarjeta,
-        owner: form.nombreTitular,
-        expiration: form.vencimiento,
-        lastFour: lastFour,
-      }
-      this.cards.push(data);
+  onSubmitCuponForm(){
+    this.cuponesService.getCupon(this.cuponForm.value.code).subscribe(res => {
+      console.log(res)
     })
   }
 

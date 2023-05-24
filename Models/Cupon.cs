@@ -8,7 +8,7 @@ namespace workcube_pagos.Models
     {
         [Key]
         public int IdCupon { get; set; }
-        public string Name { get; set; }
+        public string Codigo { get; set; }
         public string Descripcion { get; set; }
         public int IdServicio { get; set; }
         public Servicio Servicio { get; set; }
@@ -27,7 +27,5 @@ namespace workcube_pagos.Models
         Vigente,
         [Display(Name = "Vencido")]
         Vencido,
-        [Display(Name = "Cancelado")]
-        Cancelado
     }
 }

@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Text.Json.Nodes;
 using workcube_pagos.Services;
 using workcube_pagos.ViewModel.Req;
 
@@ -28,10 +29,10 @@ namespace workcube_pagos.Controllers
         }
 
         [Authorize(AuthenticationSchemes = "Bearer")]
-        [HttpGet("List/{id}")]
-        public async Task<ActionResult> List(int id)
+        [HttpPost("List")]
+        public async Task<ActionResult> List([FromBody] int Id)
         {
-            var result = await _serviciosService.GetClientServices(id);
+            var result = await _serviciosService.GetClientServices(Id);
             
             if (result == null) { 
                 return NotFound("al parecer el usuario no tiene servicios contratados");
@@ -41,10 +42,10 @@ namespace workcube_pagos.Controllers
         }
 
         [Authorize(AuthenticationSchemes = "Bearer")]
-        [HttpGet("{id}")]
-        public async Task<ActionResult> GetService(int id)
+        [HttpPost]
+        public async Task<ActionResult> GetService([FromBody] GetServiceReq model)
         {
-            var result = await _serviciosService.GetService(id);
+            var result = await _serviciosService.GetService(model);
 
             if (result == null)
             {
