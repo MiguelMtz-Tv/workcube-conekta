@@ -4,45 +4,48 @@
             <img src="http://treo.workcubeapp.com/assets/images/logo/logo.svg" class="w-20" draggable="false">
             <app-page-title title="Crea una cuenta" subtitle="Recuerda tener un numero de contrato"/>
         </div>
-        <form action="">
+        <form [formGroup]="form" (ngSubmit)="addUser()">
             <div class="flex justify-between">
                 <div class="flex flex-col mb-6 mr-1">
                     <label class="text-sm  mb-2" for="">Nombre(s)</label>
-                    <input type="text" class="p-2 border border-zinc-300 rounded" placeholder="Ingresa tu contraseña">
+                    <input type="text" class="p-2 border border-zinc-300 rounded" placeholder="Ingresa tu contraseña" formControlName="Nombre">
                 </div>
                 <div class="flex flex-col mb-6 ml-1">
                     <label class="text-sm  mb-2" for="">Apellido paterno</label>
-                    <input type="text" class="p-2 border border-zinc-300 rounded" placeholder="Ingresa tu apellido paterno">
+                    <input type="text" class="p-2 border border-zinc-300 rounded" placeholder="Ingresa tu apellido paterno" formControlName="ApellidoPat">
                 </div>
             </div>
             <div class="flex justify-between">
                 <div class="flex flex-col mb-6 mr-1">
                     <label class="text-sm  mb-2" for="">Apellido materno</label>
-                    <input type="text" class="p-2 border border-zinc-300 rounded" placeholder="Ingresa tu apellido materno">
+                    <input type="text" class="p-2 border border-zinc-300 rounded" placeholder="Ingresa tu apellido materno" formControlName="ApellidoMat">
                 </div>
                 <div class="flex flex-col mb-6 ml-1">
                     <label class="text-sm  mb-2" for="">Nombre de usuario</label>
-                    <input type="text" class="p-2 border border-zinc-300 rounded" placeholder="Elige un nombre de usuario">
+                    <input type="text" class="p-2 border border-zinc-300 rounded" placeholder="Elige un nombre de usuario" formControlName="UserName">
                 </div>
             </div>
             <div class="flex flex-col mb-6">
                 <label class="text-sm  mb-2" for="">Correo</label>
-                <input type="text" class="p-2 border border-zinc-300 rounded" placeholder="Ingresa tu correo">
+                <input type="text" class="p-2 border border-zinc-300 rounded" placeholder="Ingresa tu correo" formControlName="Email">
             </div>
             <div class="flex flex-col mb-6">
                 <label class="text-sm  mb-2" for="">Numero de contrato</label>
-                <input type="text" class="p-2 border border-zinc-300 rounded" placeholder="Ingresa tu numero de contrato">
+                <input type="text" class="p-2 border border-zinc-300 rounded" placeholder="Ingresa tu numero de contrato" formControlName="NumeroContrato">
             </div>
             <div class="flex flex-col mb-6">
                 <label class="text-sm  mb-2" for="">Contraseña</label>
-                <input type="password" class="p-2 border border-zinc-300 rounded" placeholder="Ingresa tu contraseña">
+                <input type="password" class="p-2 border border-zinc-300 rounded" placeholder="Ingresa tu contraseña" formControlName="Password" [(ngModel)]="setPassword" (ngModelChange)="comparePassword()">
             </div>
             <div class="flex flex-col mb-6">
                 <label class="text-sm  mb-2" for="">Confirmar contraseña</label>
-                <input type="password" class="p-2 border border-zinc-300 rounded" placeholder="Confirma tu contraseña">
+                <input type="password" class="p-2 border border-zinc-300 rounded" placeholder="Confirma tu contraseña" formControlName="passConfirm" [(ngModel)]="confirmPassword" (ngModelChange)="comparePassword()">
+            </div>
+            <div class="flex flex-col mb-6" *ngIf="canConfirm == false">
+                <span class="text-red-500">Las contraseñas no coinciden</span>
             </div>
             <div class="flex">
-                <button mat-flat-button color="primary" [routerLink]="['/servicios']" type="button" class="w-full" (click)="addUser()">
+                <button mat-flat-button color="primary" type="submit" class="w-full" [disabled]="canConfirm == false || !form.valid">
                     Crear cuenta
                 </button>
             </div>

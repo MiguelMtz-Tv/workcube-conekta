@@ -7,6 +7,8 @@ import { ActivatedRoute } from '@angular/router';
 import { ServiciosService } from 'src/app/services/servicios.service';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { CuponesService } from 'src/app/services/cupones.service';
+import { catchError, throwError } from 'rxjs';
+import { HotToastService } from '@ngneat/hot-toast';
 
 @Component({
   selector: 'app-pagar',
@@ -17,10 +19,16 @@ export class PagarComponent implements OnInit {
   selectedCard: string = '5771'
 
   id: number = 0
-  servicio: string = ''
-  servicioCosto: number = 0
-  descuento: number = 0
+
+  servicio: any = []
   total: number = 0
+  descuento: number = 0
+  cuponCode: string = ''
+
+  areDiscount: boolean = false
+  
+  cuponIsLoading: boolean = false
+  paymentIsLoading: boolean = false
 
  
   constructor(
@@ -28,7 +36,8 @@ export class PagarComponent implements OnInit {
     private dataService: DataService, 
     private route: ActivatedRoute, 
     private serviciosService: ServiciosService,
-    private cuponesService: CuponesService
+    private cuponesService: CuponesService,
+    private toast: HotToastService
     )
     { 
     this.id = Number(this.route.snapshot.paramMap.get('id')) 
@@ -36,8 +45,8 @@ export class PagarComponent implements OnInit {
 
   ngOnInit() {
     this.serviciosService.getServiceDetails(this.id).subscribe(res => {
-      this.servicio =         res.servicioTipoName
-      this.servicioCosto =    res.servicioTipoCosto 
+      this.servicio = res
+      this.total = res.servicioTipoCosto
     })
 
     this.dataService.getCardDataService().subscribe((form)=>{
@@ -100,9 +109,43 @@ export class PagarComponent implements OnInit {
   })
 
   onSubmitCuponForm(){
-    this.cuponesService.getCupon(this.cuponForm.value.code).subscribe(res => {
-      console.log(res)
+    this.cuponIsLoading = true
+    this.cuponesService.getCupon(this.cuponForm.value.code)
+    .pipe(
+      catchError(error => {
+        this.toast.error('Cupón invalido',{
+          style: {
+            margin:     '100px 20px',
+            padding:    '15px'
+          },
+          position:     'top-right'
+        })
+        this.cuponIsLoading = false
+        return throwError(error)
+      })
+    )
+    .subscribe(res => {
+      this.descuento = res.monto
+      this.cuponCode = res.codigo
+      this.areDiscount = true
+      this.total = this.servicio.servicioTipoCosto - res.monto
+      this.toast.success('Se aplicó un cupón de descuento',{
+        style: {
+          margin:     '100px 20px',
+          padding:    '15px'
+        },
+        position:     'top-right'
+      })
+      this.cuponIsLoading = false 
     })
+  }
+
+  onSubmitPayment(){
+    if(this.areDiscount){
+      console.log({IdServicio: this.id, Codigo: this.cuponCode})
+    }else{
+      console.log(this.id)
+    }
   }
 
   selectCard(lastFour: string){

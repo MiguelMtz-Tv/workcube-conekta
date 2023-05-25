@@ -15,10 +15,11 @@ namespace workcube_pagos.Controllers
         }
 
         [HttpPost] //creacion de usuario
-        public async Task<ActionResult> AddUser([FromBody] SingUpReq user)
+        public async Task<ActionResult> AddUser([FromBody] SingUpReq model)
         {
-            await _usersService.AddUser(user);
-            return Ok("usuario añadido");
+            var result = await _usersService.AddUser(model);
+            
+            return Ok(result);
         }
 
         [Authorize(AuthenticationSchemes = "Bearer")]

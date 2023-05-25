@@ -11,6 +11,10 @@ export class AspNetUserService {
   idUser: any
   constructor(private http: HttpClient) { this.baseUrl = getBaseUrl(), this.idUser = localStorage.getItem('Id') }
 
+  createNewUser(objUser : any){
+    return this.http.post<any>(this.baseUrl+'api/aspnetuser', objUser)
+  }
+
   getUserFullName(){
     return this.http.get<any>(this.baseUrl+'api/aspnetuser/client/'+this.idUser)
   }

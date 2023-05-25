@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using System.Net.WebSockets;
 using workcube_pagos.ViewModel.Req;
 using workcube_pagos.ViewModel.Statics;
 
@@ -81,26 +82,34 @@ namespace workcube_pagos.Services
         }
         
         //para añadir un nuevo usuario
-        public async Task<AspNetUser> AddUser(SingUpReq user)
+        public async Task<string> AddUser(SingUpReq model)
         {
-            var NewUser = new AspNetUser();
+            //Verificar si el numero de contrato ya está en uso
+            var contractAlredyUsed = await _context.AspNetUsers.Where(asp => asp.Cliente.NumeroContrato == model.NumeroContrato).FirstOrDefaultAsync();
+            if (contractAlredyUsed != null) { return "Este número de contrato ya está en uso"; }
 
-            NewUser.IdCliente = user.IdCliente;
-            NewUser.Email = user.Email;
-            NewUser.IdCliente = user.IdCliente;
-            NewUser.Nombre = user.Nombre;
-            NewUser.ApellidoPat = user.ApellidoPat;
-            NewUser.ApellidoMat = user.ApellidoMat;
-            NewUser.UserName =  user.UserName;
+            //verificar si el numero de contrato existe y obtener al cliente
+            var Cliente = await _context.Clientes.Where(c => c.NumeroContrato == model.NumeroContrato).FirstOrDefaultAsync();
+            if (Cliente == null) { return "Este número de contrato no existe"; }
 
-            NewUser.EmailConfirmed = true;
-            NewUser.PhoneNumberConfirmed = true;
-            NewUser.TwoFactorEnabled = true;
-            NewUser.LockoutEnabled = false;
-            NewUser.AccessFailedCount = 0;
+            var NewUser = new AspNetUser
+            {
+                IdCliente = Cliente.IdCliente,
+                Email = model.Email,
+                Nombre = model.Nombre,
+                ApellidoPat = model.ApellidoPat,
+                ApellidoMat = model.ApellidoMat,
+                UserName = model.UserName,
+
+                EmailConfirmed = true,
+                PhoneNumberConfirmed = true,
+                TwoFactorEnabled = true,
+                LockoutEnabled = false,
+                AccessFailedCount = 0
+            };
 
             var PasswordHasher = new PasswordHasher<AspNetUser>();
-            var password = user.Password;
+            var password = model.Password;
             var HashedPassword = PasswordHasher.HashPassword(null, password);
             
             NewUser.PasswordHash = HashedPassword;
@@ -108,7 +117,7 @@ namespace workcube_pagos.Services
             await _context.AspNetUsers.AddAsync(NewUser);
             await _context.SaveChangesAsync();
 
-            return NewUser;
+            return "usuario creado";
 
         }
 

@@ -33,7 +33,7 @@
   <div class="mt-[83px]">
     <mat-card class="w-[350px] p-4">
       <div class="py-1 text-xl text-center">
-        Servicio {{servicio}}
+        Servicio {{servicio.servicioTipoName}}
       </div>
       <div class= "text-zinc-700 text-sm mb-4">
         Para pagar primero debes seleccionar un metodo de pago
@@ -41,19 +41,19 @@
       <div class="flex flex-col">
         <div class="flex justify-between mb-2 pt-2 border-t border-zinc-300">
           <span>Servicio:</span>
-          <span>{{servicioCosto}}MXN</span>
+          <span>{{servicio.servicioTipoCosto}}MXN</span>
         </div>
         <div class="flex justify-between mb-2 pb-2 border-b border-zinc-300">
           <span>Descuento:</span>
-          <span>0MXN</span>
+          <span>{{descuento}}MXN</span>
         </div>
         <div class="flex justify-between">
           <span class="font-semibold text-lg">Total:</span>
-          <span class="font-semibold text-lg">{{total}}</span>
+          <span class="font-semibold text-lg">{{total}}MXN</span>
         </div>
       </div>
       <div class="mt-6 w-full flex justify-center">
-        <button mat-flat-button color="primary" class="w-full" (click)="confirmPay('150ms', '150ms')">Pagar</button>
+        <button mat-flat-button color="primary" class="w-full" (click)="[confirmPay('150ms', '150ms'), onSubmitPayment()]">Pagar</button>
       </div>
     </mat-card>
 
@@ -68,7 +68,10 @@
           </mat-expansion-panel-header>
           <div class="flex justify-center w-full items-center">
               <input type="text" min="1" class="w-ful p-2 border border-zinc-300 rounded" formControlName="code">
-              <button type="submit" mat-flat-button color="primary" class="mx-2" [disabled]="!cuponForm.valid">Aplicar</button>
+              <button type="submit" mat-flat-button color="primary" class="mx-2" [disabled]="!cuponForm.valid || cuponIsLoading">
+                <span *ngIf="cuponIsLoading == false">Aplicar</span>
+                <mat-spinner *ngIf="cuponIsLoading"  diameter="20"></mat-spinner>
+              </button>
           </div>
       </mat-expansion-panel>
       </div>

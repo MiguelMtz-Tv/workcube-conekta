@@ -17,9 +17,10 @@ namespace workcube_pagos.Controllers
 
         [Authorize (AuthenticationSchemes = "Bearer")]
         [HttpPost]
-        public async Task<ActionResult> GetCupon(GetCuponReq model)
+        public async Task<ActionResult> GetCupon([FromBody]GetCuponReq model)
         {
             var result = await _cuponesService.GetCupon(model);
+
             if (result == null)
             {
                 return NotFound("No se encontró un cupón valido");

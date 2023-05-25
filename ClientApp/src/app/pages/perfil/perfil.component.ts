@@ -2,8 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { AspNetUserService } from 'src/app/services/asp-net-user.service';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { HotToastService } from '@ngneat/hot-toast';
-import { catchError } from 'rxjs/operators';
-import { throwError } from 'rxjs';
+import { catchError, throwError } from 'rxjs';
 
 @Component({
   selector: 'app-perfil',
