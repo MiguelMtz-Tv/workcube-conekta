@@ -13,7 +13,7 @@ export class CuponsDialogComponent implements OnInit {
 
   constructor(private cuponesService: CuponesService) { }
 
-  ngOnInit(): void {
+  ngOnInit() {
     this.cuponesService.getCupones().subscribe(res => {
       this.cupons = res
       if(res.length == 0){

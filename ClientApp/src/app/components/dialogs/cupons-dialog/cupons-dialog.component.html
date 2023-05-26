@@ -1,11 +1,11 @@
+<div *ngIf="emptyCupons" class="p-8 text-center">
+    <span class="text-zinc-400 text-xl">No hay cupones disponibles</span>
+</div>
+
 <app-cupon *ngFor="let cupon of cupons"
     monto="{{cupon.monto}}"
     codigo="{{cupon.codigo}}"
     descripcion="{{cupon.descripcion}}"
     vigencia="{{cupon.vigencia}}"
->
-
-<div *ngIf="emptyCupons" class="p-8 text-center">
-    <span class="text-zinc-400 text-xl">No hay cupones disponibles</span>
-</div>
+></app-cupon>
 
