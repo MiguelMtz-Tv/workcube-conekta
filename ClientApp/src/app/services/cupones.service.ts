@@ -10,7 +10,12 @@ export class CuponesService {
   idCliente: any
   constructor(private http: HttpClient) { this.baseUrl = Server.base(), this.idCliente = localStorage.getItem('IdCliente') }
 
+  getCupones(){
+    return this.http.post<any>(this.baseUrl + 'api/cupon/list', { IdCliente: Number(this.idCliente) })
+  }
+
   getCupon(codigo : any){
     return this.http.post<any>(this.baseUrl + 'api/cupon', { IdCliente: Number(this.idCliente), Codigo: codigo})
   }
+
 }

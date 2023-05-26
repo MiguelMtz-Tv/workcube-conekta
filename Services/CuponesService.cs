@@ -17,10 +17,14 @@ namespace workcube_pagos.Services
         public async Task<Cupon> GetCupon(GetCuponReq model)
         {
             var result = await _context.Cupones.Where(c => c.Codigo == model.Codigo && c.IdCliente == model.IdCliente).FirstOrDefaultAsync();
-   
-            if (result == null) {
-                return null;
-            }
+            if (result == null) { return null; }
+            return result;
+        }
+
+        public async Task<List<Cupon>> List(GetCuponReq model)
+        {
+            var result = await _context.Cupones.Where(c => c.IdCliente == model.IdCliente).ToListAsync();
+            if (result == null) { return null;}
             return result;
         }
     }

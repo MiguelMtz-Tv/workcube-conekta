@@ -11,7 +11,7 @@ namespace workcube_pagos.Models
         public string Codigo { get; set; }
         public string Descripcion { get; set; }
         public int IdServicio { get; set; }
-        public Servicio Servicio { get; set; }
+        public virtual Servicio Servicio { get; set; }
         public int IdCliente { get; set; }
         public Cliente Cliente { get; set; }
         [Column(TypeName = "decimal(18, 2)")]

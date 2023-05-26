@@ -82,6 +82,7 @@
         </button>
         <mat-menu #menu="matMenu">
             <a mat-menu-item [routerLink]="['/perfil']"><span class="text-sm">Ver perfil</span></a>
+            <a mat-menu-item (click)="showCupons('150ms','150ms')"><span class="text-sm">Ver mis cupones</span></a>
             <a mat-menu-item [routerLink]="['/']" (click)="closeSession()"><span class="text-sm">Cerrar sesión</span></a>
         </mat-menu>
     </nav>

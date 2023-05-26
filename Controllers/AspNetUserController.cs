@@ -18,7 +18,11 @@ namespace workcube_pagos.Controllers
         public async Task<ActionResult> AddUser([FromBody] SingUpReq model)
         {
             var result = await _usersService.AddUser(model);
-            
+             if(result == "")
+            {
+                
+            }
+
             return Ok(result);
         }
 

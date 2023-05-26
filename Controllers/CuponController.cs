@@ -33,5 +33,15 @@ namespace workcube_pagos.Controllers
 
             return Ok(result);
         }
+
+        [Authorize(AuthenticationSchemes = "Bearer")]
+        [HttpPost("list")]
+        public async Task<ActionResult> List([FromBody]GetCuponReq model)
+        {
+            var result = await _cuponesService.List(model);
+
+            if (result == null) { return NotFound("No hay cupones disponibles"); }
+            return Ok(result);
+        }
     }
 }

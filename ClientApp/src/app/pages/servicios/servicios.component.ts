@@ -12,10 +12,14 @@ import { Sessions } from 'src/app/applicationConfig/application-service';
 })
 export class ServiciosComponent implements OnInit {
   services: any
+  emptyServices: boolean = false
 
   constructor(private serviciosService: ServiciosService){
     this.serviciosService.getUserServices().subscribe(res => {
       this.services = res
+      if(res.length == 0){
+        this.emptyServices = true 
+      }
     });
   }
 

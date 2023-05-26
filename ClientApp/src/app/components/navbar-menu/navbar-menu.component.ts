@@ -2,6 +2,8 @@ import { Component } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 import { AuthService } from 'src/app/services/auth.service';
 import { ChangeDetectionStrategy } from '@angular/core';
+import {MatDialog, MatDialogRef, MatDialogModule} from '@angular/material/dialog';
+import { CuponsDialogComponent } from '../dialogs/cupons-dialog/cupons-dialog.component';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -13,7 +15,7 @@ export class NavbarMenuComponent {
 
   public activeLink: string = '/servicios'
 
-  constructor(private router: Router, private auth: AuthService){}
+  constructor(private router: Router, private auth: AuthService, private dialog: MatDialog){}
 
   links = [
     {
@@ -36,5 +38,16 @@ export class NavbarMenuComponent {
   closeSession(){
     this.auth.removeData();
     this.router.navigate(['/'])
+  }
+
+  showCupons(enterAnimations: string, exitAnimation: string): void{
+    this.dialog.open(CuponsDialogComponent, {
+        width: '90%',
+        maxWidth: '1024px',
+        minHeight: '300px',
+        maxHeight: '1000px',
+        enterAnimationDuration: enterAnimations,
+        exitAnimationDuration: exitAnimation,
+    })
   }
 }

@@ -14,6 +14,7 @@ import { MaterialModule } from "../shared/material.module";
 import { AddCardComponent } from './dialogs/add-card/add-card.component';
 import { ConfirmarPagoComponent } from './dialogs/confirmar-pago/confirmar-pago.component';
 import { CancelServiceComponent } from './dialogs/cancel-service/cancel-service.component';
+import { CuponsDialogComponent } from './dialogs/cupons-dialog/cupons-dialog.component';
 
 
 @NgModule({
@@ -30,6 +31,7 @@ import { CancelServiceComponent } from './dialogs/cancel-service/cancel-service.
         AddCardComponent,
         ConfirmarPagoComponent,
         CancelServiceComponent,
+        CuponsDialogComponent,
     ],
     imports:[
         CommonModule,
