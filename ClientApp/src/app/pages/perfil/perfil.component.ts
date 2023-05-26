@@ -1,8 +1,9 @@
-import { Component, OnInit } from '@angular/core';
-import { AspNetUserService } from 'src/app/services/asp-net-user.service';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { HotToastService } from '@ngneat/hot-toast';
-import { catchError, throwError } from 'rxjs';
+import { Component, OnInit } from '@angular/core'
+import { AspNetUserService } from 'src/app/services/asp-net-user.service'
+import { FormGroup, FormControl, Validators } from '@angular/forms'
+import { HotToastService } from '@ngneat/hot-toast'
+import { catchError, throwError } from 'rxjs'
+
 
 @Component({
   selector: 'app-perfil',
@@ -51,6 +52,7 @@ export class PerfilComponent implements OnInit {
       .subscribe(res => {
         this.toast.success('Usuario actualizado!', {
           style: {
+            border: '1px solid #3F51B5',
             margin: '100px 20px',
             padding: '15px'
           },

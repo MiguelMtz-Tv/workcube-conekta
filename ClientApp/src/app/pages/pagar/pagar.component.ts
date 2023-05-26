@@ -95,7 +95,7 @@ export class PagarComponent implements OnInit {
       exitAnimationDuration
     })
   }
-  confirmPay(enterAnimationDuration: string, exitAnimationDuration: string): void{
+  confirmPayment(enterAnimationDuration: string, exitAnimationDuration: string): void{
     this.dialog.open(ConfirmarPagoComponent,{
       width:                    '90%',
       maxWidth:                 '500px',
@@ -115,6 +115,7 @@ export class PagarComponent implements OnInit {
       catchError(error => {
         this.toast.error('Cupón invalido',{
           style: {
+            border: '1px solid red',
             margin:     '100px 20px',
             padding:    '15px'
           },

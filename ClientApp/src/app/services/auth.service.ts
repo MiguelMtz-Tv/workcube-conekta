@@ -28,10 +28,8 @@ export class AuthService {
   }
 
   removeData(){
-    localStorage.removeItem('token')
-    localStorage.removeItem('Id')
-    localStorage.removeItem('NombreCompleto')
-    localStorage.removeItem('IdCliente')
+    localStorage.clear()
+    window.location.reload()
   }
 
   getToken(){

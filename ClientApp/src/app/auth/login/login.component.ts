@@ -1,4 +1,3 @@
-import { HttpClient } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { getBaseUrl } from 'src/main';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
@@ -13,12 +12,13 @@ import { Router } from '@angular/router';
 export class LoginComponent {
   baseUrl: string = getBaseUrl()
   isLoading: boolean = false
+  loginError: boolean = false
 
   constructor(private auth: AuthService, private router: Router) {
   }
 
   form = new FormGroup({
-    UserName: new FormControl('', [Validators.required, Validators.email]),
+    UserName: new FormControl('', [Validators.required]),
     Password: new FormControl('', [Validators.required])
   })
 
@@ -30,7 +30,13 @@ export class LoginComponent {
         this.router.navigate(['/servicios'])
       },
       error => {
+        this.loginError = true
+        setTimeout(()=>{
+          this.loginError = false
+        }, 3000)
+
         this.isLoading = false
+        console.log(error)
       },
       () => {
         this.isLoading = false

@@ -53,8 +53,8 @@ export class ServiceCardComponent implements OnInit, OnChanges{
     //set initial status color
     this.setStatusColor()
 
-    //set pyament button
-    this.status != 'Vigente' ? this.canPay = true : null
+    //set payment button
+    this.status == 'Vencido' ? this.canPay = true : this.canPay = false
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -62,6 +62,9 @@ export class ServiceCardComponent implements OnInit, OnChanges{
       this.setStatusColor()
       this.canPay = false
     }
+
+    //set pyament button
+    this.status == 'Vencido' ? this.canPay = true : this.canPay = false
   }
 
   /* to cancel service */

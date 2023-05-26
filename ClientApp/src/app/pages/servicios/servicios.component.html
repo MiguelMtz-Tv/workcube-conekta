@@ -1,10 +1,12 @@
 <!-- servicios disponibles -->
 <div class="m-auto md:w-3/4">
-    <app-page-title title="Mis servicios"/>
 
-    <app-service-card *ngFor="let service of services" id="{{service.idServicio}}" name="{{service.servicioTipoName}}" status="{{service.servicioEstatusName}}"
-        description="{{service.servicioTipoDescripcion}}" cost="" period="{{service.peridoName}}" startDate="{{service.vigencia}}">
-    </app-service-card>
+    <div class="m-auto w-fit">
+        <app-page-title title="Mis servicios"/>
+        <app-service-card *ngFor="let service of services" id="{{service.idServicio}}" name="{{service.servicioTipoName}}" status="{{service.servicioEstatusName}}"
+        description="{{service.servicioTipoDescripcion}}" cost="" period="{{service.periodoName}}" startDate="{{service.vigencia}}">
+        </app-service-card>
+    </div>
 
     <div class="w-full text-center mt-64 flex flex-col items-center" *ngIf="emptyServices">
         <span class="text-zinc-400 text-xl">Al parecer aún no cuentas con ningún servicio. Ponte en contacto con los administradores de Workcube para contratar servicios</span>

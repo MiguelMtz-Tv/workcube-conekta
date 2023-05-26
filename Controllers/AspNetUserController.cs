@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Reflection.Metadata.Ecma335;
 using workcube_pagos.Services;
 using workcube_pagos.ViewModel.Req;
 
@@ -18,9 +17,14 @@ namespace workcube_pagos.Controllers
         public async Task<ActionResult> AddUser([FromBody] SingUpReq model)
         {
             var result = await _usersService.AddUser(model);
-             if(result == "")
+
+             if(result == "Este número de contrato ya está en uso")
             {
-                
+                return BadRequest(result);
+            }
+             if(result == "Este número de contrato no existe")
+            {
+                return BadRequest(result);
             }
 
             return Ok(result);

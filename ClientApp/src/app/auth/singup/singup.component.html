@@ -1,7 +1,9 @@
 <app-auth-layout>
-    <div class="flex flex-col p-4">
-        <div class="flex justify-between">
-            <img src="http://treo.workcubeapp.com/assets/images/logo/logo.svg" class="w-20" draggable="false">
+    <div class="flex flex-col p-4 absolute">
+        <div class="flex justify-center">
+            <div>
+                <img src="../../../assets/shared/LOGOPIXL.png" class="w-12 mt-3" draggable="false">
+            </div>
             <app-page-title title="Crea una cuenta" subtitle="Recuerda tener un numero de contrato"/>
         </div>
         <form [formGroup]="form" (ngSubmit)="addUser()">
@@ -45,13 +47,21 @@
                 <span class="text-red-500">Las contraseñas no coinciden</span>
             </div>
             <div class="flex">
-                <button mat-flat-button color="primary" type="submit" class="w-full" [disabled]="canConfirm == false || !form.valid">
-                    Crear cuenta
+                <button mat-flat-button color="primary" type="submit" class="w-full" [disabled]="canConfirm == false || !form.valid || isLoading">
+                    <mat-spinner *ngIf="isLoading" diameter="20"></mat-spinner>
+                    <span *ngIf="isLoading == false">Crear cuenta</span>
                 </button>
             </div>
         </form>
         <div class="flex justify-center items-center mt-4 pt-2 border-t border-t-zinc-300">
             <p class="text-sm">¿Ya tienes una cuenta? <a [routerLink]="['/']" class=" text-indigo-600">Inicia sesión</a></p>
         </div>
+    </div>
+     <!-- Error message -->
+     <div class="flex justify-between items-center p-3 border-2 border-red-400 rounded bg-white shadow-md relative mt-[830px]" *ngIf="singupError">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="#FF4040" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-8 h-8 text-white mr-2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M9.75 9.75l4.5 4.5m0-4.5l-4.5 4.5M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+        <span class="text-zinc-600">{{singupErrorMessage}}</span>
     </div>
 </app-auth-layout>

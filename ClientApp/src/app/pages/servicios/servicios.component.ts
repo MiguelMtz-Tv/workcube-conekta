@@ -1,9 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { DataService } from 'src/app/services/data.service';
-import { HotToastService } from '@ngneat/hot-toast';
 import { ServiciosService } from 'src/app/services/servicios.service';
-import { Sessions } from 'src/app/applicationConfig/application-service';
-
 
 @Component({
   selector: 'app-servicios',
