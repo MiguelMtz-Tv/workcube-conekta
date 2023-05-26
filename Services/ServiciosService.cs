@@ -15,18 +15,20 @@ namespace workcube_pagos.Services
         //para obtener los servicios de un cliente
         public async Task<List<Servicio>> GetClientServices(int UserId)
         {
-            return await _context.Servicios.Where(s => s.IdCliente == UserId).ToListAsync();
+            return await _context.Servicios.AsNoTracking().Where(s => s.IdCliente == UserId).ToListAsync();
         }
 
         //para obtener los detalles de un servicio
         public async Task<Servicio> GetService(GetServiceReq model)
         {
-            var result = await _context.Servicios.Where(s => s.IdServicio == model.IdServicio && s.IdCliente == model.IdCliente).FirstOrDefaultAsync();
+            var loginTransaction = _context.Database.BeginTransaction();
+            var result = await _context.Servicios.AsNoTracking().Where(s => s.IdServicio == model.IdServicio && s.IdCliente == model.IdCliente).FirstOrDefaultAsync();
 
             if (result == null)
             {
                 return null;
             }
+            loginTransaction.Commit();
             return result;
         }
 
@@ -41,9 +43,9 @@ namespace workcube_pagos.Services
             }
             
             serviceToCancel.IdServicioEstatus = 3;  
-                serviceToCancel.ServicioEstatusName = "Cancelado";
-                await _context.SaveChangesAsync();
-                return serviceToCancel;
+            serviceToCancel.ServicioEstatusName = "Cancelado";
+            await _context.SaveChangesAsync();
+            return serviceToCancel;
         }
 
         //Verificar la fecha de un servicio y asignar su estatus

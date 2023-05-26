@@ -67,11 +67,12 @@ export class SingupComponent {
             Password: this.form.value.Password
           }).subscribe(
             res => {
-              this.auth.storeData(res.token, 
+              this.auth.storeData(
+                res.token, 
                 res.id, 
                 res.nombreCompleto, 
                 res.idCliente
-                )
+              )
               this.router.navigate(['/servicios'])
               this.isLoading = false
             })
