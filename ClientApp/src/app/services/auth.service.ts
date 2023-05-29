@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { getBaseUrl } from 'src/main';
 import { Router } from '@angular/router'; 
+import * as jwt from 'jose';
 
 @Injectable({
   providedIn: 'root'
@@ -51,4 +52,20 @@ export class AuthService {
   areLogin() : boolean{
     return !!localStorage.getItem('Token')
   }
+
+  isTokenExpired(){
+    const authToken = this.getToken();
+
+    if (authToken) {
+      try {
+        const tokenPayload = jwt.decodeJwt(authToken) as any;
+        const expirationDate = new Date(tokenPayload.exp * 1000); // El campo 'exp' debe contener la fecha de expiración en segundos
+
+        return expirationDate < new Date(); // Devuelve true si el token ha expirado
+      } catch (error) {
+        console.error('Error al decodificar el token:', error);
+      }
+    }
+    return false; // Devuelve false si el token no existe o no ha expirado
+  } 
 }

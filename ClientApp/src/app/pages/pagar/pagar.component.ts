@@ -132,6 +132,7 @@ export class PagarComponent implements OnInit {
       this.total = this.servicio.servicioTipoCosto - res.monto
       this.toast.success('Se aplicó un cupón de descuento',{
         style: {
+          border: '1px solid green',
           margin:     '100px 20px',
           padding:    '15px'
         },

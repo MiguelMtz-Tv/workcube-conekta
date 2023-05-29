@@ -7,6 +7,7 @@ namespace workcube_pagos.Models
     {
         [Key] 
         public int IdCliente                    { get; set; }
+        public string StripeCustomerID          { get; set; }
         public virtual AspNetUser Usuario       { get; set; }
         [JsonIgnore]
         public List<Servicio> Servicios         { get; set; }
@@ -20,6 +21,6 @@ namespace workcube_pagos.Models
         public string Direccion                 { get; set; }  
         public string CodigoPostal              { get; set; }  
         public string Code                      { get; set; }  
-        public bool IsActive                    { get; set;}
+        public bool IsActive                    { get; set; }
     }
 }

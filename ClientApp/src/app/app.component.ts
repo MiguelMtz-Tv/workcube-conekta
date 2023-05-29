@@ -19,10 +19,11 @@ export class AppComponent implements OnInit{
     this.router.events.subscribe((e) => {
       if (e instanceof NavigationEnd) {
         this.path = this.location.path();
-        if (this.path === '' || this.path === '/registro') {
-          this.layout = false;
+        if (this.path === '' || this.path === '/registro' || this.path === '/expired') {
           this.login = true;
-        }else{
+          this.layout = false;
+        } 
+        else{
           this.layout = true;
           this.login = false;
         }

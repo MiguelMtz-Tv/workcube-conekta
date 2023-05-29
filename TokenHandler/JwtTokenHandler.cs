@@ -9,7 +9,7 @@ namespace workcube_pagos.TokenHandler
 {
     public class JwtTokenHandler
     {
-        private const int JWT_TOKEN_VALIDITY_MINS = 10; // Tiempo de validez del token en minutos
+        private const int JWT_TOKEN_VALIDITY_MINS = 60; // Tiempo de validez del token en minutos
         private const string JWT_SECURITY_KEY = "yPkCqn4kSWLtaJwXvN2jGzpQRyTZ3gdXkt7FeBJP";
 
         public JwtTokenHandler() { }
@@ -17,7 +17,7 @@ namespace workcube_pagos.TokenHandler
         public LoginRes GenerateToken(AspNetUser objAspNetUser)
         {
             var tokenIssuedAt =             DateTime.UtcNow;
-            var tokenExpiration =           tokenIssuedAt.AddSeconds(JWT_TOKEN_VALIDITY_MINS);
+            var tokenExpiration =           tokenIssuedAt.AddMinutes(JWT_TOKEN_VALIDITY_MINS);
             var securityKey =               new SymmetricSecurityKey(Encoding.UTF8.GetBytes(JWT_SECURITY_KEY));
             var signingCredentials =        new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
 
