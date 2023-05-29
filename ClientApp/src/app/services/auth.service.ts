@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { getBaseUrl } from 'src/main';
-import { Router } from '@angular/router';
+import { Router } from '@angular/router'; 
 
 @Injectable({
   providedIn: 'root'
@@ -21,7 +21,7 @@ export class AuthService {
   }
 
   storeData(token: string, id: string, NombreCompleto: string, IdCliente: string){
-    localStorage.setItem('token', token)
+    localStorage.setItem('Token', token)
     localStorage.setItem('Id', id)
     localStorage.setItem('NombreCompleto', NombreCompleto),
     localStorage.setItem('IdCliente', IdCliente)
@@ -33,18 +33,22 @@ export class AuthService {
   }
 
   getToken(){
-    return localStorage.getItem('token')
+    return localStorage.getItem('Token')
   }
 
-  getId(){
-    return localStorage.getItem('id')
+  getUserId(){
+    return localStorage.getItem('Id')
+  }
+
+  getClientId(){
+    return localStorage.getItem('IdCliente')
   }
 
   getNombreCompleto(){
-    return localStorage.getItem('nombreCompleto')
+    return localStorage.getItem('NombreCompleto')
   }
 
   areLogin() : boolean{
-    return !!localStorage.getItem('token')
+    return !!localStorage.getItem('Token')
   }
 }

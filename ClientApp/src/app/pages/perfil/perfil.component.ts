@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core'
 import { AspNetUserService } from 'src/app/services/asp-net-user.service'
 import { FormGroup, FormControl, Validators } from '@angular/forms'
 import { HotToastService } from '@ngneat/hot-toast'
+import { AuthService } from 'src/app/services/auth.service'
 import { catchError, throwError } from 'rxjs'
 
 
@@ -15,11 +16,12 @@ export class PerfilComponent implements OnInit {
   passwordIsLoading: boolean = false
   isuserFormDirty: boolean = false;
 
-  constructor(private objUSerService: AspNetUserService, private toast: HotToastService) {}
+  constructor(private objUSerService: AspNetUserService, private toast: HotToastService, private auth: AuthService) {}
 
   ngOnInit(): void {
     this.objUSerService.getUserFullName().subscribe(res => {
       this.userForm.setValue({
+        Id: this.auth.getUserId(),
         Nombre: res.nombre || '',
         ApellidoPat: res.apellidoPat || '',
         ApellidoMat: res.apellidoMat || ''
@@ -29,6 +31,7 @@ export class PerfilComponent implements OnInit {
 
   //user form logic
   userForm = new FormGroup({
+    Id: new FormControl(this.auth.getUserId()),
     Nombre: new FormControl('', Validators['required']),
     ApellidoPat: new FormControl('', Validators['required']),
     ApellidoMat: new FormControl('', Validators['required']),
@@ -46,6 +49,7 @@ export class PerfilComponent implements OnInit {
             },
             position: 'top-right'
           })
+          this.userIsLoading = false
           return throwError(error)
         })
       )
@@ -71,6 +75,7 @@ export class PerfilComponent implements OnInit {
   canConfirm: boolean = false
 
   passwordForm = new FormGroup({
+    Id: new FormControl(this.auth.getUserId()),
     OldPassword: new FormControl('', Validators['required']),
     NewPassword: new FormControl('', Validators['required']),
     ConfirmPassword: new FormControl('', Validators['required'])

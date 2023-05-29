@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Text.Json.Nodes;
 using workcube_pagos.Services;
 using workcube_pagos.ViewModel.Req;
 
@@ -31,23 +32,19 @@ namespace workcube_pagos.Controllers
         }
 
         [Authorize(AuthenticationSchemes = "Bearer")]
-        [HttpGet("client/{id}")] //obtener un usuario (solo nombre y apellidos)
-        public async Task<ActionResult> GetUserNames(string id)
+        [HttpPost("user")] //obtener un usuario (solo nombre y apellidos)
+        public async Task<ActionResult> GetUserNames([FromBody] JsonObject id)
         {
-            var user = await _usersService.GetUser(id);
-            if(user == null)
-            {
-                return NotFound();
-            }
-
+            var user = await _usersService.GetUser(id["Id"].ToString());
+            if (user == null) { return NotFound("No se encontraron los datos del usuario " + id); }
             return Ok(user);
         }
 
         [Authorize(AuthenticationSchemes = "Bearer")]
-        [HttpPut("update/{id}")] //actaulizar un usuario
-        public async Task<ActionResult> UpdateUser(string id, [FromBody] UpdateUserReq user)
+        [HttpPut("update")] //actualizar un usuario
+        public async Task<ActionResult> UpdateUser([FromBody] UpdateUserReq user)
         {
-            var updatedUser = await _usersService.UpdateUser(id, user);
+            var updatedUser = await _usersService.UpdateUser(user);
             if(updatedUser == null)
             {
                 return BadRequest("El usuario no existe o se ha eliminado");
@@ -56,10 +53,10 @@ namespace workcube_pagos.Controllers
         }
 
         [Authorize(AuthenticationSchemes = "Bearer")]
-        [HttpPut("updatepass/{id}")] //actualizar contraseña
-        public async Task<ActionResult> UpdatePassword(string id, [FromBody] UpdatePasswordReq passwordReq)
+        [HttpPut("updatepass")] //actualizar contraseña
+        public async Task<ActionResult> UpdatePassword([FromBody] UpdatePasswordReq passwordReq)
         {   
-            var updatePassword = await _usersService.UpdatePassword(id, passwordReq);
+            var updatePassword = await _usersService.UpdatePassword(passwordReq);
             if(updatePassword == null)
             {
                 return BadRequest("la contraseña es incorrecta");

@@ -16,14 +16,14 @@ export class AspNetUserService {
   }
 
   getUserFullName(){
-    return this.http.get<any>(this.baseUrl+'api/aspnetuser/client/'+this.idUser)
+    return this.http.post<any>(this.baseUrl+'api/aspnetuser/user', {Id: this.idUser})
   }
 
   updateUser(objUser : any){
-    return this.http.put<any>(this.baseUrl+'api/aspnetuser/update/'+this.idUser, objUser)
+    return this.http.put<any>(this.baseUrl+'api/aspnetuser/update', objUser) 
   }
 
   updatePassword(objPass : any){
-    return this.http.put<any>(this.baseUrl+'api/aspnetuser/updatepass/'+this.idUser, objPass)
+    return this.http.put<any>(this.baseUrl+'api/aspnetuser/updatepass', objPass)
   }
 }

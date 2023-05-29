@@ -1,7 +1,4 @@
-﻿using Microsoft.AspNetCore.Http.HttpResults;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
-using System.Net.WebSockets;
+﻿using Microsoft.EntityFrameworkCore;
 using workcube_pagos.ViewModel.Req;
 using workcube_pagos.ViewModel.Statics;
 
@@ -11,12 +8,10 @@ namespace workcube_pagos.Services
     {
         private readonly SignInManager<AspNetUser> _signInManager;
         private readonly DataContext _context;
-        private readonly UserManager<AspNetUser> _userManager;
 
-        public AspNetUsersService(DataContext context, UserManager<AspNetUser> userManager, SignInManager<AspNetUser> signInManager)
+        public AspNetUsersService(DataContext context, SignInManager<AspNetUser> signInManager)
         {
             _context = context;
-            _userManager = userManager;
             _signInManager = signInManager;
         }
 
@@ -25,9 +20,9 @@ namespace workcube_pagos.Services
             return await _context.AspNetUsers.Where(itemUser => itemUser.UserName == UserName).FirstOrDefaultAsync();
         } 
 
-        public async Task<AspNetUserFullName> GetUser(string id)
+        public async Task<AspNetUserFullName>GetUser(string id) //obtener un usuario (nombre y apellidos)
         {
-            var user = await _context.AspNetUsers.Where(user => user.Id == id).FirstOrDefaultAsync();
+            var user = await _context.AspNetUsers.AsNoTracking().Where(u => u.Id == id).FirstOrDefaultAsync();
             if(user == null)
             {
                 return null;
@@ -44,9 +39,9 @@ namespace workcube_pagos.Services
         }
         
         //actualizar un usuario
-        public async Task<AspNetUser> UpdateUser(string id, UpdateUserReq data)
+        public async Task<AspNetUser> UpdateUser(UpdateUserReq data)
         {
-            var user = await _context.AspNetUsers.Where(user => user.Id == id).FirstOrDefaultAsync();
+            var user = await _context.AspNetUsers.Where(user => user.Id == data.Id).FirstOrDefaultAsync();
             if (user == null)
             {
                 return null;
@@ -60,9 +55,9 @@ namespace workcube_pagos.Services
         }
 
         //actualizar contraseña
-        public async Task<AspNetUser> UpdatePassword(string id, UpdatePasswordReq password)
+        public async Task<AspNetUser> UpdatePassword(UpdatePasswordReq password)
         {
-            var user = await _context.AspNetUsers.Where(user => user.Id == id).FirstOrDefaultAsync();
+            var user = await _context.AspNetUsers.Where(user => user.Id == password.Id).FirstOrDefaultAsync();
             if (user == null)
             {
                 return null;
@@ -84,13 +79,13 @@ namespace workcube_pagos.Services
         //para añadir un nuevo usuario
         public async Task<string> AddUser(SingUpReq model)
         {
-            //Verificar si el numero de contrato ya está en uso
-            var contractAlredyUsed = await _context.AspNetUsers.Where(asp => asp.Cliente.NumeroContrato == model.NumeroContrato).FirstOrDefaultAsync();
-            if (contractAlredyUsed != null) { return "Este número de contrato ya está en uso"; }
-
             //verificar si el numero de contrato existe y obtener al cliente
-            var Cliente = await _context.Clientes.Where(c => c.NumeroContrato == model.NumeroContrato).FirstOrDefaultAsync();
+            var Cliente = await _context.Clientes.AsNoTracking().Where(c => c.NumeroContrato == model.NumeroContrato).FirstOrDefaultAsync();
             if (Cliente == null) { return "Este número de contrato no existe"; }
+
+            //Verificar si el numero de contrato ya está en uso
+            var contractAlredyUsed = await _context.AspNetUsers.AsNoTracking().Where(asp => asp.Cliente.NumeroContrato == model.NumeroContrato).FirstOrDefaultAsync();
+            if (contractAlredyUsed != null) { return "Este número de contrato ya está en uso"; }
 
             var NewUser = new AspNetUser
             {

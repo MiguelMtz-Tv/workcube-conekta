@@ -14,16 +14,16 @@ namespace workcube_pagos.Services
             _context = context;
         }
 
-        public async Task<Cupon> GetCupon(GetCuponReq model)
+        public async Task<Cupon> GetCupon(GetCuponReq model) //para obtener un cupón
         {
             var result = await _context.Cupones.Where(c => c.Codigo == model.Codigo && c.IdCliente == model.IdCliente).FirstOrDefaultAsync();
             if (result == null) { return null; }
             return result;
         }
 
-        public async Task<List<Cupon>> List(GetCuponReq model)
+        public async Task<List<Cupon>> List(GetCuponReq model) //Para obtener los cupones de un usuario
         {
-            var result = await _context.Cupones.Where(c => c.IdCliente == model.IdCliente).ToListAsync();
+            var result = await _context.Cupones.AsNoTracking().Where(c => c.IdCliente == model.IdCliente).ToListAsync();
             if (result == null) { return null;}
             return result;
         }

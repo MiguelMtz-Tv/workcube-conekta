@@ -56,7 +56,8 @@ export class SingupComponent {
 
         if(error.error.text != 'usuario creado'){
           this.singupError = true
-          this.singupErrorMessage = error.error.text
+          this.singupErrorMessage = error.error
+          console.log(error.error)
           setTimeout(() => {
             this.singupError = false
           }, 3000)
