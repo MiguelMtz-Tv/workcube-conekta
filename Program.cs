@@ -2,6 +2,7 @@
 global using workcube_pagos.Data;
 global using Microsoft.AspNetCore.Identity;
 global using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+global using Stripe;
 using workcube_pagos.Services;
 using workcube_pagos.TokenHandler;
 using System.Globalization;
@@ -11,6 +12,9 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
+
+//configuring stripe test key
+StripeConfiguration.ApiKey = "sk_test_51NDAKSHo0a7qOJb8fswzrmT31QLoRDB6Hp8HWXNvEEg8JXpE3xnxGMWDrGOFiW5lo5AZ8Cjshh4RT7MJIpBatsUt006xpsXGTR";
 
 //inject jwt authentication
 builder.Services.AddAuthentication(options =>
@@ -38,6 +42,8 @@ builder.Services.AddDbContext<DataContext>(opt => opt.UseSqlServer(builder.Confi
 builder.Services.AddScoped<AspNetUsersService, AspNetUsersService>();
 builder.Services.AddScoped<ServiciosService,  ServiciosService>();
 builder.Services.AddScoped<CuponesService, CuponesService>();
+builder.Services.AddScoped<ClientesService, ClientesService>();
+builder.Services.AddScoped<TarjetasService, TarjetasService>();
 
 // Generador de contrase�a
 builder.Services.AddIdentity<AspNetUser, IdentityRole>(options =>

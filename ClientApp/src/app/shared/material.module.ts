@@ -11,6 +11,7 @@ import {MatRadioModule, MAT_RADIO_DEFAULT_OPTIONS} from '@angular/material/radio
 import {MatDialogModule} from '@angular/material/dialog'; 
 import {MatCheckboxModule} from '@angular/material/checkbox'; 
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import {MatRippleModule} from '@angular/material/core';
 
 @NgModule({
     imports:[
@@ -26,6 +27,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
         MatDialogModule,
         MatCheckboxModule,
         MatProgressSpinnerModule,
+        MatRippleModule,
     ],
     exports:[
         MatButtonModule,
@@ -40,6 +42,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
         MatDialogModule,
         MatCheckboxModule,
         MatProgressSpinnerModule,
+        MatRippleModule,
     ],
     providers: [{
         provide: MAT_RADIO_DEFAULT_OPTIONS,

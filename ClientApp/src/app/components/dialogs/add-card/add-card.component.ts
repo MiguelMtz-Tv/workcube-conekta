@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import { FormGroup, FormControl, Validators} from '@angular/forms';
 import { DataService } from 'src/app/services/data.service';
+import { TarjetasService } from 'src/app/services/tarjetas.service';
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'app-add-card',
@@ -8,16 +10,32 @@ import { DataService } from 'src/app/services/data.service';
   styleUrls: ['./add-card.component.css']
 })
 export class AddCardComponent {
-  constructor(private dataService: DataService){ }
+  constructor(
+    private dataService: DataService, 
+    private tarjetasService: TarjetasService, 
+    private auth: AuthService,
+    ){ }
 
   form = new FormGroup({
-    numTarjeta: new FormControl('', [Validators.required]),
-    nombreTitular: new FormControl('', [Validators.required]),
-    vencimiento: new FormControl('', [Validators.required]),
-    codigo: new FormControl('', [Validators.required])
+    number: new FormControl('', [Validators.required]),
+    name: new FormControl('', [Validators.required]),
+    exp: new FormControl('', [Validators.required]),
+    cvc_check: new FormControl('', [Validators.required])
   })
 
   onSubmit(){
-    this.dataService.setCardDataService(this.form.value)
+    let exp_month = this.form.value.exp?.substring(0,2)
+    let exp_year = this.form.value.exp?.substring(2)
+
+    let cardData = {
+      IdCliente: this.auth.getClientId(),
+      number: this.form.value.number,
+      name: this.form.value.name,
+      exp_month: exp_month,
+      exp_year: exp_year,
+      cvc_check: this.form.value.cvc_check,
+    }
+    console.log(cardData)
+    this.tarjetasService.addCard(cardData).subscribe(res => console.log(res))
   }
 }

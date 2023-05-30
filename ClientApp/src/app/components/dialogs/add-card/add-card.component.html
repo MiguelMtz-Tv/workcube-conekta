@@ -1,24 +1,24 @@
 <div class="p-8">
-    <h2>Agregar metodo de pago</h2>
+    <h2>Agregar nueva tarjeta</h2>
     <form [formGroup]="form" (ngSubmit)="onSubmit()">
         <div class="flex flex-col w-full">
             <mat-form-field class="w-full">
                 <mat-label class="mb-2 max-sm:text-sm">Numero de tarjeta</mat-label>
-                <input matInput type="text" formControlName="numTarjeta" mask="0000 0000 0000 0000" placeholder="Numero de tarjeta">
+                <input matInput type="text" formControlName="number" mask="0000 0000 0000 0000" placeholder="Numero">
             </mat-form-field>
             <mat-form-field class="w-full">
                 <mat-label class="mb-2 max-sm:text-sm">Nombre del titular</mat-label>
-                <input matInput type="text" formControlName="nombreTitular" placeholder="Nombre">
+                <input matInput type="text" formControlName="name" placeholder="Nombre">
             </mat-form-field>
         </div>
         <div class="flex justify-between">
             <mat-form-field class="w-1/2 mr-1">
                 <mat-label>Fecha de vencimiento</mat-label>
-                <input matInput type="text" formControlName="vencimiento" mask="00/00" placeholder="00/00">
+                <input matInput type="text" formControlName="exp" mask="00/00" placeholder="00/00">
             </mat-form-field>
             <mat-form-field class="w-1/2 ml-1">
                 <mat-label class="mb-2 max-sm:text-sm">Codigo de seguridad</mat-label>
-                <input matInput type="text" formControlName="codigo" mask="000" placeholder="CVV">
+                <input matInput type="text" formControlName="cvc_check" mask="000" placeholder="CVV">
             </mat-form-field>
         </div>
         <div class="flex justify-end mt-4">

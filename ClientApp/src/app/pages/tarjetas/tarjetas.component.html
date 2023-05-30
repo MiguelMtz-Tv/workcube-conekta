@@ -1,44 +1,23 @@
-<div class="sm:w-3/4 sm:m-auto">
-    <app-page-title title="Tarjetas"/>
-    <div class="flex flex-wrap">
-        <app-payment-card *ngFor="let card of cards" finishedIn="{{card.lastFour}}" owner="{{card.owner}}" expiration="{{card.expiration}}" id="{{card.id}}" />
-
-        <app-modal>
-            <div class="button-name w-[122px] h-[122px] m-4 rounded-md border border-dashed border-zinc-500 flex justify-center items-center cursor-pointer">
-                <div class="flex justify-center items-center flex-col">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
-                        class="w-6 h-6">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
-                    <p class="text-center text-sm">Nueva tarjeta</p>
+<div class="sm:w-3/4 m-auto">
+    <app-page-title title="Tarjetas" />
+    <div class="flex flex-wrap items-center m-auto">
+        <app-payment-card *ngFor="let card of cards" 
+            finishedIn="{{card.lastFour}}" 
+            owner="{{card.owner}}"
+            expiration="{{card.expiration}}" 
+            id="{{card.id}}"/>
+            <div class="p-4">
+                <div class="w-28 h-28 cursor-pointer border border-dashed border-zinc-500 rounded p-2 flex flex-col justify-center items-center" matRipple 
+                    [matRippleCentered]="false"
+                    [matRippleUnbounded]="false" 
+                    [matRippleRadius]="300"
+                    (click)="openAddCardModal('150ms', '150ms')"
+                    >
+                    <span class="text-zinc-500">Añadir tarjeta</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-zinc-500 mt-3">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                    </svg>  
                 </div>
             </div>
-            <div class="flex- flex-col modal-body">
-                <h2 class="font-semibold sm:text-xl mb-4">Añade una nueva tarjeta</h2>
-                <form [formGroup]="form" (ngSubmit)="onSubmit()" class="flex flex-col w-full">
-                    <mat-form-field class="flex flex-col">
-                        <mat-label class="mb-2 max-sm:text-sm">Numero de tarjeta</mat-label>
-                        <input matInput type="text" formControlName="numTarjeta" mask="0000 0000 0000 0000" placeholder="Numero de tarjeta">
-                    </mat-form-field>
-                    <mat-form-field class="flex flex-col">
-                        <mat-label class="mb-2 max-sm:text-sm">Nombre del titular</mat-label>
-                        <input matInput type="text" formControlName="nombreTitular" placeholder="Nombre">
-                    </mat-form-field>
-                    <div class="flex justify-between">
-                        <mat-form-field class="flex flex-col w-1/2 pr-2">
-                            <mat-label>Fecha de vencimiento</mat-label>
-                            <input matInput type="text" formControlName="vencimiento" mask="00/00" placeholder="MM/AA">
-                        </mat-form-field>
-                        <mat-form-field class="flex flex-col w-1/2 pl-2">
-                            <mat-label class="mb-2 max-sm:text-sm">Codigo de seguridad</mat-label>
-                            <input matInput type="text" formControlName="codigo" mask="000" placeholder="CVV">
-                        </mat-form-field>
-                    </div>
-                    <div class="flex justify-center mt-4">
-                        <button type="submit" [disabled]="!form.valid" mat-flat-button color="primary" class="w-full">Añadir</button>
-                    </div>
-                </form>
-            </div>
-        </app-modal>
     </div>
 </div>

@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators} from '@angular/forms';
 import { DataService } from 'src/app/services/data.service';
 import { HotToastService } from '@ngneat/hot-toast';
+import { MatDialog } from '@angular/material/dialog';
+import { AddCardComponent } from 'src/app/components/dialogs/add-card/add-card.component';
 
 @Component({
   selector: 'app-tarjetas',
@@ -9,7 +11,7 @@ import { HotToastService } from '@ngneat/hot-toast';
   styleUrls: ['./tarjetas.component.css']
 })
 export class TarjetasComponent implements OnInit {
-  constructor(private dataService: DataService, private toast: HotToastService){}
+  constructor(private dataService: DataService, private toast: HotToastService, private dialod: MatDialog){}
 
   cards = [
     {
@@ -78,6 +80,17 @@ export class TarjetasComponent implements OnInit {
     this.dataService.getPaymentCardNewData().subscribe((data) => {
       let editIndex = this.cards.findIndex((obj) => obj.id === data.id)
       this.cards[editIndex].expiration = data.expiration
+    })
+  }
+
+  openAddCardModal(enterAnimations: string, exitAnimation: string){
+    this.dialod.open(AddCardComponent, {
+      width: '90%',
+        maxWidth: '1024px',
+        minHeight: '300px',
+        maxHeight: '1000px',
+        enterAnimationDuration: enterAnimations,
+        exitAnimationDuration: exitAnimation,
     })
   }
 }

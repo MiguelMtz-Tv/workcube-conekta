@@ -1,0 +1,51 @@
+<div class="fixed mx-8">
+    <button mat-flat-button [routerLink]="['/']" class="text-xs">Regresar</button>
+</div>
+<div class="m-auto w-fit max-w-[600px] mt-8 p-4 px-16 border border-zinc-400 rounded shadow-lg">
+    <div class="text-lg text-center my-3">
+        Crear un nuevo cliente
+    </div>
+    <form [formGroup]="form" (ngSubmit)="onSubmit()">
+        <div class="flex justify-center flex-wrap">
+            <div class="flex flex-col my-3 mx-2">
+                <label>RFC</label>
+                <input class="p-1 rounded" type="text" formControlName="RFC">
+            </div>
+            <div class="flex flex-col my-3 mx-2">
+                <label>Razón social</label>
+                <input class="p-1 rounded" type="text" formControlName="RazonSocial">
+            </div>
+            <div class="flex flex-col my-3 mx-2">
+                <label>Nombre comercial</label>
+                <input class="p-1 rounded" type="text" formControlName="NombreComercial">
+            </div>
+            <div class="flex flex-col my-3 mx-2">
+                <label>Numero de contrato</label>
+                <input class="p-1 rounded" type="text" formControlName="NumeroContrato">
+            </div>
+            <div class="flex flex-col my-3 mx-2">
+                <label>Telefono</label>
+                <input class="p-1 rounded" type="text" formControlName="Telefono">
+            </div>
+            <div class="flex flex-col my-3 mx-2">
+                <label>Correo</label>
+                <input class="p-1 rounded" type="text" formControlName="Correo">
+            </div>
+            <div class="flex flex-col my-3 mx-2">
+                <label>Dirección</label>
+                <input class="p-1 rounded" type="text" formControlName="Direccion">
+            </div>
+            <div class="flex flex-col my-3 mx-2">
+                <label>Código postal</label>
+                <input class="p-1 rounded" type="text" formControlName="CodigoPostal">
+            </div>
+            <div class="flex flex-col my-3 mx-2">
+                <label>Code (6 numeros aleatorios)</label>
+                <input class="p-1 rounded" type="text" formControlName="Code">
+            </div>
+        </div>
+        <div class="m-auto flex justify-center items-center my-3">
+            <button mat-flat-button color="primary" type="submit" [disabled]="!form.valid">Crear cliente</button>
+        </div>
+    </form>
+</div>

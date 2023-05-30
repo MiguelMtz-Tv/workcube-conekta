@@ -23,6 +23,12 @@ export class AppComponent implements OnInit{
           this.login = true;
           this.layout = false;
         } 
+        // condicion con fines de testeo
+        else if(this.path === '/cliente'){
+          this.layout = false;
+          this.login = true
+        }
+        // condicion con fines de testeo
         else{
           this.layout = true;
           this.login = false;
