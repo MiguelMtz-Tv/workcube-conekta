@@ -12,6 +12,7 @@ namespace workcube_pagos.Models
         [JsonIgnore]
         public List<Servicio> Servicios         { get; set; }
         public List<Cupon> Cupones              { get; set; }
+        [JsonIgnore]
         public List<Tarjeta> Tarjetas           { get; set; }
         public string RFC                       { get; set; }  
         public string RazonSocial               { get; set; }  

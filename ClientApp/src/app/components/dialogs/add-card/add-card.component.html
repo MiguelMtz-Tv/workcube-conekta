@@ -1,29 +1,20 @@
 <div class="p-8">
     <h2>Agregar nueva tarjeta</h2>
     <form [formGroup]="form" (ngSubmit)="onSubmit()">
-        <div class="flex flex-col w-full">
-            <mat-form-field class="w-full">
-                <mat-label class="mb-2 max-sm:text-sm">Numero de tarjeta</mat-label>
-                <input matInput type="text" formControlName="number" mask="0000 0000 0000 0000" placeholder="Numero">
-            </mat-form-field>
-            <mat-form-field class="w-full">
-                <mat-label class="mb-2 max-sm:text-sm">Nombre del titular</mat-label>
-                <input matInput type="text" formControlName="name" placeholder="Nombre">
-            </mat-form-field>
+        <div id="card-element" class="card-element-container"></div>
+        <div class="mt-8 flex items-center">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="#ccd2d9" viewBox="0 0 24 24" stroke-width="1.5" stroke="#ccd2d9" class="w-6 h-6 mr-1">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
+            </svg>
+              
+            <input id="Titular" type="text" placeholder="Titular de la tarjeta" class="p-2 w-full text-[16px]" formControlName="name">
         </div>
-        <div class="flex justify-between">
-            <mat-form-field class="w-1/2 mr-1">
-                <mat-label>Fecha de vencimiento</mat-label>
-                <input matInput type="text" formControlName="exp" mask="00/00" placeholder="00/00">
-            </mat-form-field>
-            <mat-form-field class="w-1/2 ml-1">
-                <mat-label class="mb-2 max-sm:text-sm">Codigo de seguridad</mat-label>
-                <input matInput type="text" formControlName="cvc_check" mask="000" placeholder="CVV">
-            </mat-form-field>
-        </div>
-        <div class="flex justify-end mt-4">
-            <button mat-flat-button mat-dialog-close class="mx-1">Cancelar</button>
-            <button type="submit" mat-flat-button mat-dialog-close color="primary" class="mx-1" [disabled]="!form.valid">Añadir</button>
-        </div>
+        <button 
+            mat-flat-button 
+            color="primary" 
+            type="submit"
+            class="mt-4"
+            [disabled]="!form.valid"
+            >Ver tarjeta</button>
     </form>
 </div>

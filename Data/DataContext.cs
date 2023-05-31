@@ -34,7 +34,7 @@ namespace workcube_pagos.Data
             modelBuilder.Entity<Cupon>().HasOne(c => c.Cliente).WithMany(c => c.Cupones).HasForeignKey(c => c.IdCliente).OnDelete(DeleteBehavior.Restrict);
 
             //relacion tarjeta/cliente N:1
-            modelBuilder.Entity<Tarjeta>().HasOne(t => t.Cliente).WithMany(c => c.Tarjetas).HasForeignKey(t => t.IdCliente).OnDelete(DeleteBehavior.Restrict); ;
+            modelBuilder.Entity<Tarjeta>().HasOne(t => t.Cliente).WithMany(c => c.Tarjetas).HasForeignKey(t => t.IdCliente).OnDelete(DeleteBehavior.NoAction);
 
         }
 

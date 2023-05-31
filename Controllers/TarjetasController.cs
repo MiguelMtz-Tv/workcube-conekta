@@ -16,7 +16,7 @@ namespace workcube_pagos.Controllers
 
         [Authorize(AuthenticationSchemes = "Bearer")]
         [HttpPost]
-        public async Task<ActionResult> Index([FromBody] AddCardReq cardObj) 
+        public async Task<ActionResult> AddCard([FromBody] AddCardReq cardObj) 
         {
             var result = await _tarjetasService.AddCard(cardObj);
 
