@@ -20,6 +20,8 @@ export class PagarComponent implements OnInit {
   selectedCard: string = 'no seleccionado'
 
   id: number = 0
+  selectedId!: string
+  selected: boolean = false
 
   servicio: any = []
   total: number = 0
@@ -117,21 +119,19 @@ export class PagarComponent implements OnInit {
     })
   }
 
-  //payment form 
-  
-  cardForm = new FormGroup({
-    cardId: new FormControl()
-  })
-
   onSubmitPayment(){
     if(this.areDiscount){
-      console.log({IdServicio: this.id, Codigo: this.cuponCode, CardId: this.cardForm.value.cardId})
+      console.log({IdServicio: this.id, Codigo: this.cuponCode, CardId: this.selectedId})
     }else{
-      console.log({IdServicio: this.id, CardId: this.cardForm.value.cardId})
+      console.log({IdServicio: this.id, CardId: this.selectedId})
     }
   }
 
   selectCard(lastFour: string){
     this.selectedCard = 'Terminada en ' + lastFour
+  }
+  selectedCardId(id: string){
+    this.selectedId = id
+    this.selected = true
   }
 }

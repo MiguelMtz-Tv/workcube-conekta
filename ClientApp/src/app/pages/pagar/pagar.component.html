@@ -7,21 +7,23 @@
           <p class="text-lg text-zinc-700">Metodo de pago seleccionado: <span class="font-semibold">{{selectedCard}}</span></p>
         </div>
       </mat-card-header>
-        <mat-radio-button *ngFor="let card of cards" class="w-full" (click)="selectCard(card.last4)" value="{{card.id}}">
-          <div class="flex p-4 rounded border w-[500px] my-2 cursor-pointer transition duration-150 hover:bg-zinc-100">
-            <div class="w-3/4">
-              <div class="text-lg">
-                Terminada en {{card.last4}}
-              </div>
-              <div class="text-zinc-700">
-                {{card.name}}
-              </div>
+      <input type="hidden" value="{{selectedId}}">
+      <mat-radio-button *ngFor="let card of cards" class="w-full" (click)="[selectCard(card.last4), selectedCardId(card.id)]"
+        value="{{card.id}}">
+        <div class="flex p-4 rounded border w-[500px] my-2 cursor-pointer transition duration-150 hover:bg-zinc-100">
+          <div class="w-3/4">
+            <div class="text-lg">
+              Terminada en {{card.last4}}
             </div>
-            <div class="w-full text-end">
-              vencimiento: {{card.expMonth+'/'+card.expYear}}
+            <div class="text-zinc-700">
+              {{card.name}}
             </div>
           </div>
-        </mat-radio-button>
+          <div class="w-full text-end">
+            vencimiento: {{card.expMonth+'/'+card.expYear}}
+          </div>
+        </div>
+      </mat-radio-button>
       <div class="ml-[45px] w-[500px] my-2">
         <button class="w-full" mat-stroked-button color="primary" (click)="addCard('150ms', '150ms')">+ Añadir metodo de pago</button>
       </div>
@@ -52,7 +54,7 @@
           </div>
         </div>
         <div class="mt-6 w-full flex justify-center">
-          <button mat-flat-button color="primary" class="w-full" (click)="[confirmPayment('150ms', '150ms'), onSubmitPayment()]">Pagar</button>
+          <button mat-flat-button color="primary" class="w-full" (click)="[confirmPayment('150ms', '150ms'), onSubmitPayment()]" [disabled]="selected == false">Pagar</button>
         </div>
       </mat-card>
     </form>
