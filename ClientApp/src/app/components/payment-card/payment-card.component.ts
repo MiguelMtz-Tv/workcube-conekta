@@ -1,7 +1,9 @@
-import { Component, Input, ViewChild, ElementRef } from '@angular/core';
-import { DataService } from 'src/app/services/data.service';
+import { Component, Input } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { HotToastService } from '@ngneat/hot-toast';
+import { MatDialog } from '@angular/material/dialog';
+import { DeleteCardComponent } from '../dialogs/delete-card/delete-card.component';
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'app-payment-card',
@@ -15,10 +17,12 @@ export class PaymentCardComponent {
   @Input() expiration: string;
   @Input() id : string;
 
-  @ViewChild('editModal') editModal: ElementRef | undefined;
-  @ViewChild('deleteModal') deleteModal: ElementRef | undefined;
-
-  constructor(private dataService: DataService, private toast: HotToastService){
+  constructor( 
+    private toast: HotToastService,
+    private dialog: MatDialog,
+    private auth: AuthService,
+    )
+    {
     this.finishedIn = '';
     this.owner = '';
     this.expiration = '';
@@ -27,28 +31,26 @@ export class PaymentCardComponent {
 
   //open modals to edit and delete
   openEditModal(){
-    this.editModal?.nativeElement.click();
   }
-  openDeleteModal(){
-    this.deleteModal?.nativeElement.click();
+  openDeleteModal(enterAnimations: string, exitAnimation: string){
+    this.dialog.open(DeleteCardComponent, {
+      data: {
+        CardId : this.id,
+        IdCliente: this.auth.getClientId()
+      },
+      width: '90%',
+      maxWidth: '400px',
+      minHeight: '200px',
+      maxHeight: '100px',
+      enterAnimationDuration: enterAnimations,
+      exitAnimationDuration: exitAnimation,
+    })
   }
-  //
 
   closeModal(){
-    this.dataService.setModalClose('close')
   }
 
-  deleteCard(id : any){
-    this.dataService.setPaymentCardId(id);
-    this.toast.success('Tarjeta eliminada',{
-      style: {
-        margin: '90px'
-      },
-      iconTheme: {
-        primary: '#E60B5A',
-        secondary: '#fff',
-      }
-    })
+  deleteCard(){
   }
 
   //update form:
@@ -58,22 +60,6 @@ export class PaymentCardComponent {
   })
 
   onSubmit(id: any){
-    let data = {
-      id: id,
-      /* owner: this.form.value.owner, */
-      expiration: this.form.value.expiration
-    } 
-    this.dataService.setPaymentCardNewData(data)
-    this.dataService.setModalClose('close')
-    this.toast.success('Tarjeta actualizada',{
-      style: {
-        margin: '90px'
-      },
-      iconTheme: {
-        primary: '#5e15c2',
-        secondary: '#fff',
-      }
-    })
   }
   //
 }

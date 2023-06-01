@@ -1,6 +1,7 @@
 ﻿using Azure.Core;
 using Microsoft.Identity.Client;
 using Stripe;
+using System.Net.WebSockets;
 using workcube_pagos.ViewModel.Req;
 using workcube_pagos.ViewModel.Res;
 
@@ -13,6 +14,37 @@ namespace workcube_pagos.Services
         public TarjetasService(DataContext context)
         {
             _context = context;
+        }
+
+        public async Task<object> List(int idCLient)
+        {
+           var client = await _context.Clientes.FindAsync(idCLient);
+            if(client == null) { return null; }
+
+           var idCustomer = client.StripeCustomerID;
+
+            var service = new CardService();
+            var options = new CardListOptions();
+
+            var cards = service.List(idCustomer, options);
+
+            return cards;
+        }
+
+        public async Task<object> Delete(DeleteCardReq cardObj)
+        {
+            var cliente = await _context.Clientes.FindAsync(cardObj.IdCliente);
+            if(cliente == null){ return null; }
+
+            var customerId = cliente.StripeCustomerID.ToString();
+
+            var service = new CardService();
+            var result = service.Delete(
+                customerId,
+                cardObj.CardId
+            );
+
+            return result;
         }
 
         public async Task<object> AddCard(AddCardReq cardObj)

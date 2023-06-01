@@ -4,26 +4,24 @@
     <mat-card class="p-4">
       <mat-card-header>
         <div class=" w-full mb-4">
-          <p class="text-lg text-zinc-700">Metodo de pago seleccionado: Terminada en <span class="font-semibold">{{selectedCard}}</span></p>
+          <p class="text-lg text-zinc-700">Metodo de pago seleccionado: <span class="font-semibold">{{selectedCard}}</span></p>
         </div>
       </mat-card-header>
-
-      <mat-radio-button *ngFor="let card of cards" value="radio{{card.id}}" class="w-full" (click)="selectCard(card.lastFour)">
-        <div class="flex p-4 rounded border w-[500px] my-2 cursor-pointer transition duration-150 hover:bg-zinc-100">
-          <div class="w-3/4">
-            <div class="text-lg">
-              Terminada en {{card.lastFour}}
+        <mat-radio-button *ngFor="let card of cards" class="w-full" (click)="selectCard(card.last4)" value="{{card.id}}">
+          <div class="flex p-4 rounded border w-[500px] my-2 cursor-pointer transition duration-150 hover:bg-zinc-100">
+            <div class="w-3/4">
+              <div class="text-lg">
+                Terminada en {{card.last4}}
+              </div>
+              <div class="text-zinc-700">
+                {{card.name}}
+              </div>
             </div>
-            <div class="text-zinc-700">
-              {{card.owner}}
+            <div class="w-full text-end">
+              vencimiento: {{card.expMonth+'/'+card.expYear}}
             </div>
           </div>
-          <div class="w-full text-end">
-            vencimiento: {{card.expiration | mask:'00/00'}}
-          </div>
-        </div>
-      </mat-radio-button>
-
+        </mat-radio-button>
       <div class="ml-[45px] w-[500px] my-2">
         <button class="w-full" mat-stroked-button color="primary" (click)="addCard('150ms', '150ms')">+ Añadir metodo de pago</button>
       </div>
@@ -69,11 +67,12 @@
             </mat-panel-title>
           </mat-expansion-panel-header>
           <div class="flex justify-center w-full items-center">
-              <input type="text" min="1" class="w-ful p-2 border border-zinc-300 rounded" formControlName="code">
-              <button type="submit" mat-flat-button color="primary" class="mx-2" [disabled]="!cuponForm.valid || cuponIsLoading">
-                <span *ngIf="cuponIsLoading == false">Aplicar</span>
-                <mat-spinner *ngIf="cuponIsLoading"  diameter="20"></mat-spinner>
-              </button>
+            <input type="text" min="1" class="w-ful p-2 border border-zinc-300 rounded" formControlName="code">
+            <button type="submit" mat-flat-button color="primary" class="mx-2"
+              [disabled]="!cuponForm.valid || cuponIsLoading">
+              <span *ngIf="cuponIsLoading == false">Aplicar</span>
+              <mat-spinner *ngIf="cuponIsLoading" diameter="20"></mat-spinner>
+            </button>
           </div>
         </mat-expansion-panel>
       </div>

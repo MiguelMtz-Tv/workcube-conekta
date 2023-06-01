@@ -9,6 +9,7 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { CuponesService } from 'src/app/services/cupones.service';
 import { catchError, throwError } from 'rxjs';
 import { HotToastService } from '@ngneat/hot-toast';
+import { TarjetasService } from 'src/app/services/tarjetas.service';
 
 @Component({
   selector: 'app-pagar',
@@ -16,7 +17,7 @@ import { HotToastService } from '@ngneat/hot-toast';
   styleUrls: ['./pagar.component.css']
 })
 export class PagarComponent implements OnInit {
-  selectedCard: string = '5771'
+  selectedCard: string = 'no seleccionado'
 
   id: number = 0
 
@@ -33,7 +34,7 @@ export class PagarComponent implements OnInit {
  
   constructor(
     private dialog: MatDialog, 
-    private dataService: DataService, 
+    private tarjetasService: TarjetasService,
     private route: ActivatedRoute, 
     private serviciosService: ServiciosService,
     private cuponesService: CuponesService,
@@ -49,50 +50,23 @@ export class PagarComponent implements OnInit {
       this.total = res.servicioTipoCosto
     })
 
-    this.dataService.getCardDataService().subscribe((form)=>{
-      let newId=          this.cards.length + 1
-      let lastFour =      form.numTarjeta.slice(form.numTarjeta.length-4)
-      let data = {
-        id: newId,
-        finishedIn:       form.numTarjeta,
-        owner:            form.nombreTitular,
-        expiration:       form.vencimiento,
-        lastFour:         lastFour,
-      }
-      this.cards.push(data);
-    })
+    this.tarjetasService.listCards()
+      .subscribe(res => {
+        this.cards = res
+        console.log(res)
+      })
   }
 
-  cards: any = [
-    {
-      id:         '1',
-      finishedIn: '4152313451205771',
-      owner:      'Miguel Martinez Castro',
-      expiration: '07/24',
-      lastFour:   '5771',
-    },
-    {
-      id:         '2',
-      finishedIn: '4152313451204489',
-      owner:      'Carlos Rivera Lopez',
-      expiration: '07/23',
-      lastFour:   '4489',
-    },
-    {
-      id:         '3',
-      finishedIn: '4152313451202213',
-      owner:      'Martín Mendez Loeza',
-      expiration: '07/21',
-      lastFour:   '2213',
-    }
-  ]
+  cards: any 
 
   addCard(enterAnimationDuration: string, exitAnimationDuration: string): void{
     this.dialog.open(AddCardComponent,{
-      width:                    '90%',
-      maxWidth:                 '700px',
-      enterAnimationDuration,
-      exitAnimationDuration
+      width: '90%',
+        maxWidth: '500px',
+        minHeight: '300px',
+        maxHeight: '1000px',
+        enterAnimationDuration,
+        exitAnimationDuration
     })
   }
   confirmPayment(enterAnimationDuration: string, exitAnimationDuration: string): void{
@@ -104,6 +78,7 @@ export class PagarComponent implements OnInit {
     })
   } 
 
+  //Cupon Form management
   cuponForm = new FormGroup({
     code: new FormControl('', Validators['required'])
   })
@@ -142,15 +117,21 @@ export class PagarComponent implements OnInit {
     })
   }
 
+  //payment form 
+  
+  cardForm = new FormGroup({
+    cardId: new FormControl()
+  })
+
   onSubmitPayment(){
     if(this.areDiscount){
-      console.log({IdServicio: this.id, Codigo: this.cuponCode})
+      console.log({IdServicio: this.id, Codigo: this.cuponCode, CardId: this.cardForm.value.cardId})
     }else{
-      console.log(this.id)
+      console.log({IdServicio: this.id, CardId: this.cardForm.value.cardId})
     }
   }
 
   selectCard(lastFour: string){
-    this.selectedCard = lastFour
+    this.selectedCard = 'Terminada en ' + lastFour
   }
 }

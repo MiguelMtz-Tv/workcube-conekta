@@ -15,6 +15,7 @@ import { AddCardComponent } from './dialogs/add-card/add-card.component';
 import { ConfirmarPagoComponent } from './dialogs/confirmar-pago/confirmar-pago.component';
 import { CancelServiceComponent } from './dialogs/cancel-service/cancel-service.component';
 import { CuponsDialogComponent } from './dialogs/cupons-dialog/cupons-dialog.component';
+import { DeleteCardComponent } from './dialogs/delete-card/delete-card.component';
 
 
 @NgModule({
@@ -32,6 +33,7 @@ import { CuponsDialogComponent } from './dialogs/cupons-dialog/cupons-dialog.com
         ConfirmarPagoComponent,
         CancelServiceComponent,
         CuponsDialogComponent,
+        DeleteCardComponent,
     ],
     imports:[
         CommonModule,

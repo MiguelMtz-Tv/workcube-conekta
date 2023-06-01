@@ -2,9 +2,9 @@
     <app-page-title title="Tarjetas" />
     <div class="flex flex-wrap items-center m-auto">
         <app-payment-card *ngFor="let card of cards" 
-            finishedIn="{{card.lastFour}}" 
-            owner="{{card.owner}}"
-            expiration="{{card.expiration}}" 
+            finishedIn="{{card.last4}}" 
+            owner="{{card.name}}"
+            expiration="{{card.expMonth+'/'+card.expYear}}" 
             id="{{card.id}}"/>
             <div class="p-4">
                 <div class="w-28 h-28 cursor-pointer border border-dashed border-zinc-500 rounded p-2 flex flex-col justify-center items-center" matRipple 
