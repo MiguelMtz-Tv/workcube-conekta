@@ -44,6 +44,7 @@ builder.Services.AddScoped<ServiciosService,  ServiciosService>();
 builder.Services.AddScoped<CuponesService, CuponesService>();
 builder.Services.AddScoped<ClientesService, ClientesService>();
 builder.Services.AddScoped<TarjetasService, TarjetasService>();
+builder.Services.AddScoped<PagosService, PagosService>();
 
 // Generador de contrase�a
 builder.Services.AddIdentity<AspNetUser, IdentityRole>(options =>

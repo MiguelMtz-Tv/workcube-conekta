@@ -20,13 +20,7 @@ export class ServiciosComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    /* var objST = this.services.filter(x => x.IdServicioTipo == id);
-    var objStore = {
-      idServicio : 1,
-      IdServicioTipo : 1,
-      objST.Name : "Serv1",
-      objST.Descripcion : ""
-    }; */
+    
   }
 
 }

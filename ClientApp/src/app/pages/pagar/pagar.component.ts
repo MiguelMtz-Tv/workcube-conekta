@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
 import { AddCardComponent } from 'src/app/components/dialogs/add-card/add-card.component';
 import { ConfirmarPagoComponent } from 'src/app/components/dialogs/confirmar-pago/confirmar-pago.component';
-import { DataService } from 'src/app/services/data.service';
 import { ActivatedRoute } from '@angular/router';
 import { ServiciosService } from 'src/app/services/servicios.service';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
@@ -10,6 +9,8 @@ import { CuponesService } from 'src/app/services/cupones.service';
 import { catchError, throwError } from 'rxjs';
 import { HotToastService } from '@ngneat/hot-toast';
 import { TarjetasService } from 'src/app/services/tarjetas.service';
+import { PagosService } from 'src/app/services/pagos.service';
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'app-pagar',
@@ -27,6 +28,7 @@ export class PagarComponent implements OnInit {
   total: number = 0
   descuento: number = 0
   cuponCode: string = ''
+  idCupon!: number
 
   areDiscount: boolean = false
   
@@ -40,7 +42,9 @@ export class PagarComponent implements OnInit {
     private route: ActivatedRoute, 
     private serviciosService: ServiciosService,
     private cuponesService: CuponesService,
-    private toast: HotToastService
+    private toast: HotToastService,
+    private pagosService: PagosService,
+    private auth: AuthService,
     )
     { 
     this.id = Number(this.route.snapshot.paramMap.get('id')) 
@@ -55,7 +59,6 @@ export class PagarComponent implements OnInit {
     this.tarjetasService.listCards()
       .subscribe(res => {
         this.cards = res
-        console.log(res)
       })
   }
 
@@ -71,14 +74,6 @@ export class PagarComponent implements OnInit {
         exitAnimationDuration
     })
   }
-  confirmPayment(enterAnimationDuration: string, exitAnimationDuration: string): void{
-    this.dialog.open(ConfirmarPagoComponent,{
-      width:                    '90%',
-      maxWidth:                 '500px',
-      enterAnimationDuration,
-      exitAnimationDuration
-    })
-  } 
 
   //Cupon Form management
   cuponForm = new FormGroup({
@@ -103,6 +98,7 @@ export class PagarComponent implements OnInit {
       })
     )
     .subscribe(res => {
+      this.idCupon = res.idCupon,
       this.descuento = res.monto
       this.cuponCode = res.codigo
       this.areDiscount = true
@@ -126,6 +122,21 @@ export class PagarComponent implements OnInit {
       console.log({IdServicio: this.id, CardId: this.selectedId})
     }
   }
+
+  confirmPayment(enterAnimationDuration: string, exitAnimationDuration: string): void{
+    this.dialog.open(ConfirmarPagoComponent,{
+      width:                    '90%',
+      maxWidth:                 '500px',
+      enterAnimationDuration,
+      exitAnimationDuration,
+      data: {
+        IdCliente:    this.auth.getClientId(),
+        IdServicio:   this.id, 
+        IdCard:       this.selectedId,
+        IdCupon:      this.idCupon,
+      }
+    })
+  } 
 
   selectCard(lastFour: string){
     this.selectedCard = 'Terminada en ' + lastFour

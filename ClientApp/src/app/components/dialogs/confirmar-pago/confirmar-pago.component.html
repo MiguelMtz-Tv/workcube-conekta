@@ -4,6 +4,7 @@
     </div>
     <div class="flex justify-between w-1/2 m-auto">
         <button mat-stroked-button mat-dialog-close color="primary">Cancelar</button>
-        <button mat-flat-button mat-dialog-close color="primary" [routerLink]="['/servicios']">Confirmar</button>
+        <button mat-flat-button mat-dialog-close color="primary" (click)="confirmPayment()">Confirmar</button>
     </div>
 </div>
+
