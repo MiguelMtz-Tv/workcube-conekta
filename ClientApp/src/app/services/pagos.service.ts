@@ -12,4 +12,8 @@ export class PagosService {
   confirmPayment(paymentObj : any){
     return this.http.post<any>(this.baseUrl+'api/pagos', paymentObj)
   }
+
+  getPaymentsList(idServicio : number){
+    return this.http.post<any>(this.baseUrl+'api/pagos/list', idServicio)
+  }
 }

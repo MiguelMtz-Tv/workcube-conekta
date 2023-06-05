@@ -45,7 +45,7 @@ export class ConfirmarPagoComponent {
       .subscribe(res => {
         this.spinner.hide()
         this.thisDialog.close()
-        this.router.navigateByUrl('/servicios')
+        this.router.navigateByUrl('/pago-confirmado')
       })
   }
 }

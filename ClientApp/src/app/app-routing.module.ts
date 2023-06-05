@@ -11,6 +11,7 @@ import { PagarComponent } from './pages/pagar/pagar.component'
 import { PagesModule } from './pages/pages.module'
 import { AuthGuard } from './auth/guards/auth.guard'
 import { ClientComponent } from './pages/client/client.component'
+import { PagoConfirmadoComponent } from './pages/pago-confirmado/pago-confirmado.component'
 
 const pahts: Routes = [
     { path: '',                 component: LoginComponent,              pathMatch: 'full'       },
@@ -18,8 +19,9 @@ const pahts: Routes = [
     { path: 'servicios',        component: ServiciosComponent,          canActivate:[AuthGuard] },
     { path: 'tarjetas',         component: TarjetasComponent,           canActivate:[AuthGuard] },
     { path: 'perfil',           component: PerfilComponent,             canActivate:[AuthGuard] },
-    { path: 'historial',        component: HistorialPagosComponent,     canActivate:[AuthGuard] },
+    { path: 'historial/:id',    component: HistorialPagosComponent,     canActivate:[AuthGuard] },
     { path: 'pagar/:id',        component: PagarComponent,              canActivate:[AuthGuard] },
+    { path: 'pago-confirmado',  component: PagoConfirmadoComponent,     canActivate:[AuthGuard] },
     { path: 'cliente',          component: ClientComponent },
 ]
 

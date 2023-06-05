@@ -13,6 +13,7 @@ import { SingupComponent } from '../auth/singup/singup.component'
 import { LayoutsModule } from '../layouts/layout.module'
 import { FormsModule } from '@angular/forms';
 import { ClientComponent } from './client/client.component';
+import { PagoConfirmadoComponent } from './pago-confirmado/pago-confirmado.component';
 
 @NgModule({
     declarations:[
@@ -24,6 +25,7 @@ import { ClientComponent } from './client/client.component';
         LoginComponent,
         SingupComponent,
         ClientComponent,
+        PagoConfirmadoComponent,
     ],
     imports:[
         CommonModule,
