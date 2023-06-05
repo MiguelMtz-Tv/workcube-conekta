@@ -33,7 +33,20 @@ namespace workcube_pagos.Services
             var service = new ChargeService();
             var result = service.Create(options);
 
-            return result;
+            //guardar pago en la base de datos
+            var newPayment = new Pago
+            {
+                Fecha = new DateTime(),
+                IdServicio = chargeObj.IdServicio,
+                IdCliente = chargeObj.IdCliente,
+                Monto = amount,
+                IdStripeCard = result.PaymentMethod,
+            };
+
+            var storedCharge = await _context.Pagos.AddAsync(newPayment);
+            await _context.SaveChangesAsync();
+
+            return storedCharge;
         }
 
     }
