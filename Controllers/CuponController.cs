@@ -26,9 +26,9 @@ namespace workcube_pagos.Controllers
                 return NotFound("No se encontró un cupón valido");
             }
 
-            if(result.Status == CuponStatus.Vencido)
+            if(result.Status == CuponEstatus.Vencido)
             {
-                return Ok("este cuón ya no es valido");
+                return Ok("este cupón ya no es valido");
             }
 
             return Ok(result);

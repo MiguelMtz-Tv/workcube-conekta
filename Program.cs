@@ -10,6 +10,7 @@ using Quartz;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -61,6 +62,12 @@ builder.Services.AddIdentity<AspNetUser, IdentityRole>(options =>
 
 builder.Services.AddControllers();
 builder.Services.AddSingleton<JwtTokenHandler>();
+// Configurar las opciones de serialización globalmente
+//builder.Services.AddMvc().AddJsonOptions(options =>
+//{
+//    options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve;
+//    options.JsonSerializerOptions.MaxDepth = 32;
+//});
 
 var app = builder.Build();
 

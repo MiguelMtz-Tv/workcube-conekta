@@ -13,14 +13,14 @@ import { AuthGuard } from './auth/guards/auth.guard'
 import { ClientComponent } from './pages/client/client.component'
 
 const pahts: Routes = [
-    { path: '',             component: LoginComponent,              pathMatch: 'full'       },
-    { path: 'registro',     component: SingupComponent                                      },
-    { path: 'servicios',    component: ServiciosComponent,          canActivate:[AuthGuard] },
-    { path: 'tarjetas',     component: TarjetasComponent,           canActivate:[AuthGuard] },
-    { path: 'perfil',       component: PerfilComponent,             canActivate:[AuthGuard] },
-    { path: 'historial',    component: HistorialPagosComponent,     canActivate:[AuthGuard] },
-    { path: 'pagar/:id',    component: PagarComponent,              canActivate:[AuthGuard] },
-    { path: 'cliente',      component: ClientComponent }
+    { path: '',                 component: LoginComponent,              pathMatch: 'full'       },
+    { path: 'registro',         component: SingupComponent                                      },
+    { path: 'servicios',        component: ServiciosComponent,          canActivate:[AuthGuard] },
+    { path: 'tarjetas',         component: TarjetasComponent,           canActivate:[AuthGuard] },
+    { path: 'perfil',           component: PerfilComponent,             canActivate:[AuthGuard] },
+    { path: 'historial',        component: HistorialPagosComponent,     canActivate:[AuthGuard] },
+    { path: 'pagar/:id',        component: PagarComponent,              canActivate:[AuthGuard] },
+    { path: 'cliente',          component: ClientComponent },
 ]
 
 

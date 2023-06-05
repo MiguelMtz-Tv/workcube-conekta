@@ -5,6 +5,7 @@ import { PagosService } from 'src/app/services/pagos.service';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { catchError, throwError } from 'rxjs';
 import { HotToastService } from '@ngneat/hot-toast';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-confirmar-pago',
@@ -18,21 +19,22 @@ export class ConfirmarPagoComponent {
     private pagosService: PagosService,
     private spinner: NgxSpinnerService,
     private toast: HotToastService,
+    private thisDialog: MatDialogRef<ConfirmarPagoComponent>,
+    private router: Router,
     ){}
 
   confirmPayment(){
     console.log(this.data)
     this.spinner.show()
-
     this.pagosService.confirmPayment(this.data)
       .pipe(
         catchError((e) => {
           this.spinner.hide()
-          this.toast.error('Metodo de pago invalido', {
+          this.toast.error('No se pudo procesar el pago, intentelo con otro metodo de pago o contacte a un administrador', {
             style: {
               border: '1px solid #FF0000',
               margin: '100px 20px',
-              padding: '15px'
+              padding:'15px'
             },
             position: 'top-right'
           })
@@ -42,7 +44,8 @@ export class ConfirmarPagoComponent {
       )
       .subscribe(res => {
         this.spinner.hide()
-        console.log(res)
+        this.thisDialog.close()
+        this.router.navigateByUrl('/servicios')
       })
   }
 }

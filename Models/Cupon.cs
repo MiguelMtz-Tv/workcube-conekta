@@ -16,12 +16,12 @@ namespace workcube_pagos.Models
         public Cliente Cliente { get; set; }
         [Column(TypeName = "decimal(18, 2)")]
         public decimal Monto { get; set; }
-        [EnumDataType(typeof(CuponStatus))]
-        public CuponStatus Status { get; set; }
+        [EnumDataType(typeof(CuponEstatus))]
+        public CuponEstatus Status { get; set; }
         public DateTime Vigencia { get; set; }
     }
 
-    public enum CuponStatus
+    public enum CuponEstatus
     {
         [Display(Name = "Vigente")]
         Vigente,

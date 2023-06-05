@@ -12,7 +12,7 @@ import { LoginComponent } from '../auth/login/login.component'
 import { SingupComponent } from '../auth/singup/singup.component'
 import { LayoutsModule } from '../layouts/layout.module'
 import { FormsModule } from '@angular/forms';
-import { ClientComponent } from './client/client.component'
+import { ClientComponent } from './client/client.component';
 
 @NgModule({
     declarations:[
