@@ -36,6 +36,11 @@ namespace workcube_pagos.Data
             //relacion tarjeta/cliente N:1
             modelBuilder.Entity<Tarjeta>().HasOne(t => t.Cliente).WithMany(c => c.Tarjetas).HasForeignKey(t => t.IdCliente).OnDelete(DeleteBehavior.NoAction);
 
+            //relacion pagos/clientes N:1
+            modelBuilder.Entity<Pago>().HasOne(p => p.Cliente).WithMany(c => c.Pagos).HasForeignKey(p => p.IdCliente).OnDelete(DeleteBehavior.Restrict);
+            //relacion pagos/servicios N:1 
+            modelBuilder.Entity<Pago>().HasOne(p => p.Servicio).WithMany(s => s.Pagos).HasForeignKey(p => p.IdServicio).OnDelete(DeleteBehavior.Restrict);
+
         }
 
         public DbSet<AspNetUser> AspNetUsers { get; set; }
@@ -46,5 +51,6 @@ namespace workcube_pagos.Data
         public DbSet<Periodo> Periodos { get; set; }
         public DbSet<ServicioEstatus> ServiciosEstatus { get; set; }
         public DbSet<Tarjeta> Tarjetas { get; set; }
+        public DbSet<Pago> Pagos { get; set; }  
     }
 }
