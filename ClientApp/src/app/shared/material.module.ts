@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core'
+import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core'
 import { MatButtonModule } from '@angular/material/button'
 import { TextFieldModule } from '@angular/cdk/text-field'
 import { MatInputModule } from '@angular/material/input'
@@ -12,6 +12,7 @@ import {MatDialogModule} from '@angular/material/dialog';
 import {MatCheckboxModule} from '@angular/material/checkbox'; 
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import {MatRippleModule} from '@angular/material/core';
+import { NgxSpinnerModule } from "ngx-spinner";
 
 @NgModule({
     imports:[
@@ -28,6 +29,7 @@ import {MatRippleModule} from '@angular/material/core';
         MatCheckboxModule,
         MatProgressSpinnerModule,
         MatRippleModule,
+        NgxSpinnerModule,
     ],
     exports:[
         MatButtonModule,
@@ -43,11 +45,14 @@ import {MatRippleModule} from '@angular/material/core';
         MatCheckboxModule,
         MatProgressSpinnerModule,
         MatRippleModule,
+        NgxSpinnerModule,
     ],
     providers: [{
         provide: MAT_RADIO_DEFAULT_OPTIONS,
         useValue: { color: 'primary' },
-    }]
+    }],
+
+    schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 
 export class MaterialModule { }

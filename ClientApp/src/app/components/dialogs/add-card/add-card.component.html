@@ -1,20 +1,25 @@
 <div class="p-8">
     <h2>Agregar nueva tarjeta</h2>
-    <form [formGroup]="form" (ngSubmit)="onSubmit()">
-        <div id="card-element" class="card-element-container"></div>
-        <div class="mt-8 flex items-center">
+    <form [formGroup]="form" (ngSubmit)="onSubmit()" class="flex flex-col justify-center">
+        <div class="mb-8 flex items-center border border-zinc-400 rounded p-2">
             <svg xmlns="http://www.w3.org/2000/svg" fill="#ccd2d9" viewBox="0 0 24 24" stroke-width="1.5" stroke="#ccd2d9" class="w-6 h-6 mr-1">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
             </svg>
-              
-            <input id="Titular" type="text" placeholder="Titular de la tarjeta" class="p-2 w-full text-[16px]" formControlName="name">
+            <input id="Titular" type="text" placeholder="Nombre en la tarjeta" class="w-full text-[16px] focus:outline-none" formControlName="name">
+        </div>
+
+        <div class="p-3 border border-zinc-400 rounded">
+            <div id="card-element" class="card-element-container"></div>
         </div>
         <button 
+            class="mt-8"
             mat-flat-button 
             color="primary" 
             type="submit"
-            class="mt-4"
-            [disabled]="!form.valid"
-            >Ver tarjeta</button>
+            [disabled]="!form.valid || isLoading"
+            >
+            <span *ngIf="isLoading == false">Añadir metodo de pago</span>
+            <mat-spinner color="primary" diameter="20" *ngIf="isLoading"></mat-spinner>
+        </button>
     </form>
 </div>

@@ -44,6 +44,7 @@ export class PerfilComponent implements OnInit {
         catchError(error => {
           this.toast.error('No se pudo actualizar el usuario',{
             style: {
+              border: '1px solid #FF0000',
               margin: '100px 20px',
               padding: '15px'
             },
@@ -95,6 +96,7 @@ export class PerfilComponent implements OnInit {
       catchError(error => {
         this.toast.error('Contraseña incorrecta',{
           style: {
+            border: '1px solid #FF0000',
             margin: '100px 20px',
             padding: '15px'
           },

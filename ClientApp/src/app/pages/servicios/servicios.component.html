@@ -1,8 +1,8 @@
 <!-- servicios disponibles -->
 <div class="m-auto md:w-3/4">
 
-    <div class="m-auto w-fit">
-        <app-page-title title="Mis servicios"/>
+    <div class="m-auto max-w-[1024px]">
+        <app-page-title title="Mis servicios" *ngIf="areServices"/>
         <app-service-card *ngFor="let service of services" id="{{service.idServicio}}" name="{{service.servicioTipoName}}" status="{{service.servicioEstatusName}}"
         description="{{service.servicioTipoDescripcion}}" cost="" period="{{service.periodoName}}" startDate="{{service.vigencia}}">
         </app-service-card>
@@ -12,12 +12,4 @@
         <span class="text-zinc-400 text-xl">Al parecer aún no cuentas con ningún servicio. Ponte en contacto con los administradores de Workcube para contratar servicios</span>
         <img src="../../../assets/shared/LOGOPIXL.png" class="w-24 grayscale mt-10" draggable="false">
     </div>
-    <!-- Cupones-->
-    <!-- <div class="flex flex-col">
-        <h2 class="font-bold text-lg">Cupones disponibles</h2>
-        <div class="flex flex-wrap h-fit">
-            <app-cupon></app-cupon>
-            <app-cupon></app-cupon>
-        </div>
-    </div> -->
 </div>

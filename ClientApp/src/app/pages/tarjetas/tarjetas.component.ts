@@ -4,6 +4,7 @@ import { HotToastService } from '@ngneat/hot-toast';
 import { MatDialog } from '@angular/material/dialog';
 import { AddCardComponent } from 'src/app/components/dialogs/add-card/add-card.component';
 import { TarjetasService } from 'src/app/services/tarjetas.service';
+import { DataService } from 'src/app/services/data.service';
 
 @Component({
   selector: 'app-tarjetas',
@@ -15,6 +16,7 @@ export class TarjetasComponent implements OnInit {
     private toast: HotToastService, 
     private dialod: MatDialog,
     private tarjetasService: TarjetasService,
+    private dataService: DataService,
     ){}
 
   cards : any
@@ -27,11 +29,17 @@ export class TarjetasComponent implements OnInit {
     codigo: new FormControl('', [Validators.required])
   })
 
-  ngOnInit(): void {
+  getCards(){
     this.tarjetasService.listCards()
     .subscribe(res => {
       this.cards = res
     })
+  }
+
+  ngOnInit(): void {
+    this.getCards()
+    //observamos cada que se añada una tarjeta
+    this.dataService.data$.subscribe(data => this.getCards())
   }
 
   openAddCardModal(enterAnimations: string, exitAnimation: string){

@@ -72,19 +72,7 @@ namespace workcube_pagos.Services
             };
             var updatedCard = service.Update(IdCustomer, newcard.Id, updateCardOptions);
 
-            //guardar la tarjeta en la base de datos
-            var toStoreCard = new Tarjeta
-            {
-                IdCliente = cardObj.idCliente,
-                StripeCardID = updatedCard.Id,
-
-            };
- 
-            var storedCard = await _context.Tarjetas.AddAsync(toStoreCard);
-            await _context.SaveChangesAsync();
-
-            if (updatedCard == null) { return "Algo salío mal mientras se asignaba un nombre a la tarjeta"; }
-            return storedCard;
+            return updatedCard;
         }
     }
 }

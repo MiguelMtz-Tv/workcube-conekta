@@ -13,7 +13,7 @@ import { AuthInterceptor } from './auth/auth.interceptor';
 
   imports: [
     CommonModule,
-    AppRoutingModule,  
+    AppRoutingModule,
     LayoutsModule,
   ],
 

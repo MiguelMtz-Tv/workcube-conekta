@@ -11,6 +11,7 @@ import { HotToastService } from '@ngneat/hot-toast';
 import { TarjetasService } from 'src/app/services/tarjetas.service';
 import { PagosService } from 'src/app/services/pagos.service';
 import { AuthService } from 'src/app/services/auth.service';
+import { DataService } from 'src/app/services/data.service';
 
 @Component({
   selector: 'app-pagar',
@@ -35,7 +36,8 @@ export class PagarComponent implements OnInit {
   cuponIsLoading: boolean = false
   paymentIsLoading: boolean = false
 
- 
+  cards: any 
+
   constructor(
     private dialog: MatDialog, 
     private tarjetasService: TarjetasService,
@@ -45,24 +47,31 @@ export class PagarComponent implements OnInit {
     private toast: HotToastService,
     private pagosService: PagosService,
     private auth: AuthService,
+    private dataService: DataService,
     )
     { 
     this.id = Number(this.route.snapshot.paramMap.get('id')) 
     }
 
-  ngOnInit() {
-    this.serviciosService.getServiceDetails(this.id).subscribe(res => {
-      this.servicio = res
-      this.total = res.servicioTipoCosto
-    })
-
+  getCards(){
     this.tarjetasService.listCards()
       .subscribe(res => {
         this.cards = res
       })
   }
 
-  cards: any 
+  ngOnInit() {
+    this.serviciosService.getServiceDetails(this.id).subscribe(res => {
+      this.servicio = res
+      this.total = res.servicioTipoCosto
+    })
+    //obtener tarjetas de la api de stripe
+    this.getCards()
+    //observamos cuando se añade una nueva tarjeta
+    this.dataService.data$.subscribe((data) => {
+      this.getCards()
+    })
+  }
 
   addCard(enterAnimationDuration: string, exitAnimationDuration: string): void{
     this.dialog.open(AddCardComponent,{

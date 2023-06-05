@@ -3,6 +3,10 @@ import { FormGroup, FormControl, Validators} from '@angular/forms';
 import { TarjetasService } from 'src/app/services/tarjetas.service';
 import { AuthService } from 'src/app/services/auth.service';
 import { loadStripe ,StripeCardElement, StripeElements, Stripe } from '@stripe/stripe-js';
+import { HotToastService } from '@ngneat/hot-toast';
+import { catchError, throwError } from 'rxjs';
+import { DataService } from 'src/app/services/data.service';
+import { MatDialogRef } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-add-card',
@@ -10,13 +14,18 @@ import { loadStripe ,StripeCardElement, StripeElements, Stripe } from '@stripe/s
   styleUrls: ['./add-card.component.css']
 })
 export class AddCardComponent implements OnInit {
-  cardElement!: StripeCardElement;
-  stripeElements!: StripeElements;
-  stripe!: Stripe;
+  cardElement!: StripeCardElement
+  stripeElements!: StripeElements
+  stripe!: Stripe
+
+  isLoading: boolean = false
 
   constructor(
     private tarjetasService: TarjetasService,
     private auth: AuthService,
+    private toast: HotToastService,
+    private data: DataService,
+    private dialogRef: MatDialogRef<AddCardComponent>,
     ){ }
 
   ngOnInit() {
@@ -44,21 +53,42 @@ export class AddCardComponent implements OnInit {
     name: new FormControl('', [Validators.required])
   })
 
+  errorToast(){
+    return this.toast.error('Metodo de pago invalido', {
+      style: {
+        border: '1px solid #FF0000',
+        margin: '100px 20px',
+        padding: '15px'
+      },
+      position: 'top-right'
+    })
+  }
+
   onSubmit(){
+    this.isLoading = true
     this.stripe.createToken(this.cardElement).then(res => {
       if(res.error){
-        console.error(res.error)
+        this.errorToast()
+        this.isLoading = false
       }else{
-        console.log({
-          idClient: parseInt(this.auth.getClientId()!),
-          token: res.token.id,
-          name: this.form.value.name
-        })
         this.tarjetasService.addCard({
           idCliente: parseInt(this.auth.getClientId()!),
           token: res.token.id,
           name: this.form.value.name
-        }).subscribe(res => console.log(res))
+        })
+        .pipe(
+          catchError((e) => {
+            this.errorToast()
+            this.isLoading = false
+            return throwError(e)
+          })
+        )
+        .subscribe(
+          res => {
+            this.data.updateData('any')
+            this.dialogRef.close()
+          }
+        )
       }
     })
   }

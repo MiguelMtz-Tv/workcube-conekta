@@ -12,8 +12,18 @@ export class DataService {
   private statusColor = new Subject<any>()
   private paymentCardData = new Subject<any>()
 
-  constructor(){}
+  private dataSubject = new Subject<any>()
 
+  constructor(){}
+  
+
+  public data$ = this.dataSubject.asObservable()
+  updateData(data : any){
+    this.dataSubject.next(data)
+  }
+
+
+  
   //global modal closer :)
   setModalClose(value: any){
     this.modalCloser.next(value)
