@@ -25,10 +25,18 @@ namespace workcube_pagos.Services
                 Email =         ClientObj.Correo,
                 Phone =         ClientObj.Telefono,
             };
+            string idStripe = "";
+            try
+            {
+                var stripeClient = service.Create(options);
 
-            var stripeClient = service.Create(options);
-             
-            if (stripeClient.Id == "" || stripeClient.Id == null) { return null; }
+                if (string.IsNullOrEmpty(stripeClient.Id)) { throw new ArgumentException("Error al cliente: C-01"); }
+
+                idStripe = stripeClient.Id;
+            } catch (Exception ex)
+            {
+                throw new ArgumentException("Error al cliente: C-02");
+            }
 
             var newCLiente = new Cliente{
                 RFC =                   ClientObj.RFC,
@@ -41,11 +49,14 @@ namespace workcube_pagos.Services
                 CodigoPostal =          ClientObj.CodigoPostal,
                 Code =                  ClientObj.Code,
                 IsActive =              true,
-                StripeCustomerID =      stripeClient.Id,
+                StripeCustomerID =      idStripe
             };
 
             await _context.Clientes.AddAsync(newCLiente);
             await _context.SaveChangesAsync();
+
+            // ELIMIANR ID CUSTOMER PREVIO
+            // CODIGO PARA ELIMINAR CLIENTE ANTE
 
             return new CreateClientRes
             {

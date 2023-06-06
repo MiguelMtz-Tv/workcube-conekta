@@ -21,4 +21,8 @@ export class TarjetasService {
   deleteCard(cardObj : any){
     return this.http.post<any>(this.baseUrl+'api/tarjetas/delete', cardObj)
   }
+
+  updateCard(cardObj : any){
+    return this.http.post<any>(this.baseUrl+'api/tarjetas/get', cardObj)
+  }
 }

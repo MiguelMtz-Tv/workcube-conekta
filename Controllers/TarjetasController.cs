@@ -46,5 +46,16 @@ namespace workcube_pagos.Controllers
             return Ok(result);
         }
 
+        [Authorize(AuthenticationSchemes = "Bearer")]
+        [HttpPost("get")]
+        public async Task<ActionResult> getCard([FromBody] UpdateCardReq cardObj)
+        {
+            var result = await _tarjetasService.UpdateCard(cardObj);
+            if (result == null) { return BadRequest(); }
+
+            return Ok(result);
+        }
+
+
     }
 }

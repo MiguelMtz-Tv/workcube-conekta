@@ -4,6 +4,7 @@ import { HotToastService } from '@ngneat/hot-toast';
 import { MatDialog } from '@angular/material/dialog';
 import { DeleteCardComponent } from '../dialogs/delete-card/delete-card.component';
 import { AuthService } from 'src/app/services/auth.service';
+import { UpdateCardComponent } from '../dialogs/update-card/update-card.component';
 
 @Component({
   selector: 'app-payment-card',
@@ -30,7 +31,19 @@ export class PaymentCardComponent {
   }
 
   //open modals to edit and delete
-  openEditModal(){
+  openEditModal(id : string, enterAnimations: string, exitAnimation: string){
+    this.dialog.open(UpdateCardComponent, {
+      data: {
+        cardId: id,
+        idCliente: this.auth.getClientId()
+      },
+      width: '90%',
+      maxWidth: '400px',
+      minHeight: '200px',
+      maxHeight: '300px',
+      enterAnimationDuration: enterAnimations,
+      exitAnimationDuration: exitAnimation,
+    })
   }
   openDeleteModal(enterAnimations: string, exitAnimation: string){
     this.dialog.open(DeleteCardComponent, {
@@ -45,12 +58,6 @@ export class PaymentCardComponent {
       enterAnimationDuration: enterAnimations,
       exitAnimationDuration: exitAnimation,
     })
-  }
-
-  closeModal(){
-  }
-
-  deleteCard(){
   }
 
   //update form:

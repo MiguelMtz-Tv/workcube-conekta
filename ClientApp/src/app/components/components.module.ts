@@ -15,6 +15,8 @@ import { ConfirmarPagoComponent } from './dialogs/confirmar-pago/confirmar-pago.
 import { CancelServiceComponent } from './dialogs/cancel-service/cancel-service.component';
 import { CuponsDialogComponent } from './dialogs/cupons-dialog/cupons-dialog.component';
 import { DeleteCardComponent } from './dialogs/delete-card/delete-card.component';
+import { UpdateCardComponent } from './dialogs/update-card/update-card.component';
+import { FormsModule } from "@angular/forms";
 
 
 @NgModule({
@@ -32,11 +34,13 @@ import { DeleteCardComponent } from './dialogs/delete-card/delete-card.component
         CancelServiceComponent,
         CuponsDialogComponent,
         DeleteCardComponent,
+        UpdateCardComponent,
     ],
     imports:[
         CommonModule,
         LibrariesModule,
-        MaterialModule
+        MaterialModule,
+        FormsModule,
     ],
     exports:[
         CuponComponent,

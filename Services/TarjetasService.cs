@@ -18,10 +18,10 @@ namespace workcube_pagos.Services
 
         public async Task<object> List(int idCLient)
         {
-           var client = await _context.Clientes.FindAsync(idCLient);
-            if(client == null) { return null; }
+            var client = await _context.Clientes.FindAsync(idCLient);
+            if (client == null) { return null; }
 
-           var idCustomer = client.StripeCustomerID;
+            var idCustomer = client.StripeCustomerID;
 
             var service = new CardService();
             var options = new CardListOptions();
@@ -34,7 +34,7 @@ namespace workcube_pagos.Services
         public async Task<object> Delete(DeleteCardReq cardObj)
         {
             var cliente = await _context.Clientes.FindAsync(cardObj.IdCliente);
-            if(cliente == null){ return null; }
+            if (cliente == null) { return null; }
 
             var customerId = cliente.StripeCustomerID.ToString();
 
@@ -73,6 +73,33 @@ namespace workcube_pagos.Services
             var updatedCard = service.Update(IdCustomer, newcard.Id, updateCardOptions);
 
             return updatedCard;
+        }
+
+        public async Task<object> UpdateCard(UpdateCardReq cardObj)
+        {
+            try
+            {
+                var client = await _context.Clientes.Where(c => c.IdCliente == cardObj.IdCliente).FirstOrDefaultAsync();
+                if (client == null) { return null; }
+
+                var IdCustomer = client.StripeCustomerID;
+
+                var options = new CardUpdateOptions
+                {
+                    Name = cardObj.Name,
+                    ExpMonth = cardObj.ExpMonth,
+                    ExpYear = cardObj.ExpYear,
+                };
+
+                var service = new CardService();
+                var res = service.Update(IdCustomer, cardObj.CardStripeId, options);
+
+                return res;
+            }
+            catch (StripeException e)
+            {
+                return e;
+            }
         }
     }
 }
