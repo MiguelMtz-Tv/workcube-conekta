@@ -21,6 +21,16 @@ namespace workcube_pagos.Controllers
 
             return Ok(result);
         }
-        
+
+        [Authorize(AuthenticationSchemes = "Bearer")]
+        [HttpPost("list")]
+        public async Task<ActionResult> List([FromBody] int servicioId)
+        {
+            var result = await _pagosService.List(servicioId);
+            if(result == null) { return NotFound("No se han encontrado pagos de este servicio"); }
+
+            return Ok(result);
+        }
+
     }
 }

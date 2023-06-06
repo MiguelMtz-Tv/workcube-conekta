@@ -13,6 +13,8 @@ import {MatCheckboxModule} from '@angular/material/checkbox';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import {MatRippleModule} from '@angular/material/core';
 import { NgxSpinnerModule } from "ngx-spinner";
+import {MatPaginatorModule} from '@angular/material/paginator'; 
+import {MatTableModule} from '@angular/material/table'; 
 
 @NgModule({
     imports:[
@@ -30,6 +32,8 @@ import { NgxSpinnerModule } from "ngx-spinner";
         MatProgressSpinnerModule,
         MatRippleModule,
         NgxSpinnerModule,
+        MatPaginatorModule,
+        MatTableModule,
     ],
     exports:[
         MatButtonModule,
@@ -46,6 +50,8 @@ import { NgxSpinnerModule } from "ngx-spinner";
         MatProgressSpinnerModule,
         MatRippleModule,
         NgxSpinnerModule,
+        MatPaginatorModule,
+        MatTableModule,
     ],
     providers: [{
         provide: MAT_RADIO_DEFAULT_OPTIONS,

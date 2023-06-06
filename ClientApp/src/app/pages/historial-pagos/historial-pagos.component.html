@@ -6,21 +6,12 @@
     </a>
     <app-page-title 
         class="ml-4"
-        title="Servicio 1"
+        title="Historial de pagos"
         subtitle="Historial de pagos en Servicio 1"
         />
 </div>
 <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
-    <table class="w-full text-sm text-left text-gray-500">
-        <thead class="text-xs text-gray-700 uppercase bg-gray-50">
-            <tr>
-                <th scope="col" class="text-center px-6 py-3">Fecha de pago</th>
-                <th scope="col" class="text-center px-6 py-3">Descuento</th>
-                <th scope="col" class="text-center px-6 py-3">Monto total</th>
-                <th scope="col" class="text-center px-6 py-3">Imprimir comprobante</th>
-            </tr>
-        </thead>
-        <tbody>
+    <!-- <tbody>
             <tr *ngFor="let payment of payments" class="bg-white border-b">
                 <td scope="row" class="text-center px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
                     {{payment.fecha | date: 'short'}}
@@ -37,6 +28,23 @@
                     </svg>
                 </td>
             </tr>
-        </tbody>
+        </tbody> -->
+    <table mat-table [dataSource]="dataSource">
+        <ng-container matColumnDef="fecha">
+            <th mat-header-cell *matHeaderCellDef>Fecha</th>
+            <td mat-cell *matCellDef="let p">{{p.fecha | date:'short'}}</td>
+        </ng-container>
+        <ng-container matColumnDef="monto">
+            <th mat-header-cell *matHeaderCellDef>Monto</th>
+            <td mat-cell *matCellDef="let p">{{p.monto}}MXN</td>
+        </ng-container>
+        <ng-container matColumnDef="descuento">
+            <th mat-header-cell *matHeaderCellDef>Descuento</th>
+            <td mat-cell *matCellDef="let p">{{p.descuento}}MXN</td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
     </table>
+    <mat-paginator [length]="dataSource.data.length" [pageSizeOptions]="[10, 50, 100]" aria-label="Moverse de pagina"></mat-paginator>
 </div>
