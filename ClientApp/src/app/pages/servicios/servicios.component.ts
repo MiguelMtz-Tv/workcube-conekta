@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ServiciosService } from 'src/app/services/servicios.service';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 @Component({
   selector: 'app-servicios',
@@ -11,19 +12,23 @@ export class ServiciosComponent implements OnInit {
   emptyServices: boolean = false
   areServices: boolean = false
 
-  constructor(private serviciosService: ServiciosService){
+  constructor(
+    private serviciosService: ServiciosService,
+    private spinner: NgxSpinnerService,  
+    ){
+  }
+
+  ngOnInit(): void {
+    this.spinner.show()
     this.serviciosService.getUserServices().subscribe(res => {
+      this.spinner.hide()
       if(res.length == 0){
-        this.emptyServices = true 
+        this.emptyServices = true
       }else{
         this.services = res
         this.areServices = true
       }
     });
-  }
-
-  ngOnInit(): void {
-
   }
 
 }

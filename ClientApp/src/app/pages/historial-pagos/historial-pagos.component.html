@@ -36,5 +36,5 @@
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
         <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
     </table>
-    <mat-paginator [length]="dataSource.data.length" [pageSizeOptions]="[10, 50, 100]" aria-label="Moverse de pagina"></mat-paginator>
+    <mat-paginator [length]="dataSource.data.length" [pageSizeOptions]="[10, 50, 100]"></mat-paginator>
 </div>
