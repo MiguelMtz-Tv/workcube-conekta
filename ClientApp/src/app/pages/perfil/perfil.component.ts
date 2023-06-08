@@ -4,6 +4,8 @@ import { FormGroup, FormControl, Validators } from '@angular/forms'
 import { HotToastService } from '@ngneat/hot-toast'
 import { AuthService } from 'src/app/services/auth.service'
 import { catchError, throwError } from 'rxjs'
+import { NgxSpinnerService } from 'ngx-spinner'
+
 
 
 @Component({
@@ -16,9 +18,15 @@ export class PerfilComponent implements OnInit {
   passwordIsLoading: boolean = false
   isuserFormDirty: boolean = false;
 
-  constructor(private objUSerService: AspNetUserService, private toast: HotToastService, private auth: AuthService) {}
+  constructor(
+    private objUSerService: AspNetUserService, 
+    private toast: HotToastService, 
+    private auth: AuthService,
+    private spinner: NgxSpinnerService,
+    ) {}
 
   ngOnInit(): void {
+    this.spinner.show()
     this.objUSerService.getUserFullName().subscribe(res => {
       this.userForm.setValue({
         Id: this.auth.getUserId(),
@@ -26,6 +34,7 @@ export class PerfilComponent implements OnInit {
         ApellidoPat: res.apellidoPat || '',
         ApellidoMat: res.apellidoMat || ''
       })
+      this.spinner.hide()
     })
   }
 

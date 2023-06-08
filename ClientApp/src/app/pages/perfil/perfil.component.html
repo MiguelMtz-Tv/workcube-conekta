@@ -1,6 +1,6 @@
-<div class="flex flex-col justify-center items-center space-y-6">
+<div class="flex flex-col justify-center items-center space-y-6 mt-8">
     <div class="bg-white w-2/5 flex flex-col flex-auto rounded shadow-md overflow-hidden max-[1200px]:w-full m-auto mx-2">
-      <span class="text-lg font-bold px-8 pt-8 pb-2 -mb-8">Información del Perfil</span>
+      <span class="text-lg px-8 pt-8 pb-2 -mb-8">Información del Perfil</span>
       <span class="text-sm text-gray-600 px-8 py-8 -mb-8">Actualice la información de perfil y la dirección de correo
         electrónico de su cuenta.</span>
       <form [formGroup]="userForm" (ngSubmit)="onSubmitUserForm()">
@@ -34,7 +34,7 @@
     </div>
 
     <div class="bg-white w-2/5 flex flex-col flex-auto rounded shadow-md overflow-hidden max-[1200px]:w-full m-auto mx-2">
-      <span class="text-lg font-bold px-8 pt-8 pb-2 -mb-8">Actualizar contraseña</span>
+      <span class="text-lg px-8 pt-8 pb-2 -mb-8">Actualizar contraseña</span>
       <span class="text-sm text-gray-600 px-8 py-8 -mb-8">Utiliza una contraseña compleja y aleatoria para mentener la
         seguridad.</span>
       <form [formGroup]="passwordForm" (ngSubmit)="onSubmitPasswordForm()">
@@ -66,3 +66,7 @@
       </form>
     </div>
 </div>
+
+<ngx-spinner bdColor="rgba(0, 0, 0, 0.8)" size = "medium" color = "#fff" type = "ball-clip-rotate-multiple" [fullScreen] = "true">
+  <p style="color: white" > Por favor espere... </p>
+</ngx-spinner>

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ServiciosService } from 'src/app/services/servicios.service';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { DataService } from 'src/app/services/data.service';
 
 @Component({
   selector: 'app-servicios',
@@ -15,10 +16,10 @@ export class ServiciosComponent implements OnInit {
   constructor(
     private serviciosService: ServiciosService,
     private spinner: NgxSpinnerService,  
-    ){
-  }
+    private dataService: DataService,
+  ) {}
 
-  ngOnInit(): void {
+  getServices(){
     this.spinner.show()
     this.serviciosService.getUserServices().subscribe(res => {
       this.spinner.hide()
@@ -29,6 +30,12 @@ export class ServiciosComponent implements OnInit {
         this.areServices = true
       }
     });
+  }
+
+  ngOnInit(): void {
+    this.getServices()
+    //observamos el cambio de un servicio
+    this.dataService.data$.subscribe(event => this.getServices())
   }
 
 }

@@ -1,11 +1,22 @@
-<div *ngIf="emptyCupons" class="p-8 text-center">
-    <span class="text-zinc-400 text-xl">No hay cupones disponibles</span>
+<div>
+    <div *ngIf="emptyCupons" class="p-8 mt-8 flex flex-col justify-center items-center">
+        <span class="text-zinc-400 text-xl">No hay cupones disponibles</span>
+        <mat-icon fontIcon="payments" class="mt-8 text-zinc-400"></mat-icon>
+    </div>
+    
+    <app-cupon *ngFor="let cupon of cupons"
+        monto="{{cupon.monto}}"
+        codigo="{{cupon.codigo}}"
+        descripcion="{{cupon.descripcion}}"
+        vigencia="{{cupon.vigencia}}"
+    ></app-cupon>
+    
+    <ngx-spinner 
+        name="cupons-dialog"
+        bdColor="rgba(0, 0, 0, 0.8)" 
+        size="medium" 
+        color="#fff" 
+        type = "ball-clip-rotate-multiple" 
+        [fullScreen]="false">
+    </ngx-spinner>
 </div>
-
-<app-cupon *ngFor="let cupon of cupons"
-    monto="{{cupon.monto}}"
-    codigo="{{cupon.codigo}}"
-    descripcion="{{cupon.descripcion}}"
-    vigencia="{{cupon.vigencia}}"
-></app-cupon>
-

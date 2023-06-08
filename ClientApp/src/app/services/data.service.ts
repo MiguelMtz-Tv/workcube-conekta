@@ -25,7 +25,7 @@ export class DataService {
 
   
   //global modal closer :)
-  setModalClose(value: any){
+/*   setModalClose(value: any){
     this.modalCloser.next(value)
   }
   getModalClose(){
@@ -63,5 +63,5 @@ export class DataService {
   }
   getCardDataService(){
     return this.paymentCardData.asObservable()
-  }
+  } */
 }

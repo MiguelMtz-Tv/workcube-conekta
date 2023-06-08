@@ -5,6 +5,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { ServiciosService } from 'src/app/services/servicios.service';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 @Component({
   selector: 'app-historial-pagos',
@@ -16,7 +17,7 @@ export class HistorialPagosComponent implements OnInit, AfterViewInit{
   dataSource!: MatTableDataSource<any>
 
   displayedColumns: string[] = ['fecha', 'monto', 'descuento', 'imprimir'];
-  service: any
+  service!: any
 
   @ViewChild(MatPaginator) paginator!: MatPaginator
   @ViewChild(MatSort) sort!: MatSort
@@ -25,20 +26,22 @@ export class HistorialPagosComponent implements OnInit, AfterViewInit{
     private pagosService: PagosService,
     private route: ActivatedRoute,
     private serviciosService: ServiciosService,
+    private spinner: NgxSpinnerService,
     ) 
     { 
       this.id = Number(this.route.snapshot.paramMap.get('id')) 
     }
 
   ngOnInit(): void {
+    this.spinner.show()
     this.pagosService.getPaymentsList(this.id)
       .subscribe(res => {
+        this.spinner.hide()
         this.dataSource = new MatTableDataSource<any>(res)
       })
 
     this.serviciosService.getServiceDetails(this.id)
       .subscribe(res => {
-        console.log(res)
         this.service = res
       })
   }

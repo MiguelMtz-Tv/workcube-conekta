@@ -6,4 +6,13 @@
         <button mat-stroked-button mat-dialog-close color="primary">Regresar</button>
         <button mat-flat-button mat-dialog-close color="primary" [routerLink]="['/servicios']" (click)="confirmCancel()">Confirmar</button>
     </div>
+
+    <ngx-spinner 
+        name="cancel-service"
+        bdColor="rgba(0, 0, 0, 0.8)" 
+        size="medium" 
+        color="#fff" 
+        type = "ball-clip-rotate-multiple" 
+        [fullScreen]="false">
+    </ngx-spinner>
 </div>

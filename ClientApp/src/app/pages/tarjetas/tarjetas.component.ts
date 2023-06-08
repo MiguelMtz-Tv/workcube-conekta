@@ -5,6 +5,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { AddCardComponent } from 'src/app/components/dialogs/add-card/add-card.component';
 import { TarjetasService } from 'src/app/services/tarjetas.service';
 import { DataService } from 'src/app/services/data.service';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 @Component({
   selector: 'app-tarjetas',
@@ -17,6 +18,7 @@ export class TarjetasComponent implements OnInit {
     private dialod: MatDialog,
     private tarjetasService: TarjetasService,
     private dataService: DataService,
+    private spinner: NgxSpinnerService,
     ){}
 
   cards : any
@@ -30,10 +32,18 @@ export class TarjetasComponent implements OnInit {
   })
 
   getCards(){
+    this.spinner.show()
     this.tarjetasService.listCards()
-    .subscribe(res => {
+    .subscribe(
+      res => {
+      this.spinner.hide()
       this.cards = res
-    })
+      },
+      error => {
+        console.log(error)
+        this.spinner.hide()
+      }
+    )
   }
 
   ngOnInit(): void {

@@ -15,6 +15,7 @@ import {MatRippleModule} from '@angular/material/core';
 import { NgxSpinnerModule } from "ngx-spinner";
 import {MatPaginatorModule} from '@angular/material/paginator'; 
 import {MatTableModule} from '@angular/material/table'; 
+import {MatIconModule} from '@angular/material/icon'; 
 
 @NgModule({
     imports:[
@@ -34,6 +35,7 @@ import {MatTableModule} from '@angular/material/table';
         NgxSpinnerModule,
         MatPaginatorModule,
         MatTableModule,
+        MatIconModule,
     ],
     exports:[
         MatButtonModule,
@@ -52,6 +54,7 @@ import {MatTableModule} from '@angular/material/table';
         NgxSpinnerModule,
         MatPaginatorModule,
         MatTableModule,
+        MatIconModule,
     ],
     providers: [{
         provide: MAT_RADIO_DEFAULT_OPTIONS,
