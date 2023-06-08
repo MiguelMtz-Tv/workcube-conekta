@@ -31,6 +31,7 @@ namespace workcube_pagos.Migrations
                 {
                     IdCliente = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
+                    StripeCustomerID = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     RFC = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     RazonSocial = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     NombreComercial = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -53,7 +54,7 @@ namespace workcube_pagos.Migrations
                 {
                     IdPeriodo = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    PeriodoName = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -61,7 +62,20 @@ namespace workcube_pagos.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "ServicioTipos",
+                name: "ServiciosEstatus",
+                columns: table => new
+                {
+                    IdServicioEstatus = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ServiciosEstatus", x => x.IdServicioEstatus);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ServiciosTipos",
                 columns: table => new
                 {
                     IdServicioTipo = table.Column<int>(type: "int", nullable: false)
@@ -72,7 +86,7 @@ namespace workcube_pagos.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ServicioTipos", x => x.IdServicioTipo);
+                    table.PrimaryKey("PK_ServiciosTipos", x => x.IdServicioTipo);
                 });
 
             migrationBuilder.CreateTable(
@@ -133,16 +147,41 @@ namespace workcube_pagos.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Tarjetas",
+                columns: table => new
+                {
+                    IdTarjeta = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    StripeCardID = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    IdCliente = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Tarjetas", x => x.IdTarjeta);
+                    table.ForeignKey(
+                        name: "FK_Tarjetas_Clientes_IdCliente",
+                        column: x => x.IdCliente,
+                        principalTable: "Clientes",
+                        principalColumn: "IdCliente");
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Servicios",
                 columns: table => new
                 {
                     IdServicio = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     IdServicioTipo = table.Column<int>(type: "int", nullable: false),
+                    ServicioTipoName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ServicioTipoDescripcion = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ServicioTipoCosto = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     IdCliente = table.Column<int>(type: "int", nullable: false),
+                    ClienteRazonSocial = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     IdPeriodo = table.Column<int>(type: "int", nullable: false),
+                    PeriodoName = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Vigencia = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Status = table.Column<int>(type: "int", nullable: false),
+                    IdServicioEstatus = table.Column<int>(type: "int", nullable: false),
+                    ServicioEstatusName = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     KeyServicio = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
@@ -161,9 +200,15 @@ namespace workcube_pagos.Migrations
                         principalColumn: "IdPeriodo",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Servicios_ServicioTipos_IdServicioTipo",
+                        name: "FK_Servicios_ServiciosEstatus_IdServicioEstatus",
+                        column: x => x.IdServicioEstatus,
+                        principalTable: "ServiciosEstatus",
+                        principalColumn: "IdServicioEstatus",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Servicios_ServiciosTipos_IdServicioTipo",
                         column: x => x.IdServicioTipo,
-                        principalTable: "ServicioTipos",
+                        principalTable: "ServiciosTipos",
                         principalColumn: "IdServicioTipo",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -259,7 +304,7 @@ namespace workcube_pagos.Migrations
                 {
                     IdCupon = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Codigo = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Descripcion = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     IdServicio = table.Column<int>(type: "int", nullable: false),
                     IdCliente = table.Column<int>(type: "int", nullable: false),
@@ -278,6 +323,37 @@ namespace workcube_pagos.Migrations
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Cupones_Servicios_IdServicio",
+                        column: x => x.IdServicio,
+                        principalTable: "Servicios",
+                        principalColumn: "IdServicio",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Pagos",
+                columns: table => new
+                {
+                    IdPago = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Fecha = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    IdServicio = table.Column<int>(type: "int", nullable: false),
+                    IdCliente = table.Column<int>(type: "int", nullable: false),
+                    IdStripeCard = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    IdStripeCharge = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Monto = table.Column<long>(type: "bigint", nullable: false),
+                    Descuento = table.Column<decimal>(type: "decimal(18,2)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Pagos", x => x.IdPago);
+                    table.ForeignKey(
+                        name: "FK_Pagos_Clientes_IdCliente",
+                        column: x => x.IdCliente,
+                        principalTable: "Clientes",
+                        principalColumn: "IdCliente",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Pagos_Servicios_IdServicio",
                         column: x => x.IdServicio,
                         principalTable: "Servicios",
                         principalColumn: "IdServicio",
@@ -341,6 +417,16 @@ namespace workcube_pagos.Migrations
                 column: "IdServicio");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Pagos_IdCliente",
+                table: "Pagos",
+                column: "IdCliente");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Pagos_IdServicio",
+                table: "Pagos",
+                column: "IdServicio");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Servicios_IdCliente",
                 table: "Servicios",
                 column: "IdCliente");
@@ -351,9 +437,19 @@ namespace workcube_pagos.Migrations
                 column: "IdPeriodo");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Servicios_IdServicioEstatus",
+                table: "Servicios",
+                column: "IdServicioEstatus");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Servicios_IdServicioTipo",
                 table: "Servicios",
                 column: "IdServicioTipo");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Tarjetas_IdCliente",
+                table: "Tarjetas",
+                column: "IdCliente");
         }
 
         /// <inheritdoc />
@@ -378,6 +474,12 @@ namespace workcube_pagos.Migrations
                 name: "Cupones");
 
             migrationBuilder.DropTable(
+                name: "Pagos");
+
+            migrationBuilder.DropTable(
+                name: "Tarjetas");
+
+            migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
@@ -393,7 +495,10 @@ namespace workcube_pagos.Migrations
                 name: "Periodos");
 
             migrationBuilder.DropTable(
-                name: "ServicioTipos");
+                name: "ServiciosEstatus");
+
+            migrationBuilder.DropTable(
+                name: "ServiciosTipos");
         }
     }
 }

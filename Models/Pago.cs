@@ -20,6 +20,7 @@ namespace workcube_pagos.Models
         public virtual Cliente Cliente      { get; set; }
         public int IdCliente                { get; set; }
         public string IdStripeCard          { get; set; }
+        public string IdStripeCharge        { get; set; }
         public long Monto                   { get; set; }
         [Column(TypeName = "decimal(18, 2)")]
         public decimal Descuento            { get; set; }  

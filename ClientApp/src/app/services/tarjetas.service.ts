@@ -23,6 +23,10 @@ export class TarjetasService {
   }
 
   updateCard(cardObj : any){
+    return this.http.post<any>(this.baseUrl+'api/tarjetas/update', cardObj)
+  }
+
+  getCard(cardObj : any){
     return this.http.post<any>(this.baseUrl+'api/tarjetas/get', cardObj)
   }
 }

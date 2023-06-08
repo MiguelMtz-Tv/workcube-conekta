@@ -43,7 +43,7 @@ export class NavbarMenuComponent {
   showCupons(enterAnimations: string, exitAnimation: string): void{
     this.dialog.open(CuponsDialogComponent, {
         width: '90%',
-        maxWidth: '1024px',
+        maxWidth: '500px',
         minHeight: '300px',
         maxHeight: '1000px',
         enterAnimationDuration: enterAnimations,

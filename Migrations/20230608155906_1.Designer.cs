@@ -12,8 +12,8 @@ using workcube_pagos.Data;
 namespace workcube_pagos.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20230524144542_4")]
-    partial class _4
+    [Migration("20230608155906_1")]
+    partial class _1
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -266,6 +266,9 @@ namespace workcube_pagos.Migrations
                     b.Property<string>("RazonSocial")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("StripeCustomerID")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Telefono")
                         .HasColumnType("nvarchar(max)");
 
@@ -282,6 +285,9 @@ namespace workcube_pagos.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdCupon"));
 
+                    b.Property<string>("Codigo")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Descripcion")
                         .HasColumnType("nvarchar(max)");
 
@@ -293,9 +299,6 @@ namespace workcube_pagos.Migrations
 
                     b.Property<decimal>("Monto")
                         .HasColumnType("decimal(18, 2)");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Status")
                         .HasColumnType("int");
@@ -310,6 +313,44 @@ namespace workcube_pagos.Migrations
                     b.HasIndex("IdServicio");
 
                     b.ToTable("Cupones");
+                });
+
+            modelBuilder.Entity("workcube_pagos.Models.Pago", b =>
+                {
+                    b.Property<int>("IdPago")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdPago"));
+
+                    b.Property<decimal>("Descuento")
+                        .HasColumnType("decimal(18, 2)");
+
+                    b.Property<DateTime>("Fecha")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("IdCliente")
+                        .HasColumnType("int");
+
+                    b.Property<int>("IdServicio")
+                        .HasColumnType("int");
+
+                    b.Property<string>("IdStripeCard")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("IdStripeCharge")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<long>("Monto")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("IdPago");
+
+                    b.HasIndex("IdCliente");
+
+                    b.HasIndex("IdServicio");
+
+                    b.ToTable("Pagos");
                 });
 
             modelBuilder.Entity("workcube_pagos.Models.Periodo", b =>
@@ -423,6 +464,27 @@ namespace workcube_pagos.Migrations
                     b.ToTable("ServiciosTipos");
                 });
 
+            modelBuilder.Entity("workcube_pagos.Models.Tarjeta", b =>
+                {
+                    b.Property<int>("IdTarjeta")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdTarjeta"));
+
+                    b.Property<int>("IdCliente")
+                        .HasColumnType("int");
+
+                    b.Property<string>("StripeCardID")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("IdTarjeta");
+
+                    b.HasIndex("IdCliente");
+
+                    b.ToTable("Tarjetas");
+                });
+
             modelBuilder.Entity("workcube_pagos.Models.AspNetUser", b =>
                 {
                     b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityUser");
@@ -516,6 +578,25 @@ namespace workcube_pagos.Migrations
                     b.Navigation("Servicio");
                 });
 
+            modelBuilder.Entity("workcube_pagos.Models.Pago", b =>
+                {
+                    b.HasOne("workcube_pagos.Models.Cliente", "Cliente")
+                        .WithMany("Pagos")
+                        .HasForeignKey("IdCliente")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("workcube_pagos.Models.Servicio", "Servicio")
+                        .WithMany("Pagos")
+                        .HasForeignKey("IdServicio")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Cliente");
+
+                    b.Navigation("Servicio");
+                });
+
             modelBuilder.Entity("workcube_pagos.Models.Servicio", b =>
                 {
                     b.HasOne("workcube_pagos.Models.Cliente", "Cliente")
@@ -551,6 +632,17 @@ namespace workcube_pagos.Migrations
                     b.Navigation("ServicioTipo");
                 });
 
+            modelBuilder.Entity("workcube_pagos.Models.Tarjeta", b =>
+                {
+                    b.HasOne("workcube_pagos.Models.Cliente", "Cliente")
+                        .WithMany("Tarjetas")
+                        .HasForeignKey("IdCliente")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.Navigation("Cliente");
+                });
+
             modelBuilder.Entity("workcube_pagos.Models.AspNetUser", b =>
                 {
                     b.HasOne("workcube_pagos.Models.Cliente", "Cliente")
@@ -566,7 +658,11 @@ namespace workcube_pagos.Migrations
                 {
                     b.Navigation("Cupones");
 
+                    b.Navigation("Pagos");
+
                     b.Navigation("Servicios");
+
+                    b.Navigation("Tarjetas");
 
                     b.Navigation("Usuario");
                 });
@@ -579,6 +675,8 @@ namespace workcube_pagos.Migrations
             modelBuilder.Entity("workcube_pagos.Models.Servicio", b =>
                 {
                     b.Navigation("Cupones");
+
+                    b.Navigation("Pagos");
                 });
 
             modelBuilder.Entity("workcube_pagos.Models.ServicioEstatus", b =>

@@ -1,11 +1,13 @@
+
 <div class="sm:w-3/4 m-auto">
     <app-page-title title="Tarjetas" />
-    <div class="flex flex-wrap items-center m-auto">
+    <div class="flex flex-wrap items-center m-auto max-[1010px]:flex-col">
         <app-payment-card *ngFor="let card of cards" 
-            finishedIn="{{card.last4}}" 
-            owner="{{card.name}}"
-            expiration="{{card.expMonth+'/'+card.expYear}}" 
-            id="{{card.id}}"/>
+                finishedIn="{{card.last4}}" 
+                owner="{{card.name}}"
+                expiration="{{card.expMonth+'/'+card.expYear}}" 
+                brand="{{card.brand}}"
+                id="{{card.id}}"/>
             <div class="p-4">
                 <div class="w-28 h-28 cursor-pointer border border-dashed border-zinc-500 rounded p-2 flex flex-col justify-center items-center" matRipple 
                     [matRippleCentered]="false"
@@ -13,15 +15,21 @@
                     [matRippleRadius]="300"
                     (click)="openAddCardModal('150ms', '150ms')"
                     >
-                    <span class="text-zinc-500">Añadir tarjeta</span>
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-zinc-500 mt-3">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
-                    </svg>  
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-zinc-500 mt-3">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                        </svg>
+                        <span class="text-zinc-500">Añadir tarjeta</span>  
                 </div>
             </div>
     </div>
 </div>
-
-<ngx-spinner bdColor="rgba(0, 0, 0, 0.8)" size = "medium" color = "#fff" type = "ball-clip-rotate-multiple" [fullScreen] = "true">
-    <p style="color: white" > Por favor espere... </p>
+    
+<ngx-spinner 
+    name="tarjetas"
+    bdColor="rgba(0, 0, 0, 0.8)" 
+    size="medium" 
+    color="#fff" 
+    type = "ball-clip-rotate-multiple" 
+    [fullScreen]="false">
 </ngx-spinner>
+

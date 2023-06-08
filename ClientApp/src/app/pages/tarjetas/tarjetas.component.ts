@@ -32,11 +32,11 @@ export class TarjetasComponent implements OnInit {
   })
 
   getCards(){
-    this.spinner.show()
+    this.spinner.show('tarjetas')
     this.tarjetasService.listCards()
     .subscribe(
       res => {
-      this.spinner.hide()
+      this.spinner.hide('tarjetas')
       this.cards = res
       },
       error => {

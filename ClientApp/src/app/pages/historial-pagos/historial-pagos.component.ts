@@ -33,10 +33,10 @@ export class HistorialPagosComponent implements OnInit, AfterViewInit{
     }
 
   ngOnInit(): void {
-    this.spinner.show()
+    this.spinner.show('historial-pagos')
     this.pagosService.getPaymentsList(this.id)
       .subscribe(res => {
-        this.spinner.hide()
+        this.spinner.hide('historial-pagos')
         this.dataSource = new MatTableDataSource<any>(res)
       })
 

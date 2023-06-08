@@ -16,7 +16,8 @@ export class PaymentCardComponent {
   @Input() finishedIn: string;
   @Input() owner: string;
   @Input() expiration: string;
-  @Input() id : string;
+  @Input() id: string;
+  @Input() brand: string;
 
   constructor( 
     private toast: HotToastService,
@@ -28,6 +29,7 @@ export class PaymentCardComponent {
     this.owner = '';
     this.expiration = '';
     this.id = '';
+    this.brand = '';
   }
 
   //open modals to edit and delete

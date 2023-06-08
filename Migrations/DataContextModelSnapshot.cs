@@ -335,6 +335,9 @@ namespace workcube_pagos.Migrations
                     b.Property<string>("IdStripeCard")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("IdStripeCharge")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<long>("Monto")
                         .HasColumnType("bigint");
 
