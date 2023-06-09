@@ -25,9 +25,21 @@ namespace workcube_pagos.Services
             var service = new CardService();
             var options = new CardListOptions();
 
-            var cards = service.List(idCustomer, options);
-
-            return cards;
+            try
+            {
+                return service.List(idCustomer, options)
+                    .Select(c => new
+                    {
+                        id = c.Id,
+                        brand = c.Brand,
+                        expYear = c.ExpYear,
+                        expMonth = c.ExpMonth,
+                        name = c.Name,
+                    });
+            }catch(StripeException ex)
+            {
+                return ex.Message;
+            }
         }
 
         public async Task<object> Delete(DeleteCardReq cardObj)

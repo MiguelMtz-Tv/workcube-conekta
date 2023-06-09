@@ -16,6 +16,8 @@ import { NgxSpinnerModule } from "ngx-spinner";
 import {MatPaginatorModule} from '@angular/material/paginator'; 
 import {MatTableModule} from '@angular/material/table'; 
 import {MatIconModule} from '@angular/material/icon'; 
+import { PaginatorIntlService } from '../applicationConfig/paginator-config'
+import { MatPaginatorIntl } from '@angular/material/paginator'
 
 @NgModule({
     imports:[
@@ -56,10 +58,16 @@ import {MatIconModule} from '@angular/material/icon';
         MatTableModule,
         MatIconModule,
     ],
-    providers: [{
-        provide: MAT_RADIO_DEFAULT_OPTIONS,
-        useValue: { color: 'primary' },
-    }],
+    providers: [
+        {
+            provide: MAT_RADIO_DEFAULT_OPTIONS,
+            useValue: { color: 'primary' },
+        },
+        {
+            provide: MatPaginatorIntl,
+            useClass: PaginatorIntlService
+        }
+    ],
 
     schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })

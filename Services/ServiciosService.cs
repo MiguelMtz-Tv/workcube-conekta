@@ -13,9 +13,22 @@ namespace workcube_pagos.Services
 
 
         //para obtener los servicios de un cliente
-        public async Task<List<Servicio>> GetClientServices(int UserId)
+        public async Task<object> GetClientServices(int UserId)
         {
-            return await _context.Servicios.AsNoTracking().Where(s => s.IdCliente == UserId).ToListAsync();
+            return await _context.Servicios.AsNoTracking()
+                .Where(s => s.IdCliente == UserId)
+                .Select(s => new
+                {
+                    IdServicio = s.IdServicio,
+                    ServicioTipoCosto = s.ServicioTipoCosto,
+                    ServicioTipoName = s.ServicioTipoName,
+                    ServicioTipoDescripcion = s.ServicioTipoDescripcion,
+                    PeriodoName = s.PeriodoName,
+                    Vigencia = s.Vigencia,
+                    ServicioEstatusName = s.ServicioEstatusName,
+
+                })
+                .ToListAsync();
         }
 
         //para obtener los detalles de un servicio

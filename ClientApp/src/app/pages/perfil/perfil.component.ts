@@ -100,9 +100,11 @@ export class PerfilComponent implements OnInit {
   }
 
   onSubmitPasswordForm(){
+    this.passwordIsLoading = true
     this.objUSerService.updatePassword(this.passwordForm.value)
     .pipe(
       catchError(error => {
+        this.passwordIsLoading = false
         this.toast.error('Contraseña incorrecta',{
           style: {
             border: '1px solid #FF0000',
@@ -115,6 +117,7 @@ export class PerfilComponent implements OnInit {
       })
     )
     .subscribe(res => {
+      this.passwordIsLoading = false
       this.toast.success('Contraseña actualizada!', {
         style: {
           margin: '100px 20px',

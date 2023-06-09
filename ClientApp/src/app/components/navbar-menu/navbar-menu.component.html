@@ -82,15 +82,15 @@
         </button>
         <mat-menu #menu="matMenu">
             <a mat-menu-item [routerLink]="['/perfil']">
-                <mat-icon fontIcon="account_circle" class="text-zinc-400"></mat-icon>
+                <mat-icon fontIcon="account_circle" style="color: #A1A1AA;"></mat-icon>
                 <span class="text-sm">Ver perfil</span>
             </a>
             <a mat-menu-item (click)="showCupons('150ms','150ms')">
-                <mat-icon fontIcon="savings" class="text-zinc-400"></mat-icon>
+                <mat-icon fontIcon="savings" style="color: #A1A1AA;"></mat-icon>
                 <span class="text-sm">Ver mis cupones</span>
             </a>
             <a mat-menu-item [routerLink]="['/']" (click)="closeSession()">
-                <mat-icon fontIcon="logout" class="text-zinc-400"></mat-icon>
+                <mat-icon fontIcon="logout" style="color: #A1A1AA;"></mat-icon>
                 <span class="text-sm">Cerrar sesión</span>
             </a>
         </mat-menu>
