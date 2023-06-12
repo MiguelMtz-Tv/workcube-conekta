@@ -16,7 +16,7 @@ export class UpdateCardComponent implements OnInit {
   expYear: any
   expMonth: any
 
-  currentMonth = this.date.getMonth() + 1
+  currentMonth = this.date.getMonth()
   currentYear= String(this.date.getFullYear())
 
   buttonLoading: boolean = false
@@ -52,7 +52,7 @@ export class UpdateCardComponent implements OnInit {
   })
 
   onSubmit(){
-    this.buttonLoading = true
+   this.buttonLoading = true
     this.tarjetasService.updateCard({
       IdCliente: this.data.idCliente,
       CardStripeId: this.data.cardId,
@@ -69,12 +69,14 @@ export class UpdateCardComponent implements OnInit {
 
   //verificacion de fecha
   onDateChange(){
-    if (this.expYear < this.currentYear || this.expMonth > 12) {
-      this.dateInvalid = true;
-    } else if (this.expYear === this.currentYear && this.expMonth <= this.currentMonth) {
-      this.dateInvalid = true;
-    } else {
-      this.dateInvalid = false;
+    let date = new Date(this.expYear+'-'+this.expMonth+'-'+'02')
+    let currentDate = new Date()
+
+    if(date < currentDate || !isNaN(+date) == false){
+      this.dateInvalid = true
+    }else{
+      this.dateInvalid = false
     }
+
   }
 }

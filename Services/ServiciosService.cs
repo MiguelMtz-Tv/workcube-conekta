@@ -1,4 +1,4 @@
-﻿using workcube_pagos.ViewModel.Req;
+﻿using workcube_pagos.ViewModel.Req.Servicio;
 
 namespace workcube_pagos.Services
 {
@@ -26,7 +26,6 @@ namespace workcube_pagos.Services
                     PeriodoName = s.PeriodoName,
                     Vigencia = s.Vigencia,
                     ServicioEstatusName = s.ServicioEstatusName,
-
                 })
                 .ToListAsync();
         }
@@ -48,6 +47,7 @@ namespace workcube_pagos.Services
         //para cancelar un servicio
         public async Task<Servicio> CancelService(CancelServiceReq model) 
         {
+            var loginTransaction = _context.Database.BeginTransaction();
             var serviceToCancel = await _context.Servicios.Where(s => s.IdCliente == model.IdCliente && s.IdServicio == model.IdServicio).FirstOrDefaultAsync();
 
             if (serviceToCancel == null)
@@ -58,6 +58,7 @@ namespace workcube_pagos.Services
             serviceToCancel.IdServicioEstatus = 3;  
             serviceToCancel.ServicioEstatusName = "Cancelado";
             await _context.SaveChangesAsync();
+            loginTransaction.Commit();
             return serviceToCancel;
         }
 

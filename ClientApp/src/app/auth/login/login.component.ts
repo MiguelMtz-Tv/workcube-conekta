@@ -14,6 +14,8 @@ export class LoginComponent {
   isLoading: boolean = false
   loginError: boolean = false
 
+  passwordIsHidden: boolean = true
+
   constructor(private auth: AuthService, private router: Router) {
   }
 
@@ -42,6 +44,27 @@ export class LoginComponent {
         this.isLoading = false
       }
     )
+  }
+
+  toggleHiddenPass(){
+    let passFields = document.getElementsByClassName('pass-field')
+    let icon = document.getElementById('pass-icon') 
+
+    if(this.passwordIsHidden){
+      this.passwordIsHidden = false
+      icon?.setAttribute('fontIcon', 'visibility')
+
+      for(let i = 0; i < passFields.length; i++){
+        passFields[i].setAttribute('type', 'text')
+      }
+    }else{
+      this.passwordIsHidden = true
+      icon?.setAttribute('fontIcon', 'visibility_off')
+
+      for(let i = 0; i < passFields.length; i++){
+        passFields[i].setAttribute('type', 'password')
+      }
+    }
   }
 
 }

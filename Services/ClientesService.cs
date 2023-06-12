@@ -1,14 +1,10 @@
-﻿using Microsoft.AspNetCore.Http.HttpResults;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Identity.Client;
-using Stripe;
-using System.Text.Json.Nodes;
-using workcube_pagos.ViewModel.Req;
-using workcube_pagos.ViewModel.Res;
+﻿using Microsoft.Build.Framework;
+using workcube_pagos.ViewModel.Req.Cliente;
+using workcube_pagos.ViewModel.Res.Cliente;
 
 namespace workcube_pagos.Services
 {
-   
+
     public class ClientesService
     {
         private readonly DataContext _context;
@@ -26,7 +22,7 @@ namespace workcube_pagos.Services
                 Phone =         ClientObj.Telefono,
             };
             
-            //Deveolver en error si falló la creación en stripe
+            //Deveolver un error si falló la creación en stripe
             string idStripe = "";
             try
             {
@@ -74,6 +70,7 @@ namespace workcube_pagos.Services
                 StripeCustomerID =      newCLiente.StripeCustomerID,
             };
         }
+        
         
     }
 }

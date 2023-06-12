@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Text.Json.Nodes;
 using workcube_pagos.Services;
-using workcube_pagos.ViewModel.Req;
+using workcube_pagos.ViewModel.Req.Servicio;
 
 namespace workcube_pagos.Controllers
 {

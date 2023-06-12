@@ -4,21 +4,29 @@
     </button>
 </div>
 <app-auth-layout>
-    <div class="flex flex-col p-4 absolute">
-        <div class="flex justify-between">
+    <div class="flex flex-col p-4 absolute text-slate-800">
+        <div class="flex justify-between mb-6">
             <div>
                 <img src="../../../assets/shared/LOGOPIXL.png" class="w-12 mt-3" draggable="false">
             </div>
-            <app-page-title title="Bienvenido" subtitle="Inicia sesión en tu cuenta"/>
+            <div class="flex flex-col ml-6 mt-6">
+                <span class="text-2xl font-semibold">Bienvenido</span>
+                <span>Inicia sesión en tu cuenta</span>
+            </div>
         </div>
         <form [formGroup]="form" (ngSubmit)="onSubmit()">
             <div class="flex flex-col mb-6">
-                <label class="text-sm  mb-2" for="">Correo o usuario</label>
-                <input type="text" class="p-2 border border-zinc-300 rounded" placeholder="Ingresa tu correo o usuario" formControlName="UserName">
+                <label class="text-sm  mb-2" for="">Usuario</label>
+                <input type="text" class="p-3 text-slate-700 rounded border border-zinc-300 focus:outline-none focus:border-indigo-500" placeholder="Ingresa tu correo o usuario" formControlName="UserName">
             </div>
             <div class="flex flex-col mb-6">
                 <label class="text-sm  mb-2" for="">Contraseña</label>
-                <input type="password" class="p-2 border border-zinc-300 rounded" placeholder="Ingresa tu contraseña" formControlName="Password">
+                <div class="flex items-center m-auto w-full relative">
+                    <input id="currentPass" placeholder="Ingresa tu contraseña" type="password" class="w-full p-3 text-slate-700 rounded border border-zinc-300 focus:outline-none focus:border-indigo-500 pass-field" formControlName="Password">
+                    <div class="cursor-pointer absolute left-[85%] flex items-center p-1 hover:bg-zinc-200 rounded-2xl">
+                        <mat-icon id="pass-icon" class="text-zinc-400" fontIcon="visibility_off" (click)="toggleHiddenPass()"></mat-icon>
+                    </div>
+                </div>
             </div>
             <div class="mb-6">
                 <div class="flex items-center">

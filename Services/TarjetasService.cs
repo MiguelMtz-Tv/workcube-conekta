@@ -1,8 +1,4 @@
-﻿using Azure.Core;
-using Microsoft.Identity.Client;
-using System.Runtime.InteropServices.ObjectiveC;
-using workcube_pagos.ViewModel.Req;
-using workcube_pagos.ViewModel.Res;
+﻿using workcube_pagos.ViewModel.Req.Tarjeta;
 
 namespace workcube_pagos.Services
 {
@@ -29,12 +25,13 @@ namespace workcube_pagos.Services
             {
                 return service.List(idCustomer, options)
                     .Select(c => new
-                    {
+{
                         id = c.Id,
                         brand = c.Brand,
                         expYear = c.ExpYear,
                         expMonth = c.ExpMonth,
                         name = c.Name,
+                        last4 = c.Last4,
                     });
             }catch(StripeException ex)
             {

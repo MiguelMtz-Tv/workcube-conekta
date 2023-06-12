@@ -18,6 +18,8 @@ export class PerfilComponent implements OnInit {
   passwordIsLoading: boolean = false
   isuserFormDirty: boolean = false;
 
+  passwordIsHidden: boolean = true
+
   constructor(
     private objUSerService: AspNetUserService, 
     private toast: HotToastService, 
@@ -131,5 +133,27 @@ export class PerfilComponent implements OnInit {
       this.userIsLoading = false
       console.log(res)
     })
+  }
+
+  toggleHiddenPass(){
+    let passFields = document.getElementsByClassName('pass-field')
+    let icon = document.getElementById('pass-icon') 
+
+    if(this.passwordIsHidden){
+      this.passwordIsHidden = false
+      icon?.setAttribute('fontIcon', 'visibility')
+
+      for(let i = 0; i < passFields.length; i++){
+        passFields[i].setAttribute('type', 'text')
+      }
+    }else{
+      this.passwordIsHidden = true
+      icon?.setAttribute('fontIcon', 'visibility_off')
+
+      for(let i = 0; i < passFields.length; i++){
+        passFields[i].setAttribute('type', 'password')
+      }
+    }
+
   }
 }

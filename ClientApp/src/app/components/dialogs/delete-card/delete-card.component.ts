@@ -11,6 +11,8 @@ import { DialogRef } from '@angular/cdk/dialog';
   styleUrls: ['./delete-card.component.css']
 })
 export class DeleteCardComponent {
+  isDeleting: boolean = false
+
   constructor(
     public dialogRef: MatDialogRef<PaymentCardComponent>, 
     @Inject(MAT_DIALOG_DATA) public data: any,
@@ -20,10 +22,12 @@ export class DeleteCardComponent {
     ){}
 
   deleteCard(){
+    this.isDeleting = true
     this.tarjetasService.deleteCard(this.data)
       .subscribe(res => {
         this.thisDialog.close()
         this.dataService.updateData('data')
+        this.isDeleting = false
       })
   }
 

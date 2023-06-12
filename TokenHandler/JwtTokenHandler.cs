@@ -2,8 +2,7 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using workcube_pagos.ViewModel.Res;
-
+using workcube_pagos.ViewModel.Res.Usuario;
 
 namespace workcube_pagos.TokenHandler
 {

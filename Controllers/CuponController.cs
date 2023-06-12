@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using workcube_pagos.Services;
-using workcube_pagos.ViewModel.Req;
+using workcube_pagos.ViewModel.Req.Cupon;
 
 namespace workcube_pagos.Controllers
 {

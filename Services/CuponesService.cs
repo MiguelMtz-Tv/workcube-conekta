@@ -1,7 +1,7 @@
 ﻿using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.Identity.Client;
 using workcube_pagos.Models;
-using workcube_pagos.ViewModel.Req;
+using workcube_pagos.ViewModel.Req.Cupon;
 
 namespace workcube_pagos.Services
 {

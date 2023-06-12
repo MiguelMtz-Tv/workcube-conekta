@@ -1,8 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
 using workcube_pagos.Services;
 using workcube_pagos.TokenHandler;
-using workcube_pagos.ViewModel.Req;
-using workcube_pagos.ViewModel.Res;
+using workcube_pagos.ViewModel.Req.Usuario;
+using workcube_pagos.ViewModel.Res.Usuario;
 
 namespace workcube_pagos.Controllers
 {

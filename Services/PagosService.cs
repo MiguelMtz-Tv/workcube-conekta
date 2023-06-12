@@ -1,15 +1,15 @@
-﻿using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.View;
-using System.Drawing.Text;
-using workcube_pagos.ViewModel.Req;
-using workcube_pagos.ViewModel.Res;
+﻿using workcube_pagos.ViewModel.Req.Pago;
+using workcube_pagos.ViewModel.Res.Pago;
 
 namespace workcube_pagos.Services
 {
     public class PagosService
     {
         private readonly DataContext _context;
-        public PagosService(DataContext context) {
+        private readonly ClientesService _clientesService;
+        public PagosService(DataContext context, ClientesService clientesService) {
             _context = context;
+            _clientesService = clientesService;
         }   
 
         public async Task<List<Pago>> List(int idServicio)
@@ -50,7 +50,6 @@ namespace workcube_pagos.Services
             var result = new Charge();
             try
             {
-                
                 var options = new ChargeCreateOptions
                 {
                     Amount = amount,
@@ -73,6 +72,7 @@ namespace workcube_pagos.Services
             }
 
             //guardar pago en la base de datos
+            var loginTransaction = _context.Database.BeginTransaction();
             DateTime dateTime = DateTime.Now;
             var newPayment = new Pago
             {
@@ -100,6 +100,7 @@ namespace workcube_pagos.Services
 
             //guardamos las consultas
             await _context.SaveChangesAsync();
+            loginTransaction.Commit();
 
             return new ChargeRes
             {

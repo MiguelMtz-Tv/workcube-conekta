@@ -1,6 +1,6 @@
 <div class="flex flex-col justify-center items-center space-y-6 mt-8">
     <div class="bg-white w-2/5 flex flex-col flex-auto rounded shadow-md overflow-hidden max-[1200px]:w-full m-auto mx-2">
-      <span class="text-lg px-8 pt-8 pb-2 -mb-8">Información del Perfil</span>
+      <span class="text-lg px-8 pt-8 pb-2 -mb-8 text-slate-800 font-semibold">Información del Perfil</span>
       <span class="text-sm text-gray-600 px-8 py-8 -mb-8">Actualice la información de perfil y la dirección de correo
         electrónico de su cuenta.</span>
       <form [formGroup]="userForm" (ngSubmit)="onSubmitUserForm()">
@@ -28,23 +28,28 @@
     </div>
 
     <div class="bg-white w-2/5 flex flex-col flex-auto rounded shadow-md overflow-hidden max-[1200px]:w-full m-auto mx-2">
-      <span class="text-lg px-8 pt-8 pb-2 -mb-8">Actualizar contraseña</span>
+      <span class="text-lg px-8 pt-8 pb-2 -mb-8 text-slate-800 font-semibold">Actualizar contraseña</span>
       <span class="text-sm text-gray-600 px-8 py-8 -mb-8">Utiliza una contraseña compleja y aleatoria para mentener la
         seguridad.</span>
       <form [formGroup]="passwordForm" (ngSubmit)="onSubmitPasswordForm()">
         <div class="flex flex-wrap mb-8 mr-6 p-8">
           <div class="flex w-1/2 flex-col px-4 mt-3 max-[768px]:w-full">
             <label for="currentPass" class="mb-2 text-[14px] text-slate-700">Contraseña actual</label>
-            <input id="currentPass" type="password" class="p-3 text-slate-700 rounded border border-zinc-300 focus:outline-none focus:border-indigo-500" formControlName="OldPassword">
+            <div class="flex items-center m-auto w-full relative">
+              <input id="currentPass" type="password" class="w-full p-3 text-slate-700 rounded border border-zinc-300 focus:outline-none focus:border-indigo-500 pass-field" formControlName="OldPassword">
+              <div class="cursor-pointer absolute left-[85%] flex items-center p-1 hover:bg-zinc-200 rounded-2xl">
+                  <mat-icon id="pass-icon" class="text-zinc-400" fontIcon="visibility_off" (click)="toggleHiddenPass()"></mat-icon>
+              </div>
+            </div>
           </div>
           <div class="flex w-full flex-wrap">
             <div class="flex flex-col px-4 mt-3 w-full md:w-1/2">
               <label for="newPass" class="mb-2 text-[14px] text-slate-700">Nueva contraseña</label>
-            <input id="newPass" type="password" class="p-3 text-slate-700 rounded border border-zinc-300 focus:outline-none focus:border-indigo-500" [(ngModel)]="setPassword" (ngModelChange)="comparePassword()" formControlName="NewPassword">
+              <input id="newPass" type="password" class="p-3 text-slate-700 rounded border border-zinc-300 focus:outline-none focus:border-indigo-500 pass-field" [(ngModel)]="setPassword" (ngModelChange)="comparePassword()" formControlName="NewPassword">
             </div>
             <div class="flex flex-col px-4 mt-3 w-full md:w-1/2">
               <label for="confirmPass" class="mb-2 text-[14px] text-slate-700">Confirmar contraseña</label>
-              <input id="confirmPass" type="password" class="p-3 text-slate-700 rounded border border-zinc-300 focus:outline-none focus:border-indigo-500" [(ngModel)]="confirmPassword" (ngModelChange)="comparePassword()" formControlName="ConfirmPassword">
+              <input id="confirmPass" type="password" class="p-3 text-slate-700 rounded border border-zinc-300 focus:outline-none focus:border-indigo-500 pass-field" [(ngModel)]="confirmPassword" (ngModelChange)="comparePassword()" formControlName="ConfirmPassword">
             </div>
           </div>
         </div>

@@ -1,5 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using workcube_pagos.ViewModel.Req;
+﻿using workcube_pagos.ViewModel.Req.Usuario;
 using workcube_pagos.ViewModel.Statics;
 
 namespace workcube_pagos.Services

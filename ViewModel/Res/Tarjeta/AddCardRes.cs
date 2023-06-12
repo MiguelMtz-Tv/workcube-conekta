@@ -1,6 +1,6 @@
 ﻿using Microsoft.CodeAnalysis.Elfie.Model.Tree;
 
-namespace workcube_pagos.ViewModel.Res
+namespace workcube_pagos.ViewModel.Res.Tarjeta
 {
     public class AddCardRes
     {

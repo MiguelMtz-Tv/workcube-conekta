@@ -1,4 +1,4 @@
-﻿namespace workcube_pagos.ViewModel.Req
+﻿namespace workcube_pagos.ViewModel.Req.Usuario
 {
     public class LoginReq
     {

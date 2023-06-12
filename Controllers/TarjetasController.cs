@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Identity.Client;
 using System.Text.Json.Nodes;
 using workcube_pagos.Services;
-using workcube_pagos.ViewModel.Req;
+using workcube_pagos.ViewModel.Req.Tarjeta;
 
 namespace workcube_pagos.Controllers
 {
