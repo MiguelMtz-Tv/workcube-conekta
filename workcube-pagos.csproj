@@ -5,7 +5,7 @@
     <Nullable>disable</Nullable>
     <IsPackable>false</IsPackable>
     <SpaRoot>ClientApp\</SpaRoot>
-    <SpaProxyServerUrl>https://localhost:44487</SpaProxyServerUrl>
+    <SpaProxyServerUrl>https://localhost:44484</SpaProxyServerUrl>
     <SpaProxyLaunchCommand>npm start</SpaProxyLaunchCommand>
     <RootNamespace>workcube_pagos</RootNamespace>
     <ImplicitUsings>enable</ImplicitUsings>
@@ -31,6 +31,7 @@
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="7.0.6" />
     <PackageReference Include="Quartz.AspNetCore" Version="3.6.2" />
     <PackageReference Include="Stripe.net" Version="41.18.0" />
+    <PackageReference Include="Workcube.Dependencias" Version="1.0.49" />
   </ItemGroup>
 
   <ItemGroup>

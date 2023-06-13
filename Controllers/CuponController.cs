@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Workcube.Libraries;
 using workcube_pagos.Services;
 using workcube_pagos.ViewModel.Req.Cupon;
 
@@ -16,22 +17,39 @@ namespace workcube_pagos.Controllers
         }
 
         [Authorize (AuthenticationSchemes = "Bearer")]
-        [HttpPost]
+        [HttpPost("get")]
         public async Task<ActionResult> GetCupon([FromBody]GetCuponReq model)
         {
-            var result = await _cuponesService.GetCupon(model);
-
-            if (result == null)
+            JsonReturn objReturn = new JsonReturn();
+            try
             {
-                return NotFound("No se encontró un cupón valido");
+                var result = await _cuponesService.GetCupon(model);
+
+                if (result == null)
+                {
+                    return NotFound("No se encontró un cupón valido");
+                }
+
+                if (result.Status == CuponEstatus.Vencido)
+                {
+                    return BadRequest("El cupon " + result.Codigo + " ya no esta disponible");
+                }
+
+                objReturn.Result = result;
+                objReturn.Success(SuccessMessage.REQUEST);
+            }
+            catch (AppException exception)
+            {
+                objReturn.Exception(exception);
+            }
+            catch (Exception exception)
+            {
+                objReturn.Exception(ExceptionMessage.RawException(exception));
             }
 
-            if(result.Status == CuponEstatus.Vencido)
-            {
-                return Ok("este cupón ya no es valido");
-            }
+            //return Ok(result);
 
-            return Ok(result);
+            return Ok(objReturn.build());
         }
 
         [Authorize(AuthenticationSchemes = "Bearer")]

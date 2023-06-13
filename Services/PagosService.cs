@@ -6,10 +6,8 @@ namespace workcube_pagos.Services
     public class PagosService
     {
         private readonly DataContext _context;
-        private readonly ClientesService _clientesService;
-        public PagosService(DataContext context, ClientesService clientesService) {
+        public PagosService(DataContext context) {
             _context = context;
-            _clientesService = clientesService;
         }   
 
         public async Task<List<Pago>> List(int idServicio)
@@ -21,70 +19,39 @@ namespace workcube_pagos.Services
 
         public async Task<ChargeRes> CreateCharge(CreateChargeReq chargeObj)
         {
-            
             var serviceToPay = await _context.Servicios.FindAsync(chargeObj.IdServicio);
-            if (serviceToPay == null 
-                || serviceToPay.IdServicioEstatus == 1 
-                || serviceToPay.ServicioEstatusName == "Vigente") 
-                { return null; }
+            if (serviceToPay == null
+                || serviceToPay.IdServicioEstatus == 1
+                || serviceToPay.ServicioEstatusName == "Vigente")
+                { throw new ArgumentException("Error en pago: P-01"); }
 
             //obtener al cliente
-            var client = await _context.Clientes.FindAsync(chargeObj.IdCliente);
-            if (client == null) { return null; }
-            var customer = client.StripeCustomerID;
+            var client =        await _context.Clientes.FindAsync(chargeObj.IdCliente) ?? throw new ArgumentException("Error en pago: P-02 - Cliente nulo");
+            var customer =      client.StripeCustomerID;
+            decimal amount =    serviceToPay.ServicioTipoCosto;
 
-            var amount = Convert.ToInt64(serviceToPay.ServicioTipoCosto);
-
-            //obtener el cupon y realizar el descuento
+            //obtener el cupon (si existe) y realizar el descuento
             decimal descuento = 0;
             var cupon = new Cupon();
 
-            if (chargeObj.IdCupon > 0)
+            if (chargeObj.AreCupon && chargeObj.IdCupon > 0)
             {
-                cupon = await _context.Cupones.FindAsync(chargeObj.IdCupon);
-                descuento = cupon.Monto;
-                amount -= Convert.ToInt64(descuento);
-            }
-
-            //Creamos el cargo en la api de stripe
-            var result = new Charge();
-            try
-            {
-                var options = new ChargeCreateOptions
-                {
-                    Amount = amount,
-                    Currency = "mxn",
-                    Source = chargeObj.IdCard,
-                    Customer = customer,
-                };
-
-                var service = new ChargeService();
-                result = service.Create(options);
-            }
-            catch (StripeException)
-            {
-                throw new ArgumentException("Error en el pago: p-01");
-            }
-
-            if(result == null)
-            {
-                throw new ArgumentException("Error en el pago: p-02");
+                cupon =         await _context.Cupones.FindAsync(chargeObj.IdCupon);
+                descuento =     cupon.Monto;
+                amount -=       descuento;
             }
 
             //guardar pago en la base de datos
-            var loginTransaction = _context.Database.BeginTransaction();
+            var loginTransaction = _context.Database.BeginTransaction(); //empezamos transacción
+
             DateTime dateTime = DateTime.Now;
             var newPayment = new Pago
             {
                 Fecha =         dateTime,
                 IdServicio =    chargeObj.IdServicio,
                 IdCliente =     chargeObj.IdCliente,
-                Monto =         amount,
-                IdStripeCard =  result.PaymentMethod,
-                IdStripeCharge= result.Id,
-                Descuento =     descuento,
+                Monto =         (long)amount,
             };
-
             await _context.Pagos.AddAsync(newPayment);
 
             //cambiamos el estado del cupón a vencido
@@ -94,22 +61,50 @@ namespace workcube_pagos.Services
             }
 
             //Cambiamos el estatus del servicio
-            serviceToPay.ServicioEstatusName =      "Vigente";
-            serviceToPay.IdServicioEstatus =        1;
-            serviceToPay.Vigencia =                    dateTime.AddDays(30);
+            serviceToPay.ServicioEstatusName =  "Vigente";
+            serviceToPay.IdServicioEstatus =    1;
+            serviceToPay.Vigencia =             dateTime.AddDays(30);
+
+
+            //Creamos el cargo en la api de stripe
+            var result = new Charge();
+            try
+            {
+                var options = new ChargeCreateOptions
+                {
+                    Amount =    (long)amount,
+                    Currency =  "mxn",
+                    Source =    chargeObj.IdCard,
+                    Customer =  customer,
+                };
+
+                var service = new ChargeService();
+                result = service.Create(options);
+            }
+            catch (StripeException ex)
+            {
+                throw new ArgumentException("Error en el pago: p-03" + ex);
+            }
+
+
+            //asignamos el cargo al registro correspondiente
+            newPayment.IdStripeCard =   result.PaymentMethod;
+            newPayment.IdStripeCharge = result.Id;
+            newPayment.Descuento =      descuento;
 
             //guardamos las consultas
             await _context.SaveChangesAsync();
-            loginTransaction.Commit();
+
+            loginTransaction.Commit(); //confirmamos transacción
 
             return new ChargeRes
             {
-                Fecha = newPayment.Fecha,
-                IdServicio = newPayment.IdServicio,
-                IdCliente = newPayment.IdCliente,
-                IdStripeCard = newPayment.IdStripeCard,
-                Monto = newPayment.Monto,
-                Descuento = newPayment.Descuento,
+                Fecha =         newPayment.Fecha,
+                IdServicio =    newPayment.IdServicio,
+                IdCliente =     newPayment.IdCliente,
+                IdStripeCard =  newPayment.IdStripeCard,
+                Monto =         newPayment.Monto,
+                Descuento =     newPayment.Descuento,
             };
         }
 

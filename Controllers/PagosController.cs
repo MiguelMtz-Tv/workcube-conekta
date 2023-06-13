@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Workcube.Libraries;
 using workcube_pagos.Services;
 using workcube_pagos.ViewModel.Req.Pago;
 
@@ -17,15 +18,30 @@ namespace workcube_pagos.Controllers
         [HttpPost]
         public async Task<ActionResult> CreateCharge([FromBody] CreateChargeReq chargeObj)
         {
-            var result = await _pagosService.CreateCharge(chargeObj);
+            JsonReturn objReturn = new JsonReturn();
+            try
+            {
+                var result = await _pagosService.CreateCharge(chargeObj);
 
-            return Ok(result);
+                objReturn.Result = result;
+                objReturn.Success(SuccessMessage.REQUEST);
+            }
+            catch (AppException ex) {
+                objReturn.Exception(ex);
+            }
+            catch(Exception ex){
+                objReturn.Exception(ExceptionMessage.RawException(ex));
+            }
+
+            return Ok(objReturn.build());
         }
 
         [Authorize(AuthenticationSchemes = "Bearer")]
         [HttpPost("list")]
         public async Task<ActionResult> List([FromBody] int servicioId)
         {
+            JsonReturn objReturn = new JsonReturn();
+            
             var result = await _pagosService.List(servicioId);
             if(result == null) { return NotFound("No se han encontrado pagos de este servicio"); }
 

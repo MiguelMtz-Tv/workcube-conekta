@@ -15,7 +15,7 @@ export class CuponesService {
   }
 
   getCupon(codigo : any){
-    return this.http.post<any>(this.baseUrl + 'api/cupon', { IdCliente: Number(this.idCliente), Codigo: codigo})
+    return this.http.post<any>(this.baseUrl + 'api/cupon/get', { IdCliente: Number(this.idCliente), Codigo: codigo})
   }
 
 }

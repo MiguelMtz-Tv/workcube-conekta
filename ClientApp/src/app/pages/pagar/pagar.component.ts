@@ -31,7 +31,7 @@ export class PagarComponent implements OnInit {
   cuponCode: string = ''
   idCupon!: number
 
-  areDiscount: boolean = false
+  areCupon: boolean = false
   
   cuponIsLoading: boolean = false
   paymentIsLoading: boolean = false
@@ -63,7 +63,7 @@ export class PagarComponent implements OnInit {
   ngOnInit() {
     this.serviciosService.getServiceDetails(this.id).subscribe(res => {
       this.servicio = res
-      this.total = res.servicioTipoCosto
+      this.total =    res.servicioTipoCosto
     })
     //obtener tarjetas de la api de stripe
     this.getCards()
@@ -76,9 +76,9 @@ export class PagarComponent implements OnInit {
   addCard(enterAnimationDuration: string, exitAnimationDuration: string): void{
     this.dialog.open(AddCardComponent,{
       width: '90%',
-        maxWidth: '500px',
-        minHeight: '300px',
-        maxHeight: '1000px',
+        maxWidth:   '500px',
+        minHeight:  '300px',
+        maxHeight:  '1000px',
         enterAnimationDuration,
         exitAnimationDuration
     })
@@ -96,7 +96,7 @@ export class PagarComponent implements OnInit {
       catchError(error => {
         this.toast.error('Cupón invalido',{
           style: {
-            border: '1px solid red',
+            border:     '1px solid red',
             margin:     '100px 20px',
             padding:    '15px'
           },
@@ -107,14 +107,15 @@ export class PagarComponent implements OnInit {
       })
     )
     .subscribe(res => {
-      this.idCupon = res.idCupon,
-      this.descuento = res.monto
-      this.cuponCode = res.codigo
-      this.areDiscount = true
-      this.total = this.servicio.servicioTipoCosto - res.monto
+      console.log(res)
+      this.idCupon =      res.result.idCupon,
+      this.descuento =    res.result.monto
+      this.cuponCode =    res.result.codigo
+      this.areCupon =  true
+      this.total =        this.servicio.servicioTipoCosto - res.result.monto
       this.toast.success('Se aplicó un cupón de descuento',{
         style: {
-          border: '1px solid green',
+          border:     '1px solid green',
           margin:     '100px 20px',
           padding:    '15px'
         },
@@ -124,15 +125,14 @@ export class PagarComponent implements OnInit {
     })
   }
 
-  onSubmitPayment(){
-    if(this.areDiscount){
-      console.log({IdServicio: this.id, Codigo: this.cuponCode, CardId: this.selectedId})
-    }else{
-      console.log({IdServicio: this.id, CardId: this.selectedId})
-    }
-  }
-
-  confirmPayment(enterAnimationDuration: string, exitAnimationDuration: string): void{
+  confirmPayment(enterAnimationDuration: string, exitAnimationDuration: string){
+    console.log({
+      IdCliente:    this.auth.getClientId(),
+        IdServicio:   this.id, 
+        IdCard:       this.selectedId,
+        IdCupon:      this.idCupon,
+        areCupon:     this.areCupon,
+    })
     this.dialog.open(ConfirmarPagoComponent,{
       width:                    '90%',
       maxWidth:                 '500px',
@@ -143,6 +143,7 @@ export class PagarComponent implements OnInit {
         IdServicio:   this.id, 
         IdCard:       this.selectedId,
         IdCupon:      this.idCupon,
+        areCupon:     this.areCupon,
       }
     })
   } 
@@ -152,6 +153,6 @@ export class PagarComponent implements OnInit {
   }
   selectedCardId(id: string){
     this.selectedId = id
-    this.selected = true
+    this.selected =   true
   }
 }

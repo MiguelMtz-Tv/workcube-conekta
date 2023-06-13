@@ -1,8 +1,10 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Text.Json.Nodes;
+using Workcube.Libraries;
 using workcube_pagos.Services;
 using workcube_pagos.ViewModel.Req.Usuario;
+using workcube_pagos.ViewModel.Statics;
 
 namespace workcube_pagos.Controllers
 {
@@ -44,12 +46,33 @@ namespace workcube_pagos.Controllers
         [HttpPut("update")] //actualizar un usuario
         public async Task<ActionResult> UpdateUser([FromBody] UpdateUserReq user)
         {
-            var updatedUser = await _usersService.UpdateUser(user);
-            if(updatedUser == null)
+            JsonReturn objReturn = new JsonReturn();
+
+            try
             {
-                return BadRequest("El usuario no existe o se ha eliminado");
+                var updatedUser = await _usersService.UpdateUser(user);
+                if (updatedUser == null)
+                {
+                    return BadRequest("El usuario no existe o se ha eliminado");
+                    // throw new ArgumentException("El usuario no existe o se ha eliminado");
+                }
+
+                objReturn.Result = updatedUser;
+
+                objReturn.Title     = "Actualización";
+                objReturn.Message   = "El usuario se ha actualizado correctamente";
+
             }
-            return Ok(updatedUser);
+            catch(AppException app)
+            {
+                objReturn.Exception(app);
+            }
+            catch (Exception ex)
+            {
+                objReturn.Exception(ExceptionMessage.RawException(ex));
+            }
+
+            return objReturn.build();
         }
 
         [Authorize(AuthenticationSchemes = "Bearer")]

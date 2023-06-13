@@ -15,32 +15,35 @@ namespace workcube_pagos.Services
         //para obtener los servicios de un cliente
         public async Task<object> GetClientServices(int UserId)
         {
-            return await _context.Servicios.AsNoTracking()
+            var res = await _context.Servicios.AsNoTracking()
                 .Where(s => s.IdCliente == UserId)
                 .Select(s => new
                 {
-                    IdServicio = s.IdServicio,
-                    ServicioTipoCosto = s.ServicioTipoCosto,
-                    ServicioTipoName = s.ServicioTipoName,
-                    ServicioTipoDescripcion = s.ServicioTipoDescripcion,
-                    PeriodoName = s.PeriodoName,
-                    Vigencia = s.Vigencia,
-                    ServicioEstatusName = s.ServicioEstatusName,
+                    IdServicio =                s.IdServicio,
+                    ServicioTipoCosto =         s.ServicioTipoCosto,
+                    ServicioTipoName =          s.ServicioTipoName,
+                    ServicioTipoDescripcion =   s.ServicioTipoDescripcion,
+                    PeriodoName =               s.PeriodoName,
+                    Vigencia =                  s.Vigencia,
+                    IsVigente =                 s.Vigencia.Date > DateTime.Now.Date,
+                    ServicioEstatusName =       s.ServicioEstatusName,
                 })
                 .ToListAsync();
+
+            if(res == null) {return null;}
+            return res;
         }
 
         //para obtener los detalles de un servicio
-        public async Task<Servicio> GetService(GetServiceReq model)
+        public async Task<dynamic> GetService(GetServiceReq model)
         {
-            var loginTransaction = _context.Database.BeginTransaction();
-            var result = await _context.Servicios.AsNoTracking().Where(s => s.IdServicio == model.IdServicio && s.IdCliente == model.IdCliente).FirstOrDefaultAsync();
+            var result = await _context.Servicios.AsNoTracking().Where(s => 
+            s.IdServicio == model.IdServicio && 
+            s.IdCliente ==  model.IdCliente)
+            .FirstOrDefaultAsync();
 
-            if (result == null)
-            {
-                return null;
-            }
-            loginTransaction.Commit();
+            if (result == null) {return null;}
+
             return result;
         }
 
@@ -48,17 +51,21 @@ namespace workcube_pagos.Services
         public async Task<Servicio> CancelService(CancelServiceReq model) 
         {
             var loginTransaction = _context.Database.BeginTransaction();
-            var serviceToCancel = await _context.Servicios.Where(s => s.IdCliente == model.IdCliente && s.IdServicio == model.IdServicio).FirstOrDefaultAsync();
 
-            if (serviceToCancel == null)
-            {
-                return null;
-            }
+            var serviceToCancel = await _context.Servicios.Where(s => 
+                s.IdCliente ==  model.IdCliente && 
+                s.IdServicio == model.IdServicio)
+                .FirstOrDefaultAsync();
+
+            if (serviceToCancel == null) {return null;}
             
             serviceToCancel.IdServicioEstatus = 3;  
             serviceToCancel.ServicioEstatusName = "Cancelado";
+
             await _context.SaveChangesAsync();
+
             loginTransaction.Commit();
+
             return serviceToCancel;
         }
 

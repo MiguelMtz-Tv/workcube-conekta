@@ -22,9 +22,7 @@ namespace workcube_pagos.Controllers
         {
             var serviceToCancel = await _serviciosService.CancelService(model);
             
-            if (serviceToCancel == null) {
-                return BadRequest("servicio no encontrado");
-            }
+            if (serviceToCancel == null) {return BadRequest("servicio no encontrado");}
             return Ok(serviceToCancel);
         }
 
@@ -34,9 +32,7 @@ namespace workcube_pagos.Controllers
         {
             var result = await _serviciosService.GetClientServices(Id);
             
-            if (result == null) { 
-                return NotFound("al parecer el usuario no tiene servicios contratados");
-            }
+            if (result == null) {return NotFound("al parecer el usuario no tiene servicios contratados");}
 
             return Ok(result);
         }
@@ -47,10 +43,7 @@ namespace workcube_pagos.Controllers
         {
             var result = await _serviciosService.GetService(model);
 
-            if (result == null)
-            {
-                return NotFound("servicio no encontrado");
-            }
+            if (result == null) {return NotFound("servicio no encontrado");}
 
             return Ok(result);
         }

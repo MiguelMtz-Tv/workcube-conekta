@@ -1,4 +1,5 @@
 ﻿using workcube_pagos.ViewModel.Req.Tarjeta;
+using Workcube.Libraries;
 
 namespace workcube_pagos.Services
 {
@@ -26,12 +27,12 @@ namespace workcube_pagos.Services
                 return service.List(idCustomer, options)
                     .Select(c => new
 {
-                        id = c.Id,
-                        brand = c.Brand,
-                        expYear = c.ExpYear,
-                        expMonth = c.ExpMonth,
-                        name = c.Name,
-                        last4 = c.Last4,
+                        id =        c.Id,
+                        brand =     c.Brand,
+                        expYear =   c.ExpYear,
+                        expMonth =  c.ExpMonth,
+                        name =      c.Name,
+                        last4 =     c.Last4,
                     });
             }catch(StripeException ex)
             {
@@ -55,11 +56,11 @@ namespace workcube_pagos.Services
             return result;
         }
 
-        public async Task<object> AddCard(AddCardReq cardObj)
+        public async Task<dynamic> AddCard(AddCardReq cardObj)
         {
             //verificar al cliente
             var client = await _context.Clientes.Where(c => c.IdCliente == cardObj.idCliente).FirstOrDefaultAsync();
-            if (client == null) { return "No se encontró al cliente"; }
+            if (client == null) { throw new ArgumentException("No se encontró al cliente"); }
 
             //obtener el Id del cliente en stripe
             var IdCustomer = client.StripeCustomerID;
@@ -74,18 +75,21 @@ namespace workcube_pagos.Services
             {
                 //Creamos la tarjeta en stripe
                 var newcard = service.Create(IdCustomer, options);
-
-                //actaulizar la tarjeta creada
-                if (newcard == null) { return "No fue posible crear la tarjeta en la api de stripe"; }
-                var updateCardOptions = new CardUpdateOptions
-                {
-                    Name = cardObj.name,
-                };
+                
+                //Actualizamos la tarjeta creada
+                var updateCardOptions = new CardUpdateOptions{ Name = cardObj.name,};
                 updatedCard = service.Update(IdCustomer, newcard.Id, updateCardOptions);
 
                 return updatedCard;
             }
-            catch (StripeException ex) { return ex; }
+            catch(StripeException ex) 
+            { 
+                throw new ArgumentException("Error al crear la tarjeta: T-01" + ex); 
+            }
+            catch(Exception ex)
+            {
+                throw new ArgumentException("Error al crear la tarjeta: T-02" + ex); 
+            }
         }
 
         public async Task<object> UpdateCard(UpdateCardReq cardObj)
