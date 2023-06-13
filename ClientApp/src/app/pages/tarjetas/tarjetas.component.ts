@@ -37,7 +37,7 @@ export class TarjetasComponent implements OnInit {
     .subscribe(
       res => {
       this.spinner.hide('tarjetas')
-      this.cards = res
+      this.cards = res.result
       },
       error => {
         console.log(error)

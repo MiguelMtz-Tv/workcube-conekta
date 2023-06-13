@@ -1,9 +1,8 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Identity.Client;
-using System.Text.Json.Nodes;
 using workcube_pagos.Services;
 using workcube_pagos.ViewModel.Req.Tarjeta;
+using Workcube.Libraries;
 
 namespace workcube_pagos.Controllers
 {
@@ -20,20 +19,47 @@ namespace workcube_pagos.Controllers
         [HttpPost]
         public async Task<ActionResult> AddCard([FromBody] AddCardReq cardObj)
         {
-            var result = await _tarjetasService.AddCard(cardObj);
+            JsonReturn objReturn = new JsonReturn();
+            try
+            {
+                var result = await _tarjetasService.AddCard(cardObj);
+                objReturn.Result = result;
+                objReturn.Success(SuccessMessage.REQUEST);
+            }
+            catch(AppException ex)
+            {
+                objReturn.Exception(ex);
+            }
+            catch(Exception ex)
+            {
+                objReturn.Exception(ExceptionMessage.RawException(ex));
+            }
 
-            if (result == null) { return BadRequest("algo salió mal durante la creación de la tarjeta"); }
-
-            return Ok(result);
+            return Ok(objReturn.build());
         }
 
         [Authorize(AuthenticationSchemes = "Bearer")]
         [HttpPost("list")]
         public async Task<ActionResult> List([FromBody] int idClient)
         {
-            var result = await _tarjetasService.List(idClient);
+            JsonReturn objReturn = new JsonReturn();
+            try
+            {
+                var result = await _tarjetasService.List(idClient);
 
-            return Ok(result);
+                objReturn.Result = result;
+                objReturn.Success(SuccessMessage.REQUEST);
+            }
+            catch(AppException ex)
+            {
+                objReturn.Exception(ex);
+            }
+            catch(Exception ex)
+            {
+                objReturn.Exception(ExceptionMessage.RawException(ex));
+            }
+
+            return Ok(objReturn.build());
         }
 
         [Authorize(AuthenticationSchemes = "Bearer")]

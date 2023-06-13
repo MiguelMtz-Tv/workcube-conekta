@@ -12,10 +12,10 @@ namespace workcube_pagos.Services
             _context = context;
         }
 
-        public async Task<object> List(int idCLient)
+        public async Task<dynamic> List(int idCLient)
         {
             var client = await _context.Clientes.FindAsync(idCLient);
-            if (client == null) { return null; }
+            if (client == null) { throw new ArgumentException("El cliente no está disponible"); }
 
             var idCustomer = client.StripeCustomerID;
 
@@ -25,8 +25,7 @@ namespace workcube_pagos.Services
             try
             {
                 return service.List(idCustomer, options)
-                    .Select(c => new
-{
+                    .Select(c => new {
                         id =        c.Id,
                         brand =     c.Brand,
                         expYear =   c.ExpYear,
@@ -34,9 +33,14 @@ namespace workcube_pagos.Services
                         name =      c.Name,
                         last4 =     c.Last4,
                     });
-            }catch(StripeException ex)
+            }
+            catch(StripeException ex)
             {
-                return ex.Message;
+                throw new ArgumentException("Error al obtener tarjetas: T-01 " + ex);
+            }
+            catch(Exception ex)
+            {
+                throw new ArgumentException("Error al obtener tarjetas: T-02 " + ex);
             }
         }
 
@@ -60,7 +64,7 @@ namespace workcube_pagos.Services
         {
             //verificar al cliente
             var client = await _context.Clientes.Where(c => c.IdCliente == cardObj.idCliente).FirstOrDefaultAsync();
-            if (client == null) { throw new ArgumentException("No se encontró al cliente"); }
+            if (client == null) { throw new ArgumentException("El cliente no está diponible"); }
 
             //obtener el Id del cliente en stripe
             var IdCustomer = client.StripeCustomerID;
