@@ -56,7 +56,7 @@ export class PagarComponent implements OnInit {
   getCards(){
     this.tarjetasService.listCards()
       .subscribe(res => {
-        this.cards = res
+        this.cards = res.result
       })
   }
 
@@ -126,13 +126,6 @@ export class PagarComponent implements OnInit {
   }
 
   confirmPayment(enterAnimationDuration: string, exitAnimationDuration: string){
-    console.log({
-      IdCliente:    this.auth.getClientId(),
-        IdServicio:   this.id, 
-        IdCard:       this.selectedId,
-        IdCupon:      this.idCupon,
-        areCupon:     this.areCupon,
-    })
     this.dialog.open(ConfirmarPagoComponent,{
       width:                    '90%',
       maxWidth:                 '500px',

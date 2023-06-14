@@ -12,9 +12,9 @@ namespace workcube_pagos.Services
 
         public async Task<List<Pago>> List(int idServicio)
         {
-            var services = await _context.Pagos.Where(p => p.IdServicio == idServicio).ToListAsync();
-            if(services ==  null) { return null; }
-            return services;
+            var payments = await _context.Pagos.Where(p => p.IdServicio == idServicio).ToListAsync();
+            if(payments ==  null) { return null; }
+            return payments;
         }
 
         public async Task<ChargeRes> CreateCharge(CreateChargeReq chargeObj)
@@ -55,7 +55,7 @@ namespace workcube_pagos.Services
             await _context.Pagos.AddAsync(newPayment);
 
             //cambiamos el estado del cupón a vencido
-            if (cupon.IdCupon > 0)
+            if (cupon.IdCupon > 0 && cupon.Status != CuponEstatus.Vencido)
             {
                 cupon.Status = CuponEstatus.Vencido;
             }
@@ -99,12 +99,13 @@ namespace workcube_pagos.Services
 
             return new ChargeRes
             {
-                Fecha =         newPayment.Fecha,
-                IdServicio =    newPayment.IdServicio,
-                IdCliente =     newPayment.IdCliente,
-                IdStripeCard =  newPayment.IdStripeCard,
-                Monto =         newPayment.Monto,
-                Descuento =     newPayment.Descuento,
+                Fecha =             newPayment.Fecha,
+                IdServicio =        newPayment.IdServicio,
+                IdCliente =         newPayment.IdCliente,
+                IdStripeCharge =    newPayment.IdStripeCharge,
+                IdStripeCard =      newPayment.IdStripeCard,
+                Monto =             newPayment.Monto,
+                Descuento =         newPayment.Descuento,
             };
         }
 

@@ -24,10 +24,7 @@ namespace workcube_pagos.Services
         public async Task<AspNetUserFullName>GetUser(string id) //obtener un usuario (nombre y apellidos)
         {
             var user = await _context.AspNetUsers.AsNoTracking().Where(u => u.Id == id).FirstOrDefaultAsync();
-            if(user == null)
-            {
-                return null;
-            }
+            if(user == null) {return null;}
 
             var resUser = new AspNetUserFullName
             {

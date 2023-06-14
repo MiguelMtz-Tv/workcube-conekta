@@ -37,9 +37,9 @@ export class UpdateCardComponent implements OnInit {
     })
     .subscribe(res => {
       this.form.setValue({
-        name:     res.name || '',
-        expMonth: res.expMonth || '',
-        expYear:  res.expYear || '',
+        name:     res.result.name || '',
+        expMonth: res.result.expMonth || '',
+        expYear:  res.result.expYear || '',
       })
       this.spinner.hide('update-card')
     })
