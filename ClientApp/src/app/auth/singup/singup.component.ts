@@ -50,19 +50,10 @@ export class SingupComponent {
   addUser(){
     this.isLoading = true
     this.aspNetUserService.createNewUser(this.form.value)
-    .pipe(
-      catchError(error => { //error.error.text para obtener el mensaje de error
+    .subscribe(res =>{
         this.isLoading = false
-
-        if(error.error.text != 'usuario creado'){
-          this.singupError = true
-          this.singupErrorMessage = error.error
-          console.log(error.error)
-          setTimeout(() => {
-            this.singupError = false
-          }, 3000)
-        }else{
-          this.isLoading = true
+        console.log(res)
+        if(res.action){
           this.auth.login({
             UserName: this.form.value.UserName,
             Password: this.form.value.Password
@@ -77,13 +68,14 @@ export class SingupComponent {
               this.router.navigate(['/servicios'])
               this.isLoading = false
             })
+        }else{
+          this.singupError = true
+          this.singupErrorMessage = res.message
+          console.log()
+          setTimeout(() => {
+            this.singupError = false
+          }, 3000)
         }
-        return throwError(error)
-      })
-    )
-    .subscribe(
-      res =>{
-        console.log('there is not' + res)
       }
     )
   }

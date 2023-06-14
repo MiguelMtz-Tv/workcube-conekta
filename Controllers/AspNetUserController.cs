@@ -16,21 +16,26 @@ namespace workcube_pagos.Controllers
             _usersService = aspNetUsersService;
         }
 
-        [HttpPost] //creacion de usuario
+        [HttpPost("add")] //creacion de usuario
         public async Task<ActionResult> AddUser([FromBody] SingUpReq model)
         {
-            var result = await _usersService.AddUser(model);
-
-             if(result == "Este número de contrato ya está en uso")
+            JsonReturn objReturn = new JsonReturn();
+            try
             {
-                return BadRequest(result);
+                var result = await _usersService.AddUser(model);
+                objReturn.Result = result;
+                objReturn.Success(SuccessMessage.REQUEST);
             }
-             if(result == "Este número de contrato no existe")
+            catch (AppException ex)
             {
-                return BadRequest(result);
+                objReturn.Exception(ex);
+            }
+            catch(Exception ex)
+            {
+                objReturn.Exception(ExceptionMessage.RawException(ex));
             }
 
-            return Ok(result);
+            return Ok(objReturn.build());
         }
 
         [Authorize(AuthenticationSchemes = "Bearer")]
@@ -61,7 +66,6 @@ namespace workcube_pagos.Controllers
 
                 objReturn.Title     = "Actualización";
                 objReturn.Message   = "El usuario se ha actualizado correctamente";
-
             }
             catch(AppException app)
             {

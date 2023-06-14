@@ -132,6 +132,7 @@ export class PagarComponent implements OnInit {
       enterAnimationDuration,
       exitAnimationDuration,
       data: {
+        IdAspNetUser: this.auth.getUserId(),
         IdCliente:    this.auth.getClientId(),
         IdServicio:   this.id, 
         IdCard:       this.selectedId,

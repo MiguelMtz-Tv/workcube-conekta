@@ -39,15 +39,15 @@ namespace workcube_pagos.Services
         //actualizar un usuario
         public async Task<AspNetUser> UpdateUser(UpdateUserReq data)
         {
-            var user = await _context.AspNetUsers.Where(user => user.Id == data.Id).FirstOrDefaultAsync();
+            var user = await _context.AspNetUsers.FindAsync(data.Id);
             if (user == null)
             {
                 return null;
             }
 
-            user.Nombre = data.Nombre;
-            user.ApellidoPat = data.ApellidoPat;
-            user.ApellidoMat = data.ApellidoMat;
+            user.Nombre =       data.Nombre;
+            user.ApellidoPat =  data.ApellidoPat;
+            user.ApellidoMat =  data.ApellidoMat;
             
             await _context.SaveChangesAsync();
             return user;
@@ -78,15 +78,15 @@ namespace workcube_pagos.Services
         }
         
         //para añadir un nuevo usuario
-        public async Task<string> AddUser(SingUpReq model)
+        public async Task<dynamic> AddUser(SingUpReq model)
         {
             //verificar si el numero de contrato existe y obtener al cliente
             var Cliente = await _context.Clientes.AsNoTracking().Where(c => c.NumeroContrato == model.NumeroContrato).FirstOrDefaultAsync();
-            if (Cliente == null) { return "Este número de contrato no existe"; }
+            if (Cliente == null) { throw new ArgumentException("Este numero de contrato no existe"); }
 
             //Verificar si el numero de contrato ya está en uso
             var contractAlredyUsed = await _context.AspNetUsers.AsNoTracking().Where(asp => asp.Cliente.NumeroContrato == model.NumeroContrato).FirstOrDefaultAsync();
-            if (contractAlredyUsed != null) { return "Este número de contrato ya está en uso"; }
+            if (contractAlredyUsed != null) { throw new ArgumentException("Este numero de contrato ya está en uso"); }
 
             var NewUser = new AspNetUser
             {
@@ -103,17 +103,20 @@ namespace workcube_pagos.Services
                 LockoutEnabled =        false,
                 AccessFailedCount =     0
             };
-
+            
+            //Encriptación de la contraseña
             var PasswordHasher =    new PasswordHasher<AspNetUser>();
             var password =          model.Password;
             var HashedPassword =    PasswordHasher.HashPassword(null, password);
-            
+
             NewUser.PasswordHash = HashedPassword;
 
+            var loginTransacction = _context.Database.BeginTransaction();
             await _context.AspNetUsers.AddAsync(NewUser);
             await _context.SaveChangesAsync();
+            loginTransacction.Commit();
 
-            return "usuario creado";
+            return NewUser;
 
         }
 

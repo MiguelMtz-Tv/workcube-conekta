@@ -33,8 +33,6 @@ namespace workcube_pagos.Data
             //relacion cupon/cliente N:1
             modelBuilder.Entity<Cupon>().HasOne(c => c.Cliente).WithMany(c => c.Cupones).HasForeignKey(c => c.IdCliente).OnDelete(DeleteBehavior.Restrict);
 
-            //relacion tarjeta/cliente N:1
-            modelBuilder.Entity<Tarjeta>().HasOne(t => t.Cliente).WithMany(c => c.Tarjetas).HasForeignKey(t => t.IdCliente).OnDelete(DeleteBehavior.NoAction);
 
             //relacion pagos/clientes N:1
             modelBuilder.Entity<Pago>().HasOne(p => p.Cliente).WithMany(c => c.Pagos).HasForeignKey(p => p.IdCliente).OnDelete(DeleteBehavior.Restrict); ;
@@ -50,7 +48,6 @@ namespace workcube_pagos.Data
         public DbSet<Cupon> Cupones                     { get; set; }
         public DbSet<Periodo> Periodos                  { get; set; }
         public DbSet<ServicioEstatus> ServiciosEstatus  { get; set; }
-        public DbSet<Tarjeta> Tarjetas                  { get; set; }
         public DbSet<Pago> Pagos                        { get; set; } 
     }
 }

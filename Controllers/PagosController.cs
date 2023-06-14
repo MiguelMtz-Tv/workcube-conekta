@@ -26,10 +26,15 @@ namespace workcube_pagos.Controllers
                 objReturn.Result = result;
                 objReturn.Success(SuccessMessage.REQUEST);
             }
+            
             catch (AppException ex) {
                 objReturn.Exception(ex);
             }
-            catch(Exception ex){
+            catch (StripeException ex)
+            {
+                objReturn.Exception(ExceptionMessage.RawException(ex));
+            }
+            catch (Exception ex){
                 objReturn.Exception(ExceptionMessage.RawException(ex));
             }
 
@@ -39,9 +44,7 @@ namespace workcube_pagos.Controllers
         [Authorize(AuthenticationSchemes = "Bearer")]
         [HttpPost("list")]
         public async Task<ActionResult> List([FromBody] int servicioId)
-        {
-            JsonReturn objReturn = new JsonReturn();
-            
+        {   
             var result = await _pagosService.List(servicioId);
             if(result == null) { return NotFound("No se han encontrado pagos de este servicio"); }
 

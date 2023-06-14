@@ -22,7 +22,7 @@ namespace workcube_pagos.Models
         public string IdStripeCard          { get; set; }
         public string IdStripeCharge        { get; set; }
         public long Monto                   { get; set; }
-        [Column(TypeName = "decimal(18, 2)")]
-        public decimal Descuento            { get; set; }  
+        public long Descuento               { get; set; }  
+        public long Total                   { get; set; } 
     }
 }

@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace workcube_pagos.Migrations
 {
     /// <inheritdoc />
-    public partial class _1 : Migration
+    public partial class _01 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -82,7 +82,7 @@ namespace workcube_pagos.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Nombre = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Costo = table.Column<decimal>(type: "decimal(18,2)", nullable: false)
+                    Costo = table.Column<long>(type: "bigint", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -147,20 +147,21 @@ namespace workcube_pagos.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Tarjetas",
+                name: "Tarjeta",
                 columns: table => new
                 {
                     IdTarjeta = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     StripeCardID = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ClienteIdCliente = table.Column<int>(type: "int", nullable: true),
                     IdCliente = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Tarjetas", x => x.IdTarjeta);
+                    table.PrimaryKey("PK_Tarjeta", x => x.IdTarjeta);
                     table.ForeignKey(
-                        name: "FK_Tarjetas_Clientes_IdCliente",
-                        column: x => x.IdCliente,
+                        name: "FK_Tarjeta_Clientes_ClienteIdCliente",
+                        column: x => x.ClienteIdCliente,
                         principalTable: "Clientes",
                         principalColumn: "IdCliente");
                 });
@@ -174,7 +175,7 @@ namespace workcube_pagos.Migrations
                     IdServicioTipo = table.Column<int>(type: "int", nullable: false),
                     ServicioTipoName = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ServicioTipoDescripcion = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ServicioTipoCosto = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    ServicioTipoCosto = table.Column<long>(type: "bigint", nullable: false),
                     IdCliente = table.Column<int>(type: "int", nullable: false),
                     ClienteRazonSocial = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     IdPeriodo = table.Column<int>(type: "int", nullable: false),
@@ -308,7 +309,7 @@ namespace workcube_pagos.Migrations
                     Descripcion = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     IdServicio = table.Column<int>(type: "int", nullable: false),
                     IdCliente = table.Column<int>(type: "int", nullable: false),
-                    Monto = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    Monto = table.Column<long>(type: "bigint", nullable: false),
                     Status = table.Column<int>(type: "int", nullable: false),
                     Vigencia = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
@@ -341,7 +342,8 @@ namespace workcube_pagos.Migrations
                     IdStripeCard = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     IdStripeCharge = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Monto = table.Column<long>(type: "bigint", nullable: false),
-                    Descuento = table.Column<decimal>(type: "decimal(18,2)", nullable: false)
+                    Descuento = table.Column<long>(type: "bigint", nullable: false),
+                    Total = table.Column<long>(type: "bigint", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -447,9 +449,9 @@ namespace workcube_pagos.Migrations
                 column: "IdServicioTipo");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Tarjetas_IdCliente",
-                table: "Tarjetas",
-                column: "IdCliente");
+                name: "IX_Tarjeta_ClienteIdCliente",
+                table: "Tarjeta",
+                column: "ClienteIdCliente");
         }
 
         /// <inheritdoc />
@@ -477,7 +479,7 @@ namespace workcube_pagos.Migrations
                 name: "Pagos");
 
             migrationBuilder.DropTable(
-                name: "Tarjetas");
+                name: "Tarjeta");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");

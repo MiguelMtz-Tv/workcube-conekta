@@ -294,8 +294,8 @@ namespace workcube_pagos.Migrations
                     b.Property<int>("IdServicio")
                         .HasColumnType("int");
 
-                    b.Property<decimal>("Monto")
-                        .HasColumnType("decimal(18, 2)");
+                    b.Property<long>("Monto")
+                        .HasColumnType("bigint");
 
                     b.Property<int>("Status")
                         .HasColumnType("int");
@@ -320,8 +320,8 @@ namespace workcube_pagos.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdPago"));
 
-                    b.Property<decimal>("Descuento")
-                        .HasColumnType("decimal(18, 2)");
+                    b.Property<long>("Descuento")
+                        .HasColumnType("bigint");
 
                     b.Property<DateTime>("Fecha")
                         .HasColumnType("datetime2");
@@ -339,6 +339,9 @@ namespace workcube_pagos.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<long>("Monto")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("Total")
                         .HasColumnType("bigint");
 
                     b.HasKey("IdPago");
@@ -398,8 +401,8 @@ namespace workcube_pagos.Migrations
                     b.Property<string>("ServicioEstatusName")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<decimal>("ServicioTipoCosto")
-                        .HasColumnType("decimal(18, 2)");
+                    b.Property<long>("ServicioTipoCosto")
+                        .HasColumnType("bigint");
 
                     b.Property<string>("ServicioTipoDescripcion")
                         .HasColumnType("nvarchar(max)");
@@ -447,8 +450,8 @@ namespace workcube_pagos.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdServicioTipo"));
 
-                    b.Property<decimal>("Costo")
-                        .HasColumnType("decimal(18, 2)");
+                    b.Property<long>("Costo")
+                        .HasColumnType("bigint");
 
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
@@ -469,6 +472,9 @@ namespace workcube_pagos.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdTarjeta"));
 
+                    b.Property<int?>("ClienteIdCliente")
+                        .HasColumnType("int");
+
                     b.Property<int>("IdCliente")
                         .HasColumnType("int");
 
@@ -477,9 +483,9 @@ namespace workcube_pagos.Migrations
 
                     b.HasKey("IdTarjeta");
 
-                    b.HasIndex("IdCliente");
+                    b.HasIndex("ClienteIdCliente");
 
-                    b.ToTable("Tarjetas");
+                    b.ToTable("Tarjeta");
                 });
 
             modelBuilder.Entity("workcube_pagos.Models.AspNetUser", b =>
@@ -633,9 +639,7 @@ namespace workcube_pagos.Migrations
                 {
                     b.HasOne("workcube_pagos.Models.Cliente", "Cliente")
                         .WithMany("Tarjetas")
-                        .HasForeignKey("IdCliente")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
+                        .HasForeignKey("ClienteIdCliente");
 
                     b.Navigation("Cliente");
                 });

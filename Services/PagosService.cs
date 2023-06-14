@@ -1,5 +1,8 @@
-﻿using workcube_pagos.ViewModel.Req.Pago;
+﻿using Workcube.Libraries;
+using workcube_pagos.Templates.Emails;
+using workcube_pagos.ViewModel.Req.Pago;
 using workcube_pagos.ViewModel.Res.Pago;
+using workcube_pagos.ViewModel.Statics;
 
 namespace workcube_pagos.Services
 {
@@ -28,18 +31,20 @@ namespace workcube_pagos.Services
             //obtener al cliente
             var client =        await _context.Clientes.FindAsync(chargeObj.IdCliente) ?? throw new ArgumentException("Error en pago: P-02 - Cliente nulo");
             var customer =      client.StripeCustomerID;
-            decimal amount =    serviceToPay.ServicioTipoCosto;
+            long amount =       serviceToPay.ServicioTipoCosto;
+            long total;
 
             //obtener el cupon (si existe) y realizar el descuento
-            decimal descuento = 0;
+            long descuento = 0;
             var cupon = new Cupon();
 
             if (chargeObj.AreCupon && chargeObj.IdCupon > 0)
             {
                 cupon =         await _context.Cupones.FindAsync(chargeObj.IdCupon);
                 descuento =     cupon.Monto;
-                amount -=       descuento;
+                total =        amount - descuento;
             }
+            else {total = amount;}
 
             //guardar pago en la base de datos
             var loginTransaction = _context.Database.BeginTransaction(); //empezamos transacción
@@ -50,7 +55,9 @@ namespace workcube_pagos.Services
                 Fecha =         dateTime,
                 IdServicio =    chargeObj.IdServicio,
                 IdCliente =     chargeObj.IdCliente,
-                Monto =         (long)amount,
+                Total =         total,
+                Monto =         amount,
+                Descuento =     descuento,  
             };
             await _context.Pagos.AddAsync(newPayment);
 
@@ -72,7 +79,7 @@ namespace workcube_pagos.Services
             {
                 var options = new ChargeCreateOptions
                 {
-                    Amount =    (long)amount,
+                    Amount =    total,
                     Currency =  "mxn",
                     Source =    chargeObj.IdCard,
                     Customer =  customer,
@@ -85,17 +92,31 @@ namespace workcube_pagos.Services
             {
                 throw new ArgumentException("Error en el pago: p-03" + ex);
             }
+            catch(Exception ex)
+            {
+                throw new ArgumentException("Error en el pago: p-04" + ex);
+            }
 
 
             //asignamos el cargo al registro correspondiente
-            newPayment.IdStripeCard =   result.PaymentMethod;
+            newPayment.IdStripeCard = result.PaymentMethod; //use "PaymentMethodDetails.Card.Last4" to acces to the last four card´s numbers
             newPayment.IdStripeCharge = result.Id;
-            newPayment.Descuento =      descuento;
 
             //guardamos las consultas
             await _context.SaveChangesAsync();
 
             loginTransaction.Commit(); //confirmamos transacción
+
+            //enviamos correo de confirmación
+            await ConfirmationEmail(new ConfirmationEmailReq{
+                IdAspNetUser =  chargeObj.IdAspNetUser,
+                IdCliente =     chargeObj.IdCliente,
+                Last4 =         result.PaymentMethodDetails.Card.Last4,
+                Fecha =         dateTime,
+                Monto =         amount,
+                Descuento =     descuento,
+                Total =         total,
+            });
 
             return new ChargeRes
             {
@@ -105,8 +126,42 @@ namespace workcube_pagos.Services
                 IdStripeCharge =    newPayment.IdStripeCharge,
                 IdStripeCard =      newPayment.IdStripeCard,
                 Monto =             newPayment.Monto,
-                Descuento =         newPayment.Descuento,
+                Descuento =         newPayment.Descuento, 
             };
+        }
+
+        public async Task ConfirmationEmail(ConfirmationEmailReq data)
+        {
+            AspNetUser objAspNetUser = await _context.AspNetUsers.FindAsync(data.IdAspNetUser);
+
+            Cliente objCliente = await _context.Clientes.FindAsync(data.IdCliente);
+
+            if (objAspNetUser != null && objCliente != null)
+            { 
+                string email =  objAspNetUser?.Email;
+                var body = ConfirmacionDePago.Html(
+                    data.ServicioName,
+                    objCliente.RazonSocial,
+                    data.Monto, 
+                    data.Descuento,
+                    data.Total,
+                    data.Last4,
+                    data.Fecha
+                    ); 
+                try
+                {
+                    EmailManager objMailManager = new EmailManager(ConfigEmail.Data());
+                    objMailManager.html(email, "Confirmación de pago", body);
+                }
+                catch( Exception ex )
+                {
+                    throw new ArgumentException("Problemas en el envio de correos" + ex);
+                }
+            }
+            else
+            {
+                throw new ArgumentException("No se encontró al usuario en sesión" + data.IdAspNetUser);
+            }
         }
 
     }

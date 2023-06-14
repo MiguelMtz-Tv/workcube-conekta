@@ -8,6 +8,8 @@
         public string IdStripeCharge    { get; set; }  
         public string IdStripeCard      { get; set; }
         public long Monto               { get; set; }
-        public decimal Descuento        { get; set; }
+        public long Descuento           { get; set; }
+        public long Total               { get; set; }    
+
     }
 }

@@ -1,6 +1,7 @@
 ﻿using Microsoft.Build.Framework;
 using workcube_pagos.ViewModel.Req.Cliente;
 using workcube_pagos.ViewModel.Res.Cliente;
+using Workcube.Libraries;
 
 namespace workcube_pagos.Services
 {
@@ -79,7 +80,5 @@ namespace workcube_pagos.Services
                 StripeCustomerID =      newCLiente.StripeCustomerID,
             };
         }
-        
-        
     }
 }
