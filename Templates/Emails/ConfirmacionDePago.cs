@@ -25,8 +25,8 @@ namespace workcube_pagos.Templates.Emails
                             "<td style='padding-bottom: 10px; color: #1e293b;' > 500 </td>" +
                         "</tr >" +
                        "<tr >" +
-                            "< td style='padding-right: 70px; padding-bottom: 10px; color: #1e293b;'> Descuento </td>" +
-                            "< td style='padding-bottom: 10px; color: #1e293b;' > 500 </td>" +
+                            "<td style='padding-right: 70px; padding-bottom: 10px; color: #1e293b;'> Descuento </td>" +
+                            "<td style='padding-bottom: 10px; color: #1e293b;' > 500 </td>" +
                         "</tr >" +
                     "</table >" +
                     "<hr style='width: 200px; color: #ffffff; border:1px solid rgb(209, 209, 209);'/>" +
@@ -41,8 +41,8 @@ namespace workcube_pagos.Templates.Emails
                     "<div style='margin: auto; width: fit-content; color: #696969;'> pagado con Visa terminada en 1111 </div>" +
 
                     "<table width='100%' border='0' cellspacing='0' cellpadding='0' >" +
-                        "< tr >" +
-                            "< td class='p30-15 bbrr' style='padding: 30px 30px; border-radius:0px 0px 26px 26px;' bgcolor='white'>" +
+                        "<tr>" +
+                            "<td class='p30-15 bbrr' style='padding: 30px 30px; border-radius:0px 0px 26px 26px;' bgcolor='white'>" +
                                "<table width='100%' border='0' cellspacing='0' cellpadding='0'>" +
                                     "<tr>" +
                                         "<td class='text-footer1 pb10' style='color:#5a5a5a; font-family: Arial,sans-serif; font-size:12px; text-align:center; font-weight: bolder;'><multiline>Oil Field Trainning and Certification S.A.de C.V.</multiline></td>" +
