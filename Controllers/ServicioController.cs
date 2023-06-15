@@ -1,8 +1,9 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Text.Json.Nodes;
 using workcube_pagos.Services;
 using workcube_pagos.ViewModel.Req.Servicio;
+using Workcube.Libraries;
+using Microsoft.JSInterop.Implementation;
 
 namespace workcube_pagos.Controllers
 {
@@ -15,39 +16,75 @@ namespace workcube_pagos.Controllers
         {
             _serviciosService = serviciosService; 
         }
-
+        
         [Authorize(AuthenticationSchemes = "Bearer")]
-        [HttpPut("cancel")]
-        public async Task<ActionResult> CancelService([FromBody] CancelServiceReq model)
+        [HttpPost]
+        public async Task<ActionResult> GetService([FromBody] GetServiceReq model)
         {
-            var serviceToCancel = await _serviciosService.CancelService(model);
-            
-            if (serviceToCancel == null) {return BadRequest("servicio no encontrado");}
-            return Ok(serviceToCancel);
+            JsonReturn objReturn = new JsonReturn();
+            try
+            {
+                var result = await _serviciosService.GetService(model);
+                objReturn.Result = result;
+                objReturn.Title = "Servicio";
+                objReturn.Message = "Servicios encontrado";
+            }
+            catch (AppException ex) 
+            { 
+                objReturn.Exception(ex);
+            }
+            catch(Exception ex)
+            {
+                objReturn.Exception(ExceptionMessage.RawException(ex));
+            }
+            return Ok(objReturn.build());
         }
 
         [Authorize(AuthenticationSchemes = "Bearer")]
         [HttpPost("List")]
         public async Task<ActionResult> List([FromBody] int Id)
         {
-            var result = await _serviciosService.GetClientServices(Id);
-            
-            if (result == null) {return NotFound("al parecer el usuario no tiene servicios contratados");}
-
-            return Ok(result);
+            JsonReturn objReturn = new JsonReturn();
+            try
+            {
+                var result = await _serviciosService.GetClientServices(Id);
+                objReturn.Result = result;
+                objReturn.Title= "List";
+                objReturn.Message = "Lista de servicios recuperada";
+            }
+            catch (AppException ex)
+            {
+                objReturn.Exception(ex);
+            }
+            catch (Exception ex)
+            {
+                objReturn.Exception(ExceptionMessage.RawException(ex));
+            }
+            return Ok(objReturn.build());
         }
 
         [Authorize(AuthenticationSchemes = "Bearer")]
-        [HttpPost]
-        public async Task<ActionResult> GetService([FromBody] GetServiceReq model)
+        [HttpPut("cancel")]
+        public async Task<ActionResult> CancelService([FromBody] CancelServiceReq model)
         {
-            var result = await _serviciosService.GetService(model);
+            JsonReturn objReturn = new JsonReturn();
+            try
+            {
+                await _serviciosService.CancelService(model);;
 
-            if (result == null) {return NotFound("servicio no encontrado");}
-
-            return Ok(result);
+                objReturn.Title = "Cancelado";
+                objReturn.Message = "Servicio cancelado";
+            }
+            catch (AppException ex)
+            {
+                objReturn.Exception(ex);
+            }
+            catch (Exception ex)
+            {
+                objReturn.Exception(ExceptionMessage.RawException(ex));
+            }
+            return Ok(objReturn.build());
         }
-
 
     }
 }

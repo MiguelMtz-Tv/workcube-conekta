@@ -31,10 +31,10 @@ export class PerfilComponent implements OnInit {
     this.spinner.show()
     this.objUSerService.getUserFullName().subscribe(res => {
       this.userForm.setValue({
-        Id: this.auth.getUserId(),
-        Nombre: res.nombre || '',
-        ApellidoPat: res.apellidoPat || '',
-        ApellidoMat: res.apellidoMat || ''
+        Id:           this.auth.getUserId(),
+        Nombre:       res.result.nombre || '',
+        ApellidoPat:  res.result.apellidoPat || '',
+        ApellidoMat:  res.result.apellidoMat || ''
       })
       this.spinner.hide()
     })
@@ -104,10 +104,21 @@ export class PerfilComponent implements OnInit {
   onSubmitPasswordForm(){
     this.passwordIsLoading = true
     this.objUSerService.updatePassword(this.passwordForm.value)
-    .pipe(
-      catchError(error => {
-        this.passwordIsLoading = false
-        this.toast.error('Contraseña incorrecta',{
+    .subscribe(res => {
+      this.passwordIsLoading = false
+      if(res.action){
+        this.toast.success('Contraseña actualizada!', {
+          style: {
+            margin: '100px 20px',
+            padding: '15px'
+          },
+          iconTheme: {
+            primary: '#3F51B5'
+          },
+          position: 'top-right'
+        })
+      }else{
+        this.toast.error(res.message,{
           style: {
             border: '1px solid #FF0000',
             margin: '100px 20px',
@@ -115,21 +126,7 @@ export class PerfilComponent implements OnInit {
           },
           position: 'top-right'
         })
-        return throwError(error)
-      })
-    )
-    .subscribe(res => {
-      this.passwordIsLoading = false
-      this.toast.success('Contraseña actualizada!', {
-        style: {
-          margin: '100px 20px',
-          padding: '15px'
-        },
-        iconTheme: {
-          primary: '#3F51B5'
-        },
-        position: 'top-right'
-      })
+      }
       this.userIsLoading = false
       console.log(res)
     })

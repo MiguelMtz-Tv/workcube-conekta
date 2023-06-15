@@ -23,10 +23,10 @@ export class ServiciosComponent implements OnInit {
     this.spinner.show()
     this.serviciosService.getUserServices().subscribe(res => {
       this.spinner.hide()
-      if(res.length == 0){
+      if(res.result.length == 0){
         this.emptyServices = true
       }else{
-        this.services = res
+        this.services = res.result
         this.areServices = true
       }
     });

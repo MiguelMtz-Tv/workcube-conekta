@@ -42,9 +42,23 @@ namespace workcube_pagos.Controllers
         [HttpPost("user")] //obtener un usuario (solo nombre y apellidos)
         public async Task<ActionResult> GetUserNames([FromBody] JsonObject id)
         {
-            var user = await _usersService.GetUser(id["Id"].ToString());
-            if (user == null) { return NotFound("No se encontraron los datos del usuario " + id); }
-            return Ok(user);
+            JsonReturn objReturn = new JsonReturn();
+            try
+            {
+                var result = await _usersService.GetUser(id["id"].ToString());
+                objReturn.Result = result;
+                objReturn.Success(SuccessMessage.REQUEST);
+            }
+            catch (AppException ex)
+            {
+                objReturn.Exception(ex);
+            }
+            catch (Exception ex)
+            {
+                objReturn.Exception(ExceptionMessage.RawException(ex));
+            }
+
+            return Ok(objReturn.build());
         }
 
         [Authorize(AuthenticationSchemes = "Bearer")]
@@ -76,19 +90,28 @@ namespace workcube_pagos.Controllers
                 objReturn.Exception(ExceptionMessage.RawException(ex));
             }
 
-            return objReturn.build();
+            return Ok(objReturn.build());
         }
 
         [Authorize(AuthenticationSchemes = "Bearer")]
         [HttpPut("updatepass")] //actualizar contraseña
         public async Task<ActionResult> UpdatePassword([FromBody] UpdatePasswordReq passwordReq)
-        {   
-            var updatePassword = await _usersService.UpdatePassword(passwordReq);
-            if(updatePassword == null)
+        {
+            JsonReturn objReturn = new JsonReturn();
+            try
             {
-                return BadRequest("la contraseña es incorrecta");
+                await _usersService.UpdatePassword(passwordReq);
+                objReturn.Title = "Contraseña actualizada";
             }
-            return Ok();
+            catch (AppException ex)
+            {
+                objReturn.Exception(ex);
+            }
+            catch (Exception ex)
+            {
+                objReturn.Exception(ExceptionMessage.RawException(ex));
+            }
+            return Ok(objReturn.build());
         }
     }
 }

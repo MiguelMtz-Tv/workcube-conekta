@@ -45,7 +45,18 @@ export class ConfirmarPagoComponent {
       .subscribe(res => {
         this.spinner.hide()
         this.thisDialog.close()
-        this.router.navigateByUrl('/pago-confirmado')
+        if(res.action){
+          this.router.navigateByUrl('/pago-confirmado')
+        }else{
+          this.toast.error(res.message, {
+            style: {
+              border: '1px solid #FF0000',
+              margin: '100px 20px',
+              padding:'15px'
+            },
+            position: 'top-right'
+          })
+        }
       })
   }
 }

@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { getBaseUrl } from 'src/main';
 import { Sessions } from '../applicationConfig/application-service';
+import { AuthService } from './auth.service';
 
 @Injectable({
   providedIn: 'root'
@@ -9,14 +10,19 @@ import { Sessions } from '../applicationConfig/application-service';
 export class AspNetUserService {
   baseUrl: string
   idUser: any
-  constructor(private http: HttpClient) { this.baseUrl = getBaseUrl(), this.idUser = localStorage.getItem('Id') }
+  constructor(
+    private http: HttpClient,
+    private auth: AuthService,
+    ) { 
+      this.baseUrl = getBaseUrl(), 
+      this.idUser = this.auth.getUserId() }
 
   createNewUser(objUser : any){
     return this.http.post<any>(this.baseUrl+'api/aspnetuser', objUser)
   }
 
   getUserFullName(){
-    return this.http.post<any>(this.baseUrl+'api/aspnetuser/user', {Id: this.idUser})
+    return this.http.post<any>(this.baseUrl+'api/aspnetuser/user', {id: this.idUser})
   }
 
   updateUser(objUser : any){

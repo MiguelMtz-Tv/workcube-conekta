@@ -23,8 +23,9 @@ namespace workcube_pagos.Services
 
         public async Task<AspNetUserFullName>GetUser(string id) //obtener un usuario (nombre y apellidos)
         {
-            var user = await _context.AspNetUsers.AsNoTracking().Where(u => u.Id == id).FirstOrDefaultAsync();
-            if(user == null) {return null;}
+            if(id == null) { throw new ArgumentException("Se recibió un id nulo"); }
+            var user = await _context.AspNetUsers.FindAsync(id);
+            if(user == null) {throw new ArgumentException("No se pudieron recuperar los datos del usuario");}
 
             var resUser = new AspNetUserFullName
             {
@@ -61,7 +62,7 @@ namespace workcube_pagos.Services
             
             if (user == null)
             {
-                return null;
+                throw new ArgumentException("No se encontró al usuario en sesión");
             }
            
             var result = await _signInManager.CheckPasswordSignInAsync(user, password.OldPassword, false);
@@ -74,7 +75,7 @@ namespace workcube_pagos.Services
                 return user;
             }
 
-            return null;
+            throw new ArgumentException("Contraseña incorrecta");
         }
         
         //para añadir un nuevo usuario

@@ -1,4 +1,5 @@
-﻿using workcube_pagos.ViewModel.Req.Servicio;
+﻿using OfficeOpenXml.ConditionalFormatting;
+using workcube_pagos.ViewModel.Req.Servicio;
 
 namespace workcube_pagos.Services
 {
@@ -13,7 +14,7 @@ namespace workcube_pagos.Services
 
 
         //para obtener los servicios de un cliente
-        public async Task<object> GetClientServices(int UserId)
+        public async Task<dynamic> GetClientServices(int UserId)
         {
             var res = await _context.Servicios.AsNoTracking()
                 .Where(s => s.IdCliente == UserId)
@@ -30,7 +31,7 @@ namespace workcube_pagos.Services
                 })
                 .ToListAsync();
 
-            if(res == null) {return null;}
+            if(res == null) {throw new ArgumentException("Al parecer el cliente no cuenta con ningún servicio");}
             return res;
         }
 
@@ -42,13 +43,13 @@ namespace workcube_pagos.Services
             s.IdCliente ==  model.IdCliente)
             .FirstOrDefaultAsync();
 
-            if (result == null) {return null;}
+            if (result == null) {throw new ArgumentException("No se pudo recuperar este servicio");}
 
             return result;
         }
 
         //para cancelar un servicio
-        public async Task<Servicio> CancelService(CancelServiceReq model) 
+        public async Task CancelService(CancelServiceReq model) 
         {
             var loginTransaction = _context.Database.BeginTransaction();
 
@@ -57,16 +58,14 @@ namespace workcube_pagos.Services
                 s.IdServicio == model.IdServicio)
                 .FirstOrDefaultAsync();
 
-            if (serviceToCancel == null) {return null;}
+            if (serviceToCancel == null) {throw new ArgumentException("No se pudo recuperar este servicio para su cancelación");}
             
-            serviceToCancel.IdServicioEstatus = 3;  
-            serviceToCancel.ServicioEstatusName = "Cancelado";
+            serviceToCancel.IdServicioEstatus =     3;  
+            serviceToCancel.ServicioEstatusName =   "Cancelado";
 
             await _context.SaveChangesAsync();
 
             loginTransaction.Commit();
-
-            return serviceToCancel;
         }
 
         //Verificar la fecha de un servicio y asignar su estatus

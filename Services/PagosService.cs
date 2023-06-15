@@ -42,7 +42,7 @@ namespace workcube_pagos.Services
             {
                 cupon =         await _context.Cupones.FindAsync(chargeObj.IdCupon);
                 descuento =     cupon.Monto;
-                total =        amount - descuento;
+                total =         amount - descuento;
             }
             else {total = amount;}
 
@@ -105,18 +105,20 @@ namespace workcube_pagos.Services
             //guardamos las consultas
             await _context.SaveChangesAsync();
 
-            loginTransaction.Commit(); //confirmamos transacción
-
             //enviamos correo de confirmación
-            await ConfirmationEmail(new ConfirmationEmailReq{
-                IdAspNetUser =  chargeObj.IdAspNetUser,
-                IdCliente =     chargeObj.IdCliente,
-                Last4 =         result.PaymentMethodDetails.Card.Last4,
-                Fecha =         dateTime,
-                Monto =         amount,
-                Descuento =     descuento,
-                Total =         total,
+            await ConfirmationEmail(new ConfirmationEmailReq
+            {
+                ServicioName = serviceToPay.ServicioTipoName,
+                IdAspNetUser = chargeObj.IdAspNetUser,
+                IdCliente = chargeObj.IdCliente,
+                Last4 = result.PaymentMethodDetails.Card.Last4,
+                Fecha = dateTime,
+                Monto = amount,
+                Descuento = descuento,
+                Total = total,
             });
+
+            loginTransaction.Commit(); //confirmamos transacción
 
             return new ChargeRes
             {

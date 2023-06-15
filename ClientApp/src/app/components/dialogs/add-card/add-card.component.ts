@@ -4,7 +4,6 @@ import { TarjetasService } from 'src/app/services/tarjetas.service';
 import { AuthService } from 'src/app/services/auth.service';
 import { loadStripe ,StripeCardElement, StripeElements, Stripe } from '@stripe/stripe-js';
 import { HotToastService } from '@ngneat/hot-toast';
-import { catchError, throwError } from 'rxjs';
 import { DataService } from 'src/app/services/data.service';
 import { MatDialogRef } from '@angular/material/dialog';
 
@@ -53,8 +52,8 @@ export class AddCardComponent implements OnInit {
     name: new FormControl('', [Validators.required])
   })
 
-  errorToast(){
-    return this.toast.error('Metodo de pago invalido', {
+  errorToast(message: string){
+    return this.toast.error(message, {
       style: {
         border: '1px solid #FF0000',
         margin: '100px 20px',
@@ -68,7 +67,7 @@ export class AddCardComponent implements OnInit {
     this.isLoading = true
     this.stripe.createToken(this.cardElement).then(res => {
       if(res.error){
-        this.errorToast()
+        this.errorToast(res.error.message || '')
         this.isLoading = false
       }else{
         this.tarjetasService.addCard({
@@ -76,17 +75,15 @@ export class AddCardComponent implements OnInit {
           token: res.token.id,
           name: this.form.value.name
         })
-        .pipe(
-          catchError((e) => {
-            this.errorToast()
-            this.isLoading = false
-            return throwError(e)
-          })
-        )
         .subscribe(
           res => {
-            this.data.updateData('any')
-            this.dialogRef.close()
+            if(res.action){
+              this.data.updateData('any')
+              this.dialogRef.close()
+            }else{
+              this.isLoading = false
+              this.errorToast('Esta tarjeta no es valida o tiene fondos insuficientes.')
+            }
           }
         )
       }

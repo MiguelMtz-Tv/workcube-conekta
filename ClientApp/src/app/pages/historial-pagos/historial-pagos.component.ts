@@ -44,7 +44,7 @@ export class HistorialPagosComponent implements OnInit, AfterViewInit{
 
     this.serviciosService.getServiceDetails(this.id)
       .subscribe(res => {
-        this.service = res
+        this.service = res.result
       })
   }
 
