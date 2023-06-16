@@ -12,6 +12,7 @@ import { TarjetasService } from 'src/app/services/tarjetas.service';
 import { PagosService } from 'src/app/services/pagos.service';
 import { AuthService } from 'src/app/services/auth.service';
 import { DataService } from 'src/app/services/data.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-pagar',
@@ -48,6 +49,7 @@ export class PagarComponent implements OnInit {
     private pagosService: PagosService,
     private auth: AuthService,
     private dataService: DataService,
+    private router: Router,
     )
     { 
     this.id = Number(this.route.snapshot.paramMap.get('id')) 
@@ -62,13 +64,17 @@ export class PagarComponent implements OnInit {
 
   ngOnInit() {
     this.serviciosService.getServiceDetails(this.id).subscribe(res => {
-      this.servicio = res
-      this.total =    res.servicioTipoCosto
+      if(res.action){
+        this.servicio = res.result
+      }else{
+        this.router.navigateByUrl('/servicios')
+      }
+      this.total = res.result.servicioTipoCosto
     })
     //obtener tarjetas de la api de stripe
     this.getCards()
     //observamos cuando se añade una nueva tarjeta
-    this.dataService.data$.subscribe((data) => {
+    this.dataService.data$.subscribe(data => {
       this.getCards()
     })
   }
@@ -92,8 +98,25 @@ export class PagarComponent implements OnInit {
   onSubmitCuponForm(){
     this.cuponIsLoading = true
     this.cuponesService.getCupon(this.cuponForm.value.code)
-    .pipe(
-      catchError(error => {
+    .subscribe(res => {
+      console.log(res)
+      if(res.action){
+        this.idCupon =      res.result.idCupon,
+        this.descuento =    res.result.monto
+        this.cuponCode =    res.result.codigo
+        this.areCupon =     true
+        this.total =        this.servicio.servicioTipoCosto - res.result.monto
+
+        this.toast.success('Se aplicó un cupón de descuento',{
+          style: {
+            border:     '1px solid green',
+            margin:     '100px 20px',
+            padding:    '15px'
+          },
+          position:     'top-right'
+        })
+        this.cuponIsLoading = false 
+      }else{
         this.toast.error('Cupón invalido',{
           style: {
             border:     '1px solid red',
@@ -103,25 +126,7 @@ export class PagarComponent implements OnInit {
           position:     'top-right'
         })
         this.cuponIsLoading = false
-        return throwError(error)
-      })
-    )
-    .subscribe(res => {
-      console.log(res)
-      this.idCupon =      res.result.idCupon,
-      this.descuento =    res.result.monto
-      this.cuponCode =    res.result.codigo
-      this.areCupon =  true
-      this.total =        this.servicio.servicioTipoCosto - res.result.monto
-      this.toast.success('Se aplicó un cupón de descuento',{
-        style: {
-          border:     '1px solid green',
-          margin:     '100px 20px',
-          padding:    '15px'
-        },
-        position:     'top-right'
-      })
-      this.cuponIsLoading = false 
+      }
     })
   }
 

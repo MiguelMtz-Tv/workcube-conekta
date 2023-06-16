@@ -25,16 +25,6 @@ namespace workcube_pagos.Controllers
             {
                 var result = await _cuponesService.GetCupon(model);
 
-                if (result == null)
-                {
-                    return NotFound("No se encontró un cupón valido");
-                }
-
-                if (result.Status == CuponEstatus.Vencido)
-                {
-                    return BadRequest("El cupon " + result.Codigo + " ya no esta disponible");
-                }
-
                 objReturn.Result = result;
                 objReturn.Success(SuccessMessage.REQUEST);
             }
@@ -56,10 +46,24 @@ namespace workcube_pagos.Controllers
         [HttpPost("list")]
         public async Task<ActionResult> List([FromBody]GetCuponReq model)
         {
-            var result = await _cuponesService.List(model);
+            JsonReturn objReturn = new JsonReturn();
+            try
+            {
+                var result = await _cuponesService.List(model);
 
-            if (result == null) { return NotFound("No hay cupones disponibles"); }
-            return Ok(result);
+                objReturn.Result = result;
+                objReturn.Success(SuccessMessage.REQUEST);
+            }
+            catch (AppException exception)
+            {
+                objReturn.Exception(exception);
+            }
+            catch (Exception exception)
+            {
+                objReturn.Exception(ExceptionMessage.RawException(exception));
+            }
+
+            return Ok(objReturn.build());
         }
     }
 }

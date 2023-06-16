@@ -8,7 +8,7 @@ namespace workcube_pagos.ViewModel.Statics
         {
             ModelEmail objEmail = new ModelEmail();
 
-            objEmail.EmailDisplayName = "Oil Field Trainning";
+            objEmail.EmailDisplayName = "Servicios Workcube";
             objEmail.EmailEnabled =     true;
             objEmail.EmailHost =        "workcube.com.mx";
             objEmail.EmailPassword =    "$W0rkC6b3@NR";

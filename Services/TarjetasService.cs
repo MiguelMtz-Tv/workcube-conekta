@@ -96,11 +96,11 @@ namespace workcube_pagos.Services
             }
             catch(StripeException ex) 
             { 
-                throw new ArgumentException("Error al crear la tarjeta: T-01" + ex); 
+                throw new ArgumentException(ex.Message); 
             }
             catch(Exception ex)
             {
-                throw new ArgumentException("Error al crear la tarjeta: T-02" + ex); 
+                throw new ArgumentException("Error al crear la tarjeta: T-01" + ex.StackTrace + ex.Me); 
             }
         }
 

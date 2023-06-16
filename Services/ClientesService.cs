@@ -30,6 +30,9 @@ namespace workcube_pagos.Services
                 IsActive =              true,
             };
 
+            await _context.Clientes.AddAsync(newCLiente);
+            await _context.SaveChangesAsync();
+
             var service = new CustomerService();
             var options = new CustomerCreateOptions
             {
@@ -58,8 +61,7 @@ namespace workcube_pagos.Services
             //vinculamos el registro del cliente con su id en stripe
             newCLiente.StripeCustomerID = idStripe;
 
-            await _context.Clientes.AddAsync(newCLiente);
-            await _context.SaveChangesAsync();
+            _context.SaveChanges();
 
             loginTransaction.Commit();
 

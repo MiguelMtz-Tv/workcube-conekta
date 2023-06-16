@@ -1,4 +1,5 @@
 ﻿using Workcube.Libraries;
+using Workcube.ViewModels;
 using workcube_pagos.Templates.Emails;
 using workcube_pagos.ViewModel.Req.Pago;
 using workcube_pagos.ViewModel.Res.Pago;
@@ -9,8 +10,10 @@ namespace workcube_pagos.Services
     public class PagosService
     {
         private readonly DataContext _context;
-        public PagosService(DataContext context) {
+        private readonly IWebHostEnvironment _root;
+        public PagosService(DataContext context, IWebHostEnvironment root) {
             _context = context;
+            _root = root;
         }   
 
         public async Task<List<Pago>> List(int idServicio)
@@ -104,21 +107,21 @@ namespace workcube_pagos.Services
 
             //guardamos las consultas
             await _context.SaveChangesAsync();
+            loginTransaction.Commit(); //confirmamos transacción
 
             //enviamos correo de confirmación
-            await ConfirmationEmail(new ConfirmationEmailReq
+            Action e = async () => await ConfirmationEmail(new ConfirmationEmailReq
             {
-                ServicioName = serviceToPay.ServicioTipoName,
-                IdAspNetUser = chargeObj.IdAspNetUser,
-                IdCliente = chargeObj.IdCliente,
-                Last4 = result.PaymentMethodDetails.Card.Last4,
-                Fecha = dateTime,
-                Monto = amount,
-                Descuento = descuento,
-                Total = total,
-            });
-
-            loginTransaction.Commit(); //confirmamos transacción
+                ServicioName =  serviceToPay.ServicioTipoName,
+                IdAspNetUser =  chargeObj.IdAspNetUser,
+                IdCliente =     chargeObj.IdCliente,
+                Last4 =         result.PaymentMethodDetails.Card.Last4,
+                Fecha =         dateTime,
+                Monto =         amount,
+                Descuento =     descuento,
+                Total =         total,
+             });
+            await Task.Run(e);
 
             return new ChargeRes
             {
@@ -142,22 +145,33 @@ namespace workcube_pagos.Services
             { 
                 string email =  objAspNetUser?.Email;
                 var body = ConfirmacionDePago.Html(
-                    data.ServicioName,
-                    objCliente.RazonSocial,
-                    data.Monto, 
-                    data.Descuento,
-                    data.Total,
-                    data.Last4,
-                    data.Fecha
-                    ); 
+                                data.ServicioName,
+                                objCliente.RazonSocial,
+                                data.Monto, 
+                                data.Descuento,
+                                data.Total,
+                                data.Last4,
+                                data.Fecha
+                            ); 
                 try
                 {
+                    var path = _root.ContentRootPath + "\\Files\\prueba.txt";
+                    byte[] bytes = System.IO.File.ReadAllBytes(path);
+
+                    dynamic file = new ModelAttachment
+                    {
+                        type = "bytes",
+                        bytes = bytes,
+                        fileName = "Recibo-prueba",
+                        extension = "txt"
+                    };
+
                     EmailManager objMailManager = new EmailManager(ConfigEmail.Data());
-                    objMailManager.html(email, "Confirmación de pago", body);
+                    objMailManager.html(email, "Confirmación de pago", body, file);
                 }
                 catch( Exception ex )
                 {
-                    throw new ArgumentException("Problemas en el envio de correos" + ex);
+                    throw new ArgumentException("Problemas en el envio de correos: " + ex);
                 }
             }
             else

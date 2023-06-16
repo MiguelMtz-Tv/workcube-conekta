@@ -10,5 +10,4 @@ export class CuponComponent {
 @Input() codigo: any
 @Input() descripcion: any
 @Input() vigencia: any
-
 }

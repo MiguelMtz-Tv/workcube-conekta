@@ -17,12 +17,12 @@ namespace workcube_pagos.Services
         public async Task<Cupon> GetCupon(GetCuponReq model) //para obtener un cupón
         {
             var result = await _context.Cupones.Where(c => 
-                c.Codigo == model.Codigo && 
-                c.IdCliente == model.IdCliente && 
-                c.Status == CuponEstatus.Vigente)
-                .FirstOrDefaultAsync();
-            
-            if (result == null) { return null; }
+                c.Codigo ==     model.Codigo && 
+                c.IdCliente ==  model.IdCliente && 
+                c.Status ==     CuponEstatus.Vigente)
+                .FirstOrDefaultAsync() 
+                ?? throw new ArgumentException("no se pudo recuperar este cupón");
+
             return result;
         }
 
@@ -33,7 +33,7 @@ namespace workcube_pagos.Services
                 c.Status == CuponEstatus.Vigente)
                 .ToListAsync();
                 
-            if (result == null) { return null;}
+            if (result == null) { throw new ArgumentException("No se encontrarón los cupones de este usuario");}
             return result;
         }
     }

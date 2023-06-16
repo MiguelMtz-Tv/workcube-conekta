@@ -14,16 +14,19 @@ export class CuponsDialogComponent implements OnInit {
   emptyCupons: boolean = false
 
   constructor(
-      private cuponesService: CuponesService,
-      private spinner: NgxSpinnerService,
-    ) { }
+    private cuponesService: CuponesService,
+    private spinner: NgxSpinnerService,
+  ) { }
 
   ngOnInit() {
     this.spinner.show("cupons-dialog")
     this.cuponesService.getCupones().subscribe(res => {
       this.spinner.hide("cupons-dialog")
-      this.cupons = res
-      if(res.length == 0){
+      if(res.action){
+        res.result.length == 0 
+        ? this.emptyCupons = true 
+        : this.cupons = res.result
+      }else{
         this.emptyCupons = true
       }
     })

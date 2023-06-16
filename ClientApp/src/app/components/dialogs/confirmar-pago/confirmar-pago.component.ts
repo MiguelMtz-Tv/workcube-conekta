@@ -48,6 +48,7 @@ export class ConfirmarPagoComponent {
         if(res.action){
           this.router.navigateByUrl('/pago-confirmado')
         }else{
+          console.log(res.message)
           this.toast.error(res.message, {
             style: {
               border: '1px solid #FF0000',
