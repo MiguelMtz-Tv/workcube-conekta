@@ -55,12 +55,16 @@ namespace workcube_pagos.Services
             DateTime dateTime = DateTime.Now;
             var newPayment = new Pago
             {
-                Fecha =         dateTime,
-                IdServicio =    chargeObj.IdServicio,
-                IdCliente =     chargeObj.IdCliente,
-                Total =         total,
-                Monto =         amount,
-                Descuento =     descuento,  
+                Fecha =                 dateTime,
+                IdServicio =            chargeObj.IdServicio,
+                IdCliente =             chargeObj.IdCliente,
+                ClienteName =           client.NombreComercial,
+                ClienteRazonSocial =    client.RazonSocial,
+                ClienteDireccion =      client.Direccion,
+                ClienteRFC =            client.RFC,
+                Total =                 total,
+                Monto =                 amount,
+                Descuento =             descuento,  
             };
             await _context.Pagos.AddAsync(newPayment);
 
@@ -102,8 +106,12 @@ namespace workcube_pagos.Services
 
 
             //asignamos el cargo al registro correspondiente
-            newPayment.IdStripeCard = result.PaymentMethod; //use "PaymentMethodDetails.Card.Last4" to acces to the last four card´s numbers
-            newPayment.IdStripeCharge = result.Id;
+            newPayment.IdStripeCard =       result.PaymentMethod;
+            newPayment.IdStripeCharge =     result.Id;
+            newPayment.TarjetaTipo =        result.PaymentMethodDetails.Card.Brand;
+            newPayment.TarjetaTerminacion = result.PaymentMethodDetails.Card.Last4;
+            newPayment.TarjetaBanco =       result.PaymentMethodDetails.Card.Issuer;
+            newPayment.CargoObj =           result.ToString();
 
             //guardamos las consultas
             await _context.SaveChangesAsync();
