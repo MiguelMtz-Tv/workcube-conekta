@@ -338,12 +338,22 @@ namespace workcube_pagos.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Fecha = table.Column<DateTime>(type: "datetime2", nullable: false),
                     IdServicio = table.Column<int>(type: "int", nullable: false),
+                    ServicioName = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     IdCliente = table.Column<int>(type: "int", nullable: false),
+                    ClienteName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ClienteRazonSocial = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ClienteRFC = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ClienteDireccion = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     IdStripeCard = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    TarjetaTipo = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    TarjetaTerminacion = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    TarjetaBanco = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     IdStripeCharge = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Monto = table.Column<long>(type: "bigint", nullable: false),
                     Descuento = table.Column<long>(type: "bigint", nullable: false),
-                    Total = table.Column<long>(type: "bigint", nullable: false)
+                    Total = table.Column<long>(type: "bigint", nullable: false),
+                    CargoObj = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    NroFolio = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {

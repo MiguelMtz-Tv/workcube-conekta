@@ -12,7 +12,7 @@ using workcube_pagos.Data;
 namespace workcube_pagos.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20230614185331_01")]
+    [Migration("20230616230204_01")]
     partial class _01
     {
         /// <inheritdoc />
@@ -323,6 +323,21 @@ namespace workcube_pagos.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdPago"));
 
+                    b.Property<string>("CargoObj")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ClienteDireccion")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ClienteName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ClienteRFC")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ClienteRazonSocial")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<long>("Descuento")
                         .HasColumnType("bigint");
 
@@ -343,6 +358,21 @@ namespace workcube_pagos.Migrations
 
                     b.Property<long>("Monto")
                         .HasColumnType("bigint");
+
+                    b.Property<string>("NroFolio")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ServicioName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("TarjetaBanco")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("TarjetaTerminacion")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("TarjetaTipo")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<long>("Total")
                         .HasColumnType("bigint");
