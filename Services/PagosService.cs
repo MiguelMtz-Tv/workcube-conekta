@@ -5,6 +5,7 @@ using workcube_pagos.ViewModel.Req.Pago;
 using workcube_pagos.ViewModel.Res.Pago;
 using workcube_pagos.ViewModel.Statics;
 using workcube_pagos.Libraries;
+using Newtonsoft.Json;
 
 namespace workcube_pagos.Services
 {
@@ -20,7 +21,7 @@ namespace workcube_pagos.Services
         public async Task<List<Pago>> List(int idServicio)
         {
             var payments = await _context.Pagos.Where(p => p.IdServicio == idServicio).ToListAsync();
-            if(payments ==  null) { return null; }
+            if(payments ==  null) { throw new ArgumentException("No se encontraron pagos"); }
             return payments;
         }
 
@@ -30,12 +31,12 @@ namespace workcube_pagos.Services
             DateTime dateTime = DateTime.Now;
 
             if (serviceToPay == null || serviceToPay.Vigencia > dateTime)
-                { throw new ArgumentException("Error en pago: P-01"); }
+            { throw new ArgumentException("Error en pago: P-01"); }
 
             //obtener al cliente
-            var client =        await _context.Clientes.FindAsync(chargeObj.IdCliente) ?? throw new ArgumentException("Error en pago: P-02 - Cliente nulo");
-            var customer =      client.StripeCustomerID;
-            long amount =       serviceToPay.ServicioTipoCosto;
+            var client = await _context.Clientes.FindAsync(chargeObj.IdCliente) ?? throw new ArgumentException("Error en pago: P-02 - Cliente nulo");
+            var customer = client.StripeCustomerID;
+            long amount = serviceToPay.ServicioTipoCosto;
             long total;
 
             //obtener el cupon (si existe) y realizar el descuento
@@ -44,29 +45,30 @@ namespace workcube_pagos.Services
 
             if (chargeObj.AreCupon && chargeObj.IdCupon > 0)
             {
-                cupon =         await _context.Cupones.FindAsync(chargeObj.IdCupon);
-                descuento =     cupon.Monto;
-                total =         amount - descuento;
+                cupon = await _context.Cupones.FindAsync(chargeObj.IdCupon);
+                descuento = cupon.Monto;
+                total = amount - descuento;
             }
-            else {total = amount;}
+            else { total = amount; }
 
             //guardar pago en la base de datos
             var loginTransaction = _context.Database.BeginTransaction(); //empezamos transacción
 
             var newPayment = new Pago
             {
-                Fecha =                 dateTime,
-                IdServicio =            chargeObj.IdServicio,
-                IdCliente =             chargeObj.IdCliente,
-                ClienteName =           client.NombreComercial,
-                ClienteRazonSocial =    client.RazonSocial,
-                ClienteDireccion =      client.Direccion,
-                ClienteRFC =            client.RFC,
-                Total =                 total,
-                Monto =                 amount,
-                Descuento =             descuento,  
+                Fecha = dateTime,
+                IdServicio = chargeObj.IdServicio,
+                IdCliente = chargeObj.IdCliente,
+                ClienteName = client.NombreComercial,
+                ClienteRazonSocial = client.RazonSocial,
+                ClienteDireccion = client.Direccion,
+                ClienteRFC = client.RFC,
+                Total = total,
+                Monto = amount,
+                Descuento = descuento,
             };
             await _context.Pagos.AddAsync(newPayment);
+            await _context.SaveChangesAsync();
 
             //cambiamos el estado del cupón a vencido
             if (cupon.IdCupon > 0 && cupon.Status != CuponEstatus.Vencido)
@@ -84,43 +86,49 @@ namespace workcube_pagos.Services
             {
                 var options = new ChargeCreateOptions
                 {
-                    Amount =    total,
-                    Currency =  "mxn",
-                    Source =    chargeObj.IdCard,
-                    Customer =  customer,
+                    Amount = total,
+                    Currency = "mxn",
+                    Source = chargeObj.IdCard,
+                    Customer = customer,
                 };
 
                 var service = new ChargeService();
                 result = service.Create(options);
             }
-            catch (StripeException ex)  { StripeExceptionHandler.OnException(ex); }
-            catch(Exception ex)         { throw new ArgumentException("Error en el pago: p-03" + ex); }
+            catch (StripeException ex) { StripeExceptionHandler.OnException(ex); }
+            catch (Exception ex) { throw new ArgumentException("Error en el pago: p-03" + ex); }
 
 
             //asignamos el cargo al registro correspondiente
-            newPayment.IdStripeCard =       result.PaymentMethod;
-            newPayment.IdStripeCharge =     result.Id;
-            newPayment.TarjetaTipo =        result.PaymentMethodDetails.Card.Brand;
+            newPayment.IdStripeCard = result.PaymentMethod;
+            newPayment.IdStripeCharge = result.Id;
+            newPayment.TarjetaTipo = result.PaymentMethodDetails.Card.Brand;
             newPayment.TarjetaTerminacion = result.PaymentMethodDetails.Card.Last4;
-            newPayment.TarjetaBanco =       result.PaymentMethodDetails.Card.Issuer;
-            newPayment.CargoObj =           result.ToString();
+            newPayment.TarjetaBanco = result.PaymentMethodDetails.Card.Issuer;
+            newPayment.CargoObj = result.ToString();
+            newPayment.NroFolio = Globals.PIN("1234567890", 8);
+
+            Charge CargoObj = JsonConvert.DeserializeObject<Charge>(newPayment.CargoObj);
 
             //guardamos las consultas
             await _context.SaveChangesAsync();
             loginTransaction.Commit(); //confirmamos transacción
 
             //enviamos correo de confirmación
-            await Task.Run(async () => await ConfirmationEmail(new ConfirmationEmailReq
+            Action b = () => this.ConfirmationEmail(new ConfirmationEmailReq
             {
-                ServicioName =  serviceToPay.ServicioTipoName,
-                IdAspNetUser =  chargeObj.IdAspNetUser,
-                IdCliente =     chargeObj.IdCliente,
-                Last4 =         result.PaymentMethodDetails.Card.Last4,
-                Fecha =         dateTime,
-                Monto =         amount,
-                Descuento =     descuento,
-                Total =         total,
-            }));
+                ServicioName = serviceToPay.ServicioTipoName,
+                IdAspNetUser = chargeObj.IdAspNetUser,
+                IdCliente = chargeObj.IdCliente,
+                Last4 = result.PaymentMethodDetails.Card.Last4,
+                Fecha = dateTime,
+                Monto = amount,
+                Descuento = descuento,
+                Total = total
+            }); 
+            
+
+            Task task = Task.Run((Action) b);
 
             return new ChargeRes
             {
@@ -134,11 +142,11 @@ namespace workcube_pagos.Services
             };
         }
 
-        public async Task ConfirmationEmail(ConfirmationEmailReq data)
+        public void ConfirmationEmail(ConfirmationEmailReq data)
         {
-            AspNetUser objAspNetUser = await _context.AspNetUsers.FindAsync(data.IdAspNetUser);
+            AspNetUser objAspNetUser = _context.AspNetUsers.Find(data.IdAspNetUser);
 
-            Cliente objCliente = await _context.Clientes.FindAsync(data.IdCliente);
+            Cliente objCliente = _context.Clientes.Find(data.IdCliente);
 
             if (objAspNetUser != null && objCliente != null)
             { 

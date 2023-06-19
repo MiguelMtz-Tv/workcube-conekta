@@ -41,15 +41,15 @@ namespace workcube_pagos.Libraries
                 switch(e.StripeError.Type)
                 {
                     case "invalid_request_error":
-                        throw new ArgumentException("An invalid request occurred.");
+                        throw new ArgumentException("Se realizó una solicitud invalida.");
                     case "api_connection_error":
                         throw new ArgumentException("There was a network problem between your server and Stripe.");
                     case "api_error":
-                        throw new ArgumentException("Something went wrong on Stripe´s end");
+                        throw new ArgumentException("Algo salio mal al intentar conectar con Stripe");
                     case "rate_limit_error":
-                        throw new ArgumentException("There are too many API calls in too short time");
+                        throw new ArgumentException("Se hicieron demasiadas peticiones en muy poco tiempo");
                     default:
-                        throw new ArgumentException("Another problem occurred, maybe unrelated to Stripe.");
+                        throw new ArgumentException("Error desconocido.");
                 };
             }
 
