@@ -24,8 +24,7 @@ namespace workcube_pagos.Controllers
             JsonReturn objReturn = new JsonReturn();
             try
             {
-                var result = await _tarjetasService.AddCard(cardObj);
-                if(result == null) {return NotFound(this.NfMessage);}                    
+                var result = await _tarjetasService.AddCard(cardObj);                  
 
                 objReturn.Result = result;
                 objReturn.Success(SuccessMessage.REQUEST);
@@ -50,7 +49,6 @@ namespace workcube_pagos.Controllers
             try
             {
                 var result = await _tarjetasService.List(idClient);
-                if(result == null) { return NotFound(this.NfMessage); }
 
                 objReturn.Result = result;
                 objReturn.Success(SuccessMessage.REQUEST);
@@ -75,7 +73,6 @@ namespace workcube_pagos.Controllers
             try
             {
                 var result = await _tarjetasService.Delete(cardObj);
-                if (result == null) { return NotFound(this.NfMessage); }
 
                 objReturn.Result = result;
                 objReturn.Success(SuccessMessage.REQUEST);
@@ -100,7 +97,6 @@ namespace workcube_pagos.Controllers
             try
             {
                 var result = await _tarjetasService.UpdateCard(cardObj);
-                if (result == null) { return NotFound(this.NfMessage); }
 
                 objReturn.Result = result;
                 objReturn.Success(SuccessMessage.REQUEST);
@@ -125,7 +121,6 @@ namespace workcube_pagos.Controllers
             try
             {
                 var result = await _tarjetasService.GetCard(cardObj);
-                if (result == null) { return NotFound(this.NfMessage); }
                 
                 objReturn.Result = result;
                 objReturn.Success(SuccessMessage.REQUEST);

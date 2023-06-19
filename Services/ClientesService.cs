@@ -1,7 +1,6 @@
-﻿using Microsoft.Build.Framework;
-using workcube_pagos.ViewModel.Req.Cliente;
+﻿using workcube_pagos.ViewModel.Req.Cliente;
 using workcube_pagos.ViewModel.Res.Cliente;
-using Workcube.Libraries;
+using workcube_pagos.Libraries;
 
 namespace workcube_pagos.Services
 {
@@ -50,13 +49,9 @@ namespace workcube_pagos.Services
                 if (string.IsNullOrEmpty(stripeClient.Id)) { throw new ArgumentException("Error al cliente: C-01"); }
                 idStripe = stripeClient.Id;
 
-            }catch(StripeException ex){
-                throw new ArgumentException("Error al crear el cliente: c-01" + ex);
-            } 
-            catch (Exception ex)
-            {
-                throw new ArgumentException("Error al cliente: C-02: " + ex);
             }
+            catch(StripeException ex)  { StripeExceptionHandler.OnException(ex); } 
+            catch(Exception ex)        {throw new ArgumentException("Error al cliente: C-02: " + ex);}
 
             //vinculamos el registro del cliente con su id en stripe
             newCLiente.StripeCustomerID = idStripe;
@@ -64,9 +59,6 @@ namespace workcube_pagos.Services
             _context.SaveChanges();
 
             loginTransaction.Commit();
-
-            // ELIMIANAR ID CUSTOMER PREVIO
-            // CODIGO PARA ELIMINAR CLIENTE ANTE
 
             return new CreateClientRes
             {

@@ -4,6 +4,7 @@ using workcube_pagos.Templates.Emails;
 using workcube_pagos.ViewModel.Req.Pago;
 using workcube_pagos.ViewModel.Res.Pago;
 using workcube_pagos.ViewModel.Statics;
+using workcube_pagos.Libraries;
 
 namespace workcube_pagos.Services
 {
@@ -95,14 +96,8 @@ namespace workcube_pagos.Services
                 var service = new ChargeService();
                 result = service.Create(options);
             }
-            catch (StripeException ex)
-            {
-                throw new ArgumentException("Error en el pago: p-03" + ex);
-            }
-            catch(Exception ex)
-            {
-                throw new ArgumentException("Error en el pago: p-04" + ex);
-            }
+            catch (StripeException ex)  { StripeExceptionHandler.OnException(ex); }
+            catch(Exception ex)         { throw new ArgumentException("Error en el pago: p-03" + ex); }
 
 
             //asignamos el cargo al registro correspondiente

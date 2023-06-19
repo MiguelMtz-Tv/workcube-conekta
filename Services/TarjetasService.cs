@@ -2,6 +2,8 @@
 using Workcube.Libraries;
 using NuGet.Protocol;
 using Microsoft.AspNetCore.Http.HttpResults;
+using workcube_pagos.Libraries;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace workcube_pagos.Services
 {
@@ -17,7 +19,7 @@ namespace workcube_pagos.Services
         public async Task<dynamic> List(int idCLient)
         {
             var client = await _context.Clientes.FindAsync(idCLient);
-            if (client == null) { return null; }
+            if (client == null) { throw new ArgumentException("No se pudieron recuperar los datos de la sesión"); }
 
             var idCustomer = client.StripeCustomerID;
 
@@ -38,11 +40,11 @@ namespace workcube_pagos.Services
             }
             catch(StripeException ex)
             {
-                throw new ArgumentException("Error al obtener tarjetas: T-01 " + ex);
+                throw StripeExceptionHandler.OnException(ex);
             }
             catch(Exception ex)
             {
-                throw new ArgumentException("Error al obtener tarjetas: T-02 " + ex);
+                throw new ArgumentException("Error al obtener tarjetas: TL-01 " + ex);
             }
         }
 
@@ -64,7 +66,11 @@ namespace workcube_pagos.Services
             }
             catch (StripeException ex)
             {
-                throw new ArgumentException("Error al eliminar tarjeta: T-01 " + ex);
+                throw StripeExceptionHandler.OnException(ex);
+            }
+            catch (Exception ex)
+            {
+                throw new ArgumentException("Error al eliminar la tarjeta: TD-01");
             }
         }
 
@@ -72,7 +78,7 @@ namespace workcube_pagos.Services
         {
             //verificar al cliente
             var client = await _context.Clientes.Where(c => c.IdCliente == cardObj.idCliente).FirstOrDefaultAsync();
-            if (client == null) { return null; }
+            if (client == null) { throw new ArgumentException("Error al añadir metodo de pago: TA-01"); }
 
             //obtener el Id del cliente en stripe
             var IdCustomer = client.StripeCustomerID;
@@ -95,8 +101,8 @@ namespace workcube_pagos.Services
                 return updatedCard;
             }
             catch(StripeException ex) 
-            { 
-                throw new ArgumentException(ex.Message); 
+            {
+                throw StripeExceptionHandler.OnException(ex);
             }
             catch(Exception ex)
             {
@@ -107,7 +113,7 @@ namespace workcube_pagos.Services
         public async Task<dynamic> UpdateCard(UpdateCardReq cardObj)
         {
             var client = await _context.Clientes.Where(c => c.IdCliente == cardObj.IdCliente).FirstOrDefaultAsync();
-            if (client == null) { return null; }
+            if (client == null) { throw new ArgumentException("Error al actualizar el metodo de pago: TU-01"); }
             
             var IdCustomer = client.StripeCustomerID;
 
@@ -127,7 +133,7 @@ namespace workcube_pagos.Services
             }
             catch (StripeException ex)
             {
-                throw new ArgumentException("No fue posible actualizar la tarjeta: T-01 " + ex);
+                throw StripeExceptionHandler.OnException(ex);
             }
             catch(Exception ex)
             {
@@ -138,7 +144,7 @@ namespace workcube_pagos.Services
         public async Task<dynamic> GetCard(UpdateCardReq cardObj)
         {
             var cliente = await _context.Clientes.FindAsync(cardObj.IdCliente);
-            if (cliente == null) { return null; }
+            if (cliente == null) { throw new ArgumentException("Error al recuperar metodo de pago: TG-01"); }
 
             var service = new CardService();
             try
@@ -155,7 +161,7 @@ namespace workcube_pagos.Services
             }
             catch(StripeException ex)
             {
-                throw new ArgumentException("Error al obtener la tgarjeta: T-01" + ex);
+                throw StripeExceptionHandler.OnException(ex);
             }
             catch(Exception ex)
             {
