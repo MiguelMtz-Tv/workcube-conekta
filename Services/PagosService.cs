@@ -27,9 +27,9 @@ namespace workcube_pagos.Services
         public async Task<ChargeRes> CreateCharge(CreateChargeReq chargeObj)
         {
             var serviceToPay = await _context.Servicios.FindAsync(chargeObj.IdServicio);
-            if (serviceToPay == null
-                || serviceToPay.IdServicioEstatus == 1
-                || serviceToPay.ServicioEstatusName == "Vigente")
+            DateTime dateTime = DateTime.Now;
+
+            if (serviceToPay == null || serviceToPay.Vigencia > dateTime)
                 { throw new ArgumentException("Error en pago: P-01"); }
 
             //obtener al cliente
@@ -53,7 +53,6 @@ namespace workcube_pagos.Services
             //guardar pago en la base de datos
             var loginTransaction = _context.Database.BeginTransaction(); //empezamos transacción
 
-            DateTime dateTime = DateTime.Now;
             var newPayment = new Pago
             {
                 Fecha =                 dateTime,
@@ -75,10 +74,8 @@ namespace workcube_pagos.Services
                 cupon.Status = CuponEstatus.Vencido;
             }
 
-            //Cambiamos el estatus del servicio
-            serviceToPay.ServicioEstatusName =  "Vigente";
-            serviceToPay.IdServicioEstatus =    1;
-            serviceToPay.Vigencia =             dateTime.AddDays(30);
+            //actualizamos la vigencia del servicio
+            serviceToPay.Vigencia = dateTime.AddDays(30);
 
 
             //Creamos el cargo en la api de stripe
@@ -113,7 +110,7 @@ namespace workcube_pagos.Services
             loginTransaction.Commit(); //confirmamos transacción
 
             //enviamos correo de confirmación
-            Action e = async () => await ConfirmationEmail(new ConfirmationEmailReq
+            await Task.Run(async () => await ConfirmationEmail(new ConfirmationEmailReq
             {
                 ServicioName =  serviceToPay.ServicioTipoName,
                 IdAspNetUser =  chargeObj.IdAspNetUser,
@@ -123,8 +120,7 @@ namespace workcube_pagos.Services
                 Monto =         amount,
                 Descuento =     descuento,
                 Total =         total,
-             });
-            await Task.Run(e);
+            }));
 
             return new ChargeRes
             {

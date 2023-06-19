@@ -12,36 +12,46 @@ import { CancelServiceComponent } from '../dialogs/cancel-service/cancel-service
 })
 export class ServiceCardComponent implements OnInit, OnChanges{
   @Input() name = ''
-  @Input() status= ''
   @Input() description= ''
   @Input() date= ''
   @Input() cost= ''
   @Input() period= ''
   @Input() startDate= ''
   @Input() id = ''
+  @Input() isVigente: boolean = false
+  @Input() isCanceled: boolean = false
 
   color = 'bg-gray-500' //on error default
   days= '0'
   canPay = false
+  status = ''
 
   constructor(private toast: HotToastService, private dialog: MatDialog) { }
 
   //set status color
   setStatusColor(){
-    switch(this.status){
-      case 'Vigente':
-        this.color = 'bg-green-500'
-        break
-      case 'Vencido':
-        this.color = 'bg-red-500'
-        break
-      case 'Cancelado':
-        this.color = 'bg-yellow-500'
-        break
+    if(this.isCanceled){
+      this.color = 'bg-yellow-500'
+      this.status = 'Cancelado'
+    }else if(this.isVigente){
+      this.color = 'bg-green-500'
+      this.status = 'Vigente'
+    }else{
+      this.color = 'bg-red-500'
+      this.status = 'Vencido'
     }
   }
 
+  setPaymentButton(){
+    if(this.isCanceled){
+      this.canPay = false
+    }else if(this.isVigente){
+      this.canPay = false
+    }else{this.canPay = true}
+  }
+
   ngOnInit(){
+    console.log({canceled: this.isCanceled, vigente: this.isVigente})
     //get remaining days
     let closeDate = add(new Date(this.startDate), { days: 30 })
     let daysToDate = differenceInDays(closeDate, new Date())
@@ -52,19 +62,14 @@ export class ServiceCardComponent implements OnInit, OnChanges{
     }
     //set initial status color
     this.setStatusColor()
-
-    //set payment button
-    this.status == 'Vencido' ? this.canPay = true : this.canPay = false
+    this.setPaymentButton()
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes.status && this.status === 'Cancelado') {
+    if (changes.status && this.isCanceled) {
       this.setStatusColor()
-      this.canPay = false
+      this.setPaymentButton()
     }
-
-    //set pyament button
-    this.status == 'Vencido' ? this.canPay = true : this.canPay = false
   }
 
   /* to cancel service */

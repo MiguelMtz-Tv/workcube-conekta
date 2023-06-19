@@ -30,10 +30,7 @@ namespace workcube_pagos.Models
         public string PeriodoName                       { get; set; }
         public virtual List<Cupon> Cupones              { get; set; }
         public DateTime Vigencia                        { get; set; }
-        public virtual ServicioEstatus ServicioEstatus  { get; set; }
-        public int IdServicioEstatus                    { get; set; }
-        public string ServicioEstatusName               { get; set; }
-
+        public bool IsCanceled                          { get; set; }
         public string KeyServicio                       { get; set; }
     }
 }

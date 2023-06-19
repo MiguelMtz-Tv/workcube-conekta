@@ -62,19 +62,6 @@ namespace workcube_pagos.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "ServiciosEstatus",
-                columns: table => new
-                {
-                    IdServicioEstatus = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ServiciosEstatus", x => x.IdServicioEstatus);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "ServiciosTipos",
                 columns: table => new
                 {
@@ -181,8 +168,7 @@ namespace workcube_pagos.Migrations
                     IdPeriodo = table.Column<int>(type: "int", nullable: false),
                     PeriodoName = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Vigencia = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    IdServicioEstatus = table.Column<int>(type: "int", nullable: false),
-                    ServicioEstatusName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    IsCanceled = table.Column<bool>(type: "bit", nullable: false),
                     KeyServicio = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
@@ -200,12 +186,6 @@ namespace workcube_pagos.Migrations
                         principalTable: "Periodos",
                         principalColumn: "IdPeriodo",
                         onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Servicios_ServiciosEstatus_IdServicioEstatus",
-                        column: x => x.IdServicioEstatus,
-                        principalTable: "ServiciosEstatus",
-                        principalColumn: "IdServicioEstatus",
-                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Servicios_ServiciosTipos_IdServicioTipo",
                         column: x => x.IdServicioTipo,
@@ -449,11 +429,6 @@ namespace workcube_pagos.Migrations
                 column: "IdPeriodo");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Servicios_IdServicioEstatus",
-                table: "Servicios",
-                column: "IdServicioEstatus");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Servicios_IdServicioTipo",
                 table: "Servicios",
                 column: "IdServicioTipo");
@@ -505,9 +480,6 @@ namespace workcube_pagos.Migrations
 
             migrationBuilder.DropTable(
                 name: "Periodos");
-
-            migrationBuilder.DropTable(
-                name: "ServiciosEstatus");
 
             migrationBuilder.DropTable(
                 name: "ServiciosTipos");

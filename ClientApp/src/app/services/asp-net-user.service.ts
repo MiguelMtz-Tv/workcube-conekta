@@ -18,7 +18,7 @@ export class AspNetUserService {
       this.idUser = this.auth.getUserId() }
 
   createNewUser(objUser : any){
-    return this.http.post<any>(this.baseUrl+'api/aspnetuser', objUser)
+    return this.http.post<any>(this.baseUrl+'api/aspnetuser/add', objUser)
   }
 
   getUserFullName(){

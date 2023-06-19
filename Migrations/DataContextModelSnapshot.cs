@@ -416,19 +416,16 @@ namespace workcube_pagos.Migrations
                     b.Property<int>("IdPeriodo")
                         .HasColumnType("int");
 
-                    b.Property<int>("IdServicioEstatus")
-                        .HasColumnType("int");
-
                     b.Property<int>("IdServicioTipo")
                         .HasColumnType("int");
+
+                    b.Property<bool>("IsCanceled")
+                        .HasColumnType("bit");
 
                     b.Property<string>("KeyServicio")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PeriodoName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ServicioEstatusName")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<long>("ServicioTipoCosto")
@@ -449,27 +446,9 @@ namespace workcube_pagos.Migrations
 
                     b.HasIndex("IdPeriodo");
 
-                    b.HasIndex("IdServicioEstatus");
-
                     b.HasIndex("IdServicioTipo");
 
                     b.ToTable("Servicios");
-                });
-
-            modelBuilder.Entity("workcube_pagos.Models.ServicioEstatus", b =>
-                {
-                    b.Property<int>("IdServicioEstatus")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdServicioEstatus"));
-
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("IdServicioEstatus");
-
-                    b.ToTable("ServiciosEstatus");
                 });
 
             modelBuilder.Entity("workcube_pagos.Models.ServicioTipo", b =>
@@ -644,12 +623,6 @@ namespace workcube_pagos.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("workcube_pagos.Models.ServicioEstatus", "ServicioEstatus")
-                        .WithMany("Servicios")
-                        .HasForeignKey("IdServicioEstatus")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
                     b.HasOne("workcube_pagos.Models.ServicioTipo", "ServicioTipo")
                         .WithMany("Servicio")
                         .HasForeignKey("IdServicioTipo")
@@ -659,8 +632,6 @@ namespace workcube_pagos.Migrations
                     b.Navigation("Cliente");
 
                     b.Navigation("Periodo");
-
-                    b.Navigation("ServicioEstatus");
 
                     b.Navigation("ServicioTipo");
                 });
@@ -708,11 +679,6 @@ namespace workcube_pagos.Migrations
                     b.Navigation("Cupones");
 
                     b.Navigation("Pagos");
-                });
-
-            modelBuilder.Entity("workcube_pagos.Models.ServicioEstatus", b =>
-                {
-                    b.Navigation("Servicios");
                 });
 
             modelBuilder.Entity("workcube_pagos.Models.ServicioTipo", b =>

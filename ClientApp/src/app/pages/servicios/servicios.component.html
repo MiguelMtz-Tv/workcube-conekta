@@ -3,7 +3,7 @@
 
     <div class="m-auto max-w-[1024px]">
         <app-page-title title="Mis servicios" *ngIf="areServices"/>
-        <app-service-card *ngFor="let service of services" id="{{service.idServicio}}" name="{{service.servicioTipoName}}" status="{{service.servicioEstatusName}}"
+        <app-service-card *ngFor="let service of services" id="{{service.idServicio}}" name="{{service.servicioTipoName}}" [isVigente]="service.isVigente" [isCanceled]="service.isCanceled"
         description="{{service.servicioTipoDescripcion}}" cost="" period="{{service.periodoName}}" startDate="{{service.vigencia}}">
         </app-service-card>
     </div>

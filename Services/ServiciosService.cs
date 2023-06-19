@@ -27,7 +27,7 @@ namespace workcube_pagos.Services
                     PeriodoName =               s.PeriodoName,
                     Vigencia =                  s.Vigencia,
                     IsVigente =                 s.Vigencia.Date > DateTime.Now.Date,
-                    ServicioEstatusName =       s.ServicioEstatusName,
+                    IsCanceled =                s.IsCanceled,
                 })
                 .ToListAsync();
 
@@ -60,37 +60,11 @@ namespace workcube_pagos.Services
 
             if (serviceToCancel == null) {throw new ArgumentException("No se pudo recuperar este servicio para su cancelación");}
             
-            serviceToCancel.IdServicioEstatus =     3;  
-            serviceToCancel.ServicioEstatusName =   "Cancelado";
+            serviceToCancel.IsCanceled = true;
 
             await _context.SaveChangesAsync();
 
             loginTransaction.Commit();
         }
-
-        //Verificar la fecha de un servicio y asignar su estatus
-        public async Task<List<Servicio>> UpdateStatusService()
-        {
-            DateTime FechaActual = DateTime.Now;
-
-            var ServiciosVencidos = await _context.Servicios
-                .Where(s => s.Vigencia.Date <= FechaActual.Date && s.IdServicioEstatus == 1)
-                .ToListAsync();
-
-            if(ServiciosVencidos.Any() )
-            {
-                foreach(var servicio in ServiciosVencidos)
-                {
-                    servicio.IdServicioEstatus = 2;
-                    servicio.ServicioEstatusName = "Vencido";
-
-                    await _context.SaveChangesAsync();
-                }
-                return ServiciosVencidos;
-            }
-
-            return null;
-        }
-
     }
 }
