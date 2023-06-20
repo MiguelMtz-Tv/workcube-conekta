@@ -10,6 +10,6 @@
         public long Descuento       { get; set; }
         public long Total           { get; set; }
         public string Last4         { get; set; }
-        public string CardHolder    { get; set; }
+        public string CardFunding   { get; set; }
     }
 }

@@ -19,6 +19,7 @@ namespace workcube_pagos.Services
             var result = await _context.Cupones.Where(c => 
                 c.Codigo ==     model.Codigo && 
                 c.IdCliente ==  model.IdCliente && 
+                c.Vigencia == new DateTime().Date &&
                 c.Status ==     CuponEstatus.Vigente)
                 .FirstOrDefaultAsync() 
                 ?? throw new ArgumentException("no se pudo recuperar este cupón");

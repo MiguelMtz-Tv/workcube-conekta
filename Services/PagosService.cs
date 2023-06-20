@@ -4,6 +4,7 @@ using workcube_pagos.Templates.Emails;
 using workcube_pagos.ViewModel.Req.Pago;
 using workcube_pagos.ViewModel.Statics;
 using workcube_pagos.Libraries;
+using System.Security.Claims;
 
 namespace workcube_pagos.Services
 {
@@ -23,10 +24,13 @@ namespace workcube_pagos.Services
             return payments;
         }
 
-        public async Task<dynamic> CreateCharge(CreateChargeReq chargeObj)
+        public async Task<dynamic> CreateCharge(CreateChargeReq chargeObj, ClaimsPrincipal user)
         {
             var serviceToPay = await _context.Servicios.FindAsync(chargeObj.IdServicio);
             DateTime dateTime = DateTime.Now;
+
+            var id = Globals.GetClaim("Id", user);
+            var Nombre = Globals.GetClaim("Nombre", user);
 
             if (serviceToPay == null || serviceToPay.Vigencia > dateTime)
             { throw new ArgumentException("Error en pago: P-01"); }
@@ -121,7 +125,7 @@ namespace workcube_pagos.Services
                 IdAspNetUser =  chargeObj.IdAspNetUser,
                 IdCliente =     chargeObj.IdCliente,
                 Last4 =         result.PaymentMethodDetails.Card.Last4,
-                CardHolder =    result.BillingDetails.Name,
+                CardFunding =    result.PaymentMethodDetails.Card.Funding,
                 Fecha =         dateTime,
                 Monto =         amount,
                 Descuento =     descuento,
@@ -131,6 +135,7 @@ namespace workcube_pagos.Services
 
             await Task.Run((Action) b);
 
+            Console.WriteLine("se inició el proceso en segundo plano");
             return new 
             {
                 Fecha =             newPayment.Fecha,
@@ -159,7 +164,7 @@ namespace workcube_pagos.Services
                                 data.Descuento,
                                 data.Total,
                                 data.Last4,
-                                data.CardHolder,
+                                data.CardFunding,
                                 data.Fecha
                             ); 
                 try

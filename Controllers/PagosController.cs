@@ -21,7 +21,7 @@ namespace workcube_pagos.Controllers
             JsonReturn objReturn = new JsonReturn();
             try
             {
-                var result = await _pagosService.CreateCharge(chargeObj);
+                var result = await _pagosService.CreateCharge(chargeObj, User);
 
                 objReturn.Result = result;
                 objReturn.Success(SuccessMessage.REQUEST);

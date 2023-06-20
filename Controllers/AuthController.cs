@@ -36,7 +36,7 @@ namespace workcube_pagos.Controllers
             {
                 return _jwtTokenHandler.GenerateToken(user);
             }
-                return Unauthorized("Contraseña incorrecta");
+                return Unauthorized("Contraseï¿½a incorrecta");
         }
     }
 }
