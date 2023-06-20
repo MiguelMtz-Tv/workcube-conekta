@@ -1,9 +1,5 @@
 ﻿using workcube_pagos.ViewModel.Req.Tarjeta;
-using Workcube.Libraries;
-using NuGet.Protocol;
-using Microsoft.AspNetCore.Http.HttpResults;
 using workcube_pagos.Libraries;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace workcube_pagos.Services
 {
@@ -70,7 +66,7 @@ namespace workcube_pagos.Services
             }
             catch (Exception ex)
             {
-                throw new ArgumentException("Error al eliminar la tarjeta: TD-01");
+                throw new ArgumentException(ex.Message);
             }
         }
 

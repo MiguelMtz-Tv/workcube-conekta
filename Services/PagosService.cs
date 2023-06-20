@@ -75,7 +75,7 @@ namespace workcube_pagos.Services
             {
                 cupon.Status = CuponEstatus.Vencido;
             }
-
+            
             //actualizamos la vigencia del servicio
             serviceToPay.Vigencia = dateTime.AddDays(30);
 
@@ -121,6 +121,7 @@ namespace workcube_pagos.Services
                 IdAspNetUser =  chargeObj.IdAspNetUser,
                 IdCliente =     chargeObj.IdCliente,
                 Last4 =         result.PaymentMethodDetails.Card.Last4,
+                CardHolder =    result.BillingDetails.Name,
                 Fecha =         dateTime,
                 Monto =         amount,
                 Descuento =     descuento,
@@ -158,6 +159,7 @@ namespace workcube_pagos.Services
                                 data.Descuento,
                                 data.Total,
                                 data.Last4,
+                                data.CardHolder,
                                 data.Fecha
                             ); 
                 try

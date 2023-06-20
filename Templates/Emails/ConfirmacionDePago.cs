@@ -4,11 +4,10 @@ namespace workcube_pagos.Templates.Emails
 {
     public class ConfirmacionDePago
     {
-        public static string Html(string servicioName, string clienteName, long monto, long descuento, long total, string last4, DateTime fecha)
+        public static string Html(string servicioName, string clienteName, long monto, long descuento, long total, string last4, string cardHolder, DateTime fecha)
         {
             var html="<body style='padding:20px !important; margin:0 !important; display:block !important; min-width:100% !important; width:100% !important; background:#f5f5f5; -webkit-text-size-adjust:none; font-family: sans-serif;'>" +
                    "<div style='width: 500px;background-color: #ffffff;border-radius: 15px;margin: auto;margin-top: 40px;'>" +
-
                         "<div style='background-color: #6366f1; border-top-left-radius: 15px;border-top-right-radius: 15px;height: 100px;text-align: center;font-weight: 500;color: #ffffff; text-align: center;'>" +
                         "<svg xmlns='http://www.w3.org/2000/svg' style='margin-top:10px' fill='none' viewBox='0 0 24 24' stroke-width='1.5' stroke='currentColor'>" +
                             "<path stroke-linecap='round' stroke-linejoin='round' d='M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z'/>" +
@@ -36,9 +35,9 @@ namespace workcube_pagos.Templates.Emails
                             "<td style='padding-bottom: 10px; color: #1e293b; font-weight: 600;'> "+total+"MXN</td>" +
                         "</tr>" +
                     "</table>" +
-
-                   "<div style='margin: auto; width: fit-content; margin-top: 20px; color: #696969;'> Realizado el "+ fecha.ToString("MM/dd/yyyy h:mm tt") +"</div>" +
-                    "<div style='margin: auto; width: fit-content; color: #696969;'> pagado con Visa terminada en "+last4+"</div>" +
+                    
+                    "<div style='margin: auto; width: fit-content; margin-top: 20px; color: #696969;'> Realizado el "+ fecha.ToString("MM/dd/yyyy h:mm tt") +"</div>" +
+                    "<div style='margin: auto; width: fit-content; color: #696969;'> pagado con Visa terminada en "+last4+" a nombre de "+cardHolder+"</div>" +
 
                     "<table width='100%' border='0' cellspacing='0' cellpadding='0' >" +
                         "<tr>" +
