@@ -326,9 +326,6 @@ namespace workcube_pagos.Migrations
                     b.Property<string>("ClienteDireccion")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("ClienteName")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("ClienteRFC")
                         .HasColumnType("nvarchar(max)");
 
@@ -340,6 +337,9 @@ namespace workcube_pagos.Migrations
 
                     b.Property<DateTime>("Fecha")
                         .HasColumnType("datetime2");
+
+                    b.Property<string>("Folio")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<int>("IdCliente")
                         .HasColumnType("int");
@@ -356,25 +356,32 @@ namespace workcube_pagos.Migrations
                     b.Property<long>("Monto")
                         .HasColumnType("bigint");
 
-                    b.Property<string>("NroFolio")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("ServicioName")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("TarjetaBanco")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("TarjetaFinanciacion")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("TarjetaMarca")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("TarjetaTerminacion")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("TarjetaTipo")
+                    b.Property<string>("TarjetaTitular")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<long>("Total")
                         .HasColumnType("bigint");
 
                     b.HasKey("IdPago");
+
+                    b.HasIndex("Folio")
+                        .IsUnique()
+                        .HasFilter("[Folio] IS NOT NULL");
 
                     b.HasIndex("IdCliente");
 

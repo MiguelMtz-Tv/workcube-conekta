@@ -41,10 +41,7 @@ namespace workcube_pagos.Services
         public async Task<AspNetUser> UpdateUser(UpdateUserReq data)
         {
             var user = await _context.AspNetUsers.FindAsync(data.Id);
-            if (user == null)
-            {
-                return null;
-            }
+            if (user == null) { throw new ArgumentException("No se pudieron recuperar los datos de la sesión"); }
 
             user.Nombre =       data.Nombre;
             user.ApellidoPat =  data.ApellidoPat;

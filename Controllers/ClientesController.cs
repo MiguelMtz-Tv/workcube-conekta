@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using workcube_pagos.Services;
 using workcube_pagos.ViewModel.Req.Cliente;
+using Workcube.Libraries;
+using Microsoft.DotNet.MSIdentity.Shared;
 
 namespace workcube_pagos.Controllers
 {
@@ -14,13 +16,25 @@ namespace workcube_pagos.Controllers
         [HttpPost]
         public async Task<ActionResult> Create([FromBody] CreateClientReq ClientObj)
         {
-            if(ClientObj == null) { return BadRequest("El cliente es nulo"); }
-
-            var result = await _clientesService.CreateClient(ClientObj);
+            JsonReturn objReturn = new JsonReturn();
             
-            if (result == null) { return Forbid("algo salió mal"); }
+            try
+            {
+                var result = await _clientesService.CreateClient(ClientObj);
+                objReturn.Result = result;
+                objReturn.Title = "Se ha creado un nuevo cliente";
+                objReturn.Message = "Usuario creado en la base de datos";
+            }
+            catch (AppException ex) 
+            {
+                objReturn.Exception(ex);
+            }
+            catch(Exception ex)
+            {
+                objReturn.Exception(ExceptionMessage.RawException(ex));
+            }
             
-            return Ok(result);
+            return Ok(objReturn.build());
         }
     }
 }

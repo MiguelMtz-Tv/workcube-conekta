@@ -51,7 +51,7 @@ namespace workcube_pagos.Services
 
             }
             catch(StripeException ex)  { StripeExceptionHandler.OnException(ex); } 
-            catch(Exception ex)        {throw new ArgumentException("Error al cliente: C-02: " + ex);}
+            catch(Exception ex)        { throw new ArgumentException("Error al cliente: C-02: " + ex); }
 
             //vinculamos el registro del cliente con su id en stripe
             newCLiente.StripeCustomerID = idStripe;

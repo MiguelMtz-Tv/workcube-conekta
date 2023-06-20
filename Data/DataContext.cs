@@ -32,7 +32,7 @@ namespace workcube_pagos.Data
             modelBuilder.Entity<Cupon>().HasOne(c => c.Cliente).WithMany(c => c.Cupones).HasForeignKey(c => c.IdCliente).OnDelete(DeleteBehavior.Restrict);
 
 
-            modelBuilder.Entity<Pago>().HasIndex(s => s.NroFolio).IsUnique();
+            modelBuilder.Entity<Pago>().HasIndex(s => s.Folio).IsUnique();
             //relacion pagos/clientes N:1
             modelBuilder.Entity<Pago>().HasOne(p => p.Cliente).WithMany(c => c.Pagos).HasForeignKey(p => p.IdCliente).OnDelete(DeleteBehavior.Restrict); ;
             //relacion pagos/servicios N:1 

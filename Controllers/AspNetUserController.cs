@@ -70,11 +70,6 @@ namespace workcube_pagos.Controllers
             try
             {
                 var updatedUser = await _usersService.UpdateUser(user);
-                if (updatedUser == null)
-                {
-                    return BadRequest("El usuario no existe o se ha eliminado");
-                    // throw new ArgumentException("El usuario no existe o se ha eliminado");
-                }
 
                 objReturn.Result = updatedUser;
 

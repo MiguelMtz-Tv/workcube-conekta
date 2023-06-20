@@ -2,10 +2,8 @@
 using Workcube.ViewModels;
 using workcube_pagos.Templates.Emails;
 using workcube_pagos.ViewModel.Req.Pago;
-using workcube_pagos.ViewModel.Res.Pago;
 using workcube_pagos.ViewModel.Statics;
 using workcube_pagos.Libraries;
-using Newtonsoft.Json;
 
 namespace workcube_pagos.Services
 {
@@ -25,7 +23,7 @@ namespace workcube_pagos.Services
             return payments;
         }
 
-        public async Task<ChargeRes> CreateCharge(CreateChargeReq chargeObj)
+        public async Task<dynamic> CreateCharge(CreateChargeReq chargeObj)
         {
             var serviceToPay = await _context.Servicios.FindAsync(chargeObj.IdServicio);
             DateTime dateTime = DateTime.Now;
@@ -51,24 +49,26 @@ namespace workcube_pagos.Services
             }
             else { total = amount; }
 
-            //guardar pago en la base de datos
-            var loginTransaction = _context.Database.BeginTransaction(); //empezamos transacción
+            //Guardar pago en la base de datos
+            var loginTransaction = _context.Database.BeginTransaction();
 
             var newPayment = new Pago
             {
                 Fecha = dateTime,
                 IdServicio = chargeObj.IdServicio,
+                ServicioName = serviceToPay.ServicioTipoName,
                 IdCliente = chargeObj.IdCliente,
-                ClienteName = client.NombreComercial,
                 ClienteRazonSocial = client.RazonSocial,
                 ClienteDireccion = client.Direccion,
                 ClienteRFC = client.RFC,
                 Total = total,
                 Monto = amount,
                 Descuento = descuento,
+                Folio = Globals.PIN("1234567890", 8)
             };
             await _context.Pagos.AddAsync(newPayment);
             await _context.SaveChangesAsync();
+            //Console.WriteLine($"Se guardaron los primeros datos y se asignó el numero de folio: {newPayment.NroFolio}");
 
             //cambiamos el estado del cupón a vencido
             if (cupon.IdCupon > 0 && cupon.Status != CuponEstatus.Vencido)
@@ -97,40 +97,40 @@ namespace workcube_pagos.Services
             }
             catch (StripeException ex) { StripeExceptionHandler.OnException(ex); }
             catch (Exception ex) { throw new ArgumentException("Error en el pago: p-03" + ex); }
-
+            //Console.WriteLine("Se guardó el cargo en la API de stripe y se almacenó la respuesta");
 
             //asignamos el cargo al registro correspondiente
-            newPayment.IdStripeCard = result.PaymentMethod;
-            newPayment.IdStripeCharge = result.Id;
-            newPayment.TarjetaTipo = result.PaymentMethodDetails.Card.Brand;
-            newPayment.TarjetaTerminacion = result.PaymentMethodDetails.Card.Last4;
-            newPayment.TarjetaBanco = result.PaymentMethodDetails.Card.Issuer;
-            newPayment.CargoObj = result.ToString();
-            newPayment.NroFolio = Globals.PIN("1234567890", 8);
+            newPayment.IdStripeCard =           result.PaymentMethod;
+            newPayment.IdStripeCharge =         result.Id;
+            newPayment.TarjetaMarca =           result.PaymentMethodDetails.Card.Brand;
+            newPayment.TarjetaFinanciacion =    result.PaymentMethodDetails.Card.Funding;
+            newPayment.TarjetaTerminacion =     result.PaymentMethodDetails.Card.Last4;
+            newPayment.TarjetaBanco =           result.PaymentMethodDetails.Card.Issuer;
+            newPayment.TarjetaTitular =         result.BillingDetails.Name;
+            newPayment.CargoObj =               result.RawJObject.ToString();
+            //Console.WriteLine($"se guardo el objeto de la respuesta {newPayment.CargoObj}");
+            //throw new ArgumentException($"Lanzando error para lectura {newPayment.TarjetaTitular}");
 
-            Charge CargoObj = JsonConvert.DeserializeObject<Charge>(newPayment.CargoObj);
-
-            //guardamos las consultas
             await _context.SaveChangesAsync();
-            loginTransaction.Commit(); //confirmamos transacción
+            loginTransaction.Commit(); 
 
-            //enviamos correo de confirmación
-            Action b = () => this.ConfirmationEmail(new ConfirmationEmailReq
+            //Correo de confirmación
+            Action b = () => ConfirmationEmail(new ConfirmationEmailReq
             {
-                ServicioName = serviceToPay.ServicioTipoName,
-                IdAspNetUser = chargeObj.IdAspNetUser,
-                IdCliente = chargeObj.IdCliente,
-                Last4 = result.PaymentMethodDetails.Card.Last4,
-                Fecha = dateTime,
-                Monto = amount,
-                Descuento = descuento,
-                Total = total
+                ServicioName =  serviceToPay.ServicioTipoName,
+                IdAspNetUser =  chargeObj.IdAspNetUser,
+                IdCliente =     chargeObj.IdCliente,
+                Last4 =         result.PaymentMethodDetails.Card.Last4,
+                Fecha =         dateTime,
+                Monto =         amount,
+                Descuento =     descuento,
+                Total =         total,
             }); 
             
 
-            Task task = Task.Run((Action) b);
+            await Task.Run((Action) b);
 
-            return new ChargeRes
+            return new 
             {
                 Fecha =             newPayment.Fecha,
                 IdServicio =        newPayment.IdServicio,
@@ -167,9 +167,9 @@ namespace workcube_pagos.Services
 
                     dynamic file = new ModelAttachment
                     {
-                        type = "bytes",
-                        bytes = bytes,
-                        fileName = "Recibo-prueba",
+                        type =      "bytes",
+                        bytes =     bytes,
+                        fileName =  "Recibo-prueba",
                         extension = "txt"
                     };
 

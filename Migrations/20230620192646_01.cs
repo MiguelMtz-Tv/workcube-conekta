@@ -320,20 +320,21 @@ namespace workcube_pagos.Migrations
                     IdServicio = table.Column<int>(type: "int", nullable: false),
                     ServicioName = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     IdCliente = table.Column<int>(type: "int", nullable: false),
-                    ClienteName = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ClienteRazonSocial = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ClienteRFC = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ClienteDireccion = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     IdStripeCard = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    TarjetaTipo = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    TarjetaMarca = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    TarjetaFinanciacion = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     TarjetaTerminacion = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     TarjetaBanco = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    TarjetaTitular = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     IdStripeCharge = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Monto = table.Column<long>(type: "bigint", nullable: false),
                     Descuento = table.Column<long>(type: "bigint", nullable: false),
                     Total = table.Column<long>(type: "bigint", nullable: false),
                     CargoObj = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    NroFolio = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Folio = table.Column<string>(type: "nvarchar(450)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -407,6 +408,13 @@ namespace workcube_pagos.Migrations
                 name: "IX_Cupones_IdServicio",
                 table: "Cupones",
                 column: "IdServicio");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Pagos_Folio",
+                table: "Pagos",
+                column: "Folio",
+                unique: true,
+                filter: "[Folio] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Pagos_IdCliente",

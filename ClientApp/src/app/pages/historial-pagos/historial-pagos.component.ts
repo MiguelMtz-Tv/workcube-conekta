@@ -39,7 +39,7 @@ export class HistorialPagosComponent implements OnInit, AfterViewInit{
     this.pagosService.getPaymentsList(this.id)
       .subscribe(res => {
         this.spinner.hide('historial-pagos')
-        this.dataSource = new MatTableDataSource<any>(res)
+        this.dataSource = new MatTableDataSource<any>(res.result)
       })
 
     this.serviciosService.getServiceDetails(this.id)

@@ -45,7 +45,14 @@
             </div>
         </div>
         <div class="m-auto flex justify-center items-center my-3">
-            <button mat-flat-button color="primary" type="submit" [disabled]="!form.valid">Crear cliente</button>
+            <button mat-flat-button color="primary" type="submit" [disabled]="!form.valid || isLoading">
+                <mat-spinner diameter="20" *ngIf="isLoading" color="primary">
+
+                </mat-spinner>
+                <div *ngIf="isLoading == false">
+                    Crear cliente
+                </div>
+            </button>
         </div>
     </form>
 </div>
