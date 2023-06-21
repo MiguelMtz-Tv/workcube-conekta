@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using Azure.Core;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Workcube.Libraries;
 using workcube_pagos.Services;
@@ -59,5 +60,24 @@ namespace workcube_pagos.Controllers
             return objReturn.build();
         }
 
+        [HttpPost("file")]
+        public dynamic Recibo()
+        {
+            JsonReturn objReturn = new JsonReturn();
+            try
+            {
+                byte[] result = _pagosService.Recibo();
+
+                Response.Headers["Content-Disposition"] = $"inline; filename=reciboTest.pdf";
+
+                return new FileContentResult(result, "Aplication/pdf");
+            }
+            catch
+            {
+
+            }
+
+            return objReturn.build();
+        }
     }
 }

@@ -5,6 +5,8 @@ using workcube_pagos.ViewModel.Req.Pago;
 using workcube_pagos.ViewModel.Statics;
 using workcube_pagos.Libraries;
 using System.Security.Claims;
+using iTextSharp.text.pdf;
+using iTextSharp.text;
 
 namespace workcube_pagos.Services
 {
@@ -29,8 +31,8 @@ namespace workcube_pagos.Services
             var serviceToPay = await _context.Servicios.FindAsync(chargeObj.IdServicio);
             DateTime dateTime = DateTime.Now;
 
-            if (serviceToPay == null || serviceToPay.Vigencia > dateTime)
-            { throw new ArgumentException("Error en pago: P-01"); }
+            if (serviceToPay == null) { throw new ArgumentException("Error en pago: P-01"); }
+            if (serviceToPay.Vigencia > dateTime) { throw new ArgumentException("No puedes pagar este servicio porque aún se encuentra vigente"); }
 
             //obtener al cliente
             var client = await _context.Clientes.FindAsync(chargeObj.IdCliente) ?? throw new ArgumentException("Error en pago: P-02 - Cliente nulo");
@@ -178,5 +180,26 @@ namespace workcube_pagos.Services
             }
         }
 
+        public byte[] Recibo()
+        {
+            // INSTANCIAS
+            PdfTable table = null;
+            PdfPCell cell = null;
+            Paragraph parrafo = null;
+
+            Document document = new Document(PageSize.Letter, 40f, 40f, 80f, 20f);
+
+            using (MemoryStream memoryStream = new MemoryStream())
+            {
+                parrafo = new Paragraph();
+                parrafo.Add(new Phrase("Me comprometo", PDFFont.FontStyle(true, 10, "#000", "Arial")));
+                parrafo.Add(new Phrase(" a no dar uso ", PDFFont.FontStyle(false, 10, "#000", "Arial")));
+                parrafo.Add(new Phrase("del certificado para efectos de ingresar el equipo a laborar, trabajar, operar y/o ejecutar cualquier actividad relevante que involucre al equipo mencionado y el requerimiento mismo del certificado.", PDFFont.FontStyle(true, 10, "#000", "Arial")));
+                parrafo.Alignment = Element.ALIGN_JUSTIFIED;
+                document.Add(parrafo);
+
+                return memoryStream.ToArray();
+            }
+        }
     }
 }
