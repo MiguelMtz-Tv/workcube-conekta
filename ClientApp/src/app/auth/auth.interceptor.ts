@@ -36,7 +36,7 @@ export class AuthInterceptor implements HttpInterceptor {
   }
 
   handleError(error: HttpErrorResponse){
-    console.warn(error);
-    return throwError('Error personalizado');
+    console.log(error);
+    return throwError(error);
   }
 }

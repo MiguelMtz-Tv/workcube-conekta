@@ -25,18 +25,15 @@ namespace workcube_pagos.Controllers
         {
             var user = await _aspNetUsersService.FindLogin(model.UserName);
 
-            if (user == null)
-            {
-                return Unauthorized("Usuario incorrecto o no encontrado");
-            }
+            if(!user.IsActive)  { return Unauthorized("Este usuario se encuentra desactivado"); }
+
+            if (user == null)   { return Unauthorized("Usuario incorrecto o no encontrado"); }
 
             var result = await _signInManager.CheckPasswordSignInAsync(user, model.Password, false);
 
-            if (result.Succeeded)
-            {
-                return _jwtTokenHandler.GenerateToken(user);
-            }
-                return Unauthorized("Contraseña incorrecta");
+            if (result.Succeeded) { return _jwtTokenHandler.GenerateToken(user);}
+            
+            return Unauthorized("Contraseña incorrecta");
         }
     }
 }

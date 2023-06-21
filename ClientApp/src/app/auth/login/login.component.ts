@@ -16,6 +16,8 @@ export class LoginComponent {
 
   passwordIsHidden: boolean = true
 
+  errorMssg!: string
+
   constructor(private auth: AuthService, private router: Router) {
   }
 
@@ -38,13 +40,13 @@ export class LoginComponent {
         this.router.navigate(['/servicios'])
       },
       error => {
+        this.errorMssg = error.error
         this.loginError = true
         setTimeout(()=>{
           this.loginError = false
         }, 3000)
-
+        
         this.isLoading = false
-        console.log(error)
       },
       () => {
         this.isLoading = false
