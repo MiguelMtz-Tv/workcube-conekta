@@ -33,7 +33,7 @@ namespace workcube_pagos.Services
             var result = await _context.Cupones.AsNoTracking().Where(c => 
                 c.IdCliente == model.IdCliente && 
                 c.Status == CuponEstatus.Disponible)
-                .ToListAsync() ?? throw new ArgumentException("No se encontrarón los cupones de este usuario");
+                .ToListAsync();
                 
             return result;
         }
