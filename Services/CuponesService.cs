@@ -18,11 +18,12 @@ namespace workcube_pagos.Services
         {
             var result = await _context.Cupones.Where(c => 
                 c.Codigo ==     model.Codigo && 
-                c.IdCliente ==  model.IdCliente && 
-                c.Vigencia == new DateTime().Date &&
-                c.Status ==     CuponEstatus.Vigente)
-                .FirstOrDefaultAsync() 
-                ?? throw new ArgumentException("no se pudo recuperar este cupón");
+                c.IdCliente ==  model.IdCliente)
+                .FirstOrDefaultAsync();
+
+            if(result.IdServicio != model.IdServicio)   { throw new ArgumentException("No puedes usar este cupón con este servicio"); }
+            if(result.Vigencia < DateTime.Now)          { throw new ArgumentException("El cupón ya no se encuentra vigente"); }
+            if(result.Status == CuponEstatus.Usado)     { throw new ArgumentException("Este cupón ya fue utilizado"); }             
 
             return result;
         }
@@ -31,10 +32,9 @@ namespace workcube_pagos.Services
         {
             var result = await _context.Cupones.AsNoTracking().Where(c => 
                 c.IdCliente == model.IdCliente && 
-                c.Status == CuponEstatus.Vigente)
-                .ToListAsync();
+                c.Status == CuponEstatus.Disponible)
+                .ToListAsync() ?? throw new ArgumentException("No se encontrarón los cupones de este usuario");
                 
-            if (result == null) { throw new ArgumentException("No se encontrarón los cupones de este usuario");}
             return result;
         }
     }

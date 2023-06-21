@@ -97,7 +97,7 @@ export class PagarComponent implements OnInit {
 
   onSubmitCuponForm(){
     this.cuponIsLoading = true
-    this.cuponesService.getCupon(this.cuponForm.value.code)
+    this.cuponesService.getCupon(this.cuponForm.value.code, this.id)
     .subscribe(res => {
       console.log(res)
       if(res.action){
@@ -117,7 +117,7 @@ export class PagarComponent implements OnInit {
         })
         this.cuponIsLoading = false 
       }else{
-        this.toast.error('Cupón invalido',{
+        this.toast.error('Cupón invalido: '+res.message,{
           style: {
             border:     '1px solid red',
             margin:     '100px 20px',

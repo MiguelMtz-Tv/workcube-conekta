@@ -22,9 +22,9 @@ namespace workcube_pagos.Models
 
     public enum CuponEstatus
     {
-        [Display(Name = "Vigente")]
-        Vigente,
-        [Display(Name = "Vencido")]
-        Vencido,
+        [Display(Name = "Disponible")]
+        Disponible,
+        [Display(Name = "Usado")]
+        Usado,
     }
 }

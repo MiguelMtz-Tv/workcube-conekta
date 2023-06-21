@@ -2,7 +2,8 @@
 {
     public class GetCuponReq
     {
-        public string Codigo { get; set; }
-        public int IdCliente { get; set; }
+        public string Codigo    { get; set; }
+        public int IdCliente    { get; set; }
+        public int IdServicio   { get; set; }
     }
 }

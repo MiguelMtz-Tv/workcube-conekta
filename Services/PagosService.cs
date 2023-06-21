@@ -72,9 +72,9 @@ namespace workcube_pagos.Services
             //Console.WriteLine($"Se guardaron los primeros datos y se asignó el numero de folio: {newPayment.NroFolio}");
 
             //cambiamos el estado del cupón a vencido
-            if (cupon.IdCupon > 0 && cupon.Status != CuponEstatus.Vencido)
+            if (cupon.IdCupon > 0 && cupon.Status != CuponEstatus.Disponible)
             {
-                cupon.Status = CuponEstatus.Vencido;
+                cupon.Status = CuponEstatus.Disponible;
             }
             
             //actualizamos la vigencia del servicio
