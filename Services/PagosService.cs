@@ -29,9 +29,6 @@ namespace workcube_pagos.Services
             var serviceToPay = await _context.Servicios.FindAsync(chargeObj.IdServicio);
             DateTime dateTime = DateTime.Now;
 
-            var id = Globals.GetClaim("Id", user);
-            var Nombre = Globals.GetClaim("Nombre", user);
-
             if (serviceToPay == null || serviceToPay.Vigencia > dateTime)
             { throw new ArgumentException("Error en pago: P-01"); }
 
@@ -119,23 +116,22 @@ namespace workcube_pagos.Services
             loginTransaction.Commit(); 
 
             //Correo de confirmación
+            string claimEmail = Globals.GetClaim("Email", user);
             Action b = () => ConfirmationEmail(new ConfirmationEmailReq
             {
-                ServicioName =  serviceToPay.ServicioTipoName,
-                IdAspNetUser =  chargeObj.IdAspNetUser,
-                IdCliente =     chargeObj.IdCliente,
-                Last4 =         result.PaymentMethodDetails.Card.Last4,
-                CardFunding =    result.PaymentMethodDetails.Card.Funding,
-                Fecha =         dateTime,
-                Monto =         amount,
-                Descuento =     descuento,
-                Total =         total,
+                Email =             claimEmail,
+                RazonSocial =       client.RazonSocial,
+                ServicioName =      serviceToPay.ServicioTipoName,
+                Last4 =             result.PaymentMethodDetails.Card.Last4,
+                CardFunding =       result.PaymentMethodDetails.Card.Funding,
+                Fecha =             dateTime,
+                Monto =             amount,
+                Descuento =         descuento,
+                Total =             total,
             }); 
             
+            var send = Task.Run((Action) b);
 
-            await Task.Run((Action) b);
-
-            Console.WriteLine("se inició el proceso en segundo plano");
             return new 
             {
                 Fecha =             newPayment.Fecha,
@@ -150,47 +146,35 @@ namespace workcube_pagos.Services
 
         public void ConfirmationEmail(ConfirmationEmailReq data)
         {
-            AspNetUser objAspNetUser = _context.AspNetUsers.Find(data.IdAspNetUser);
-
-            Cliente objCliente = _context.Clientes.Find(data.IdCliente);
-
-            if (objAspNetUser != null && objCliente != null)
-            { 
-                string email =  objAspNetUser?.Email;
-                var body = ConfirmacionDePago.Html(
-                                data.ServicioName,
-                                objCliente.RazonSocial,
-                                data.Monto, 
-                                data.Descuento,
-                                data.Total,
-                                data.Last4,
-                                data.CardFunding,
-                                data.Fecha
-                            ); 
-                try
-                {
-                    var path = _root.ContentRootPath + "\\Files\\prueba.txt";
-                    byte[] bytes = System.IO.File.ReadAllBytes(path);
-
-                    dynamic file = new ModelAttachment
-                    {
-                        type =      "bytes",
-                        bytes =     bytes,
-                        fileName =  "Recibo-prueba",
-                        extension = "txt"
-                    };
-
-                    EmailManager objMailManager = new EmailManager(ConfigEmail.Data());
-                    objMailManager.html(email, "Confirmación de pago", body, file);
-                }
-                catch( Exception ex )
-                {
-                    throw new ArgumentException("Problemas en el envio de correos: " + ex);
-                }
-            }
-            else
+            var body = ConfirmacionDePago.Html(
+                            data.ServicioName,
+                            data.RazonSocial,
+                            data.Monto,
+                            data.Descuento,
+                            data.Total,
+                            data.Last4,
+                            data.CardFunding,
+                            data.Fecha
+                        );
+            try
             {
-                throw new ArgumentException("No se encontró al usuario en sesión" + data.IdAspNetUser);
+                var path = _root.ContentRootPath + "\\Files\\prueba.txt";
+                byte[] bytes = System.IO.File.ReadAllBytes(path);
+
+                dynamic file = new ModelAttachment
+                {
+                    type = "bytes",
+                    bytes = bytes,
+                    fileName = "Recibo-prueba",
+                    extension = "txt"
+                };
+
+                EmailManager objMailManager = new EmailManager(ConfigEmail.Data());
+                objMailManager.html(data.Email, "Confirmación de pago", body, file);
+            }
+            catch (Exception ex)
+            {
+                throw new ArgumentException("Problemas en el envio de correos: " + ex);
             }
         }
 

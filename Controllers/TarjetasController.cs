@@ -19,7 +19,7 @@ namespace workcube_pagos.Controllers
 
         [Authorize(AuthenticationSchemes = "Bearer")]
         [HttpPost]
-        public async Task<ActionResult> AddCard([FromBody] AddCardReq cardObj)
+        public async Task<ActionResult<dynamic>> AddCard([FromBody] AddCardReq cardObj)
         {
             JsonReturn objReturn = new JsonReturn();
             try
@@ -38,12 +38,12 @@ namespace workcube_pagos.Controllers
                 objReturn.Exception(ExceptionMessage.RawException(ex));
             }
 
-            return Ok(objReturn.build());
+            return objReturn.build();
         }
 
         [Authorize(AuthenticationSchemes = "Bearer")]
         [HttpPost("list")]
-        public async Task<ActionResult> List([FromBody] int idClient)
+        public async Task<ActionResult<dynamic>> List([FromBody] int idClient)
         {
             JsonReturn objReturn = new JsonReturn();
             try
@@ -51,7 +51,6 @@ namespace workcube_pagos.Controllers
                 var result = await _tarjetasService.List(idClient);
 
                 objReturn.Result = result;
-                objReturn.Success(SuccessMessage.REQUEST);
             }
             catch(AppException ex)
             {
@@ -62,12 +61,12 @@ namespace workcube_pagos.Controllers
                 objReturn.Exception(ExceptionMessage.RawException(ex));
             }
 
-            return Ok(objReturn.build());
+            return objReturn.build();
         }
 
         [Authorize(AuthenticationSchemes = "Bearer")]
         [HttpPost("delete")]
-        public async Task<ActionResult> Delete([FromBody] DeleteCardReq cardObj)
+        public async Task<ActionResult<dynamic>> Delete([FromBody] DeleteCardReq cardObj)
         {
             JsonReturn objReturn = new JsonReturn();
             try
@@ -86,12 +85,12 @@ namespace workcube_pagos.Controllers
                 objReturn.Exception(ExceptionMessage.RawException(ex));
             }
 
-            return Ok(objReturn.build());
+            return objReturn.build();
         }
 
         [Authorize(AuthenticationSchemes = "Bearer")]
         [HttpPost("update")]
-        public async Task<ActionResult> UpdateCard([FromBody] UpdateCardReq cardObj)
+        public async Task<ActionResult<dynamic>> UpdateCard([FromBody] UpdateCardReq cardObj)
         {
             JsonReturn objReturn = new JsonReturn();
             try
@@ -110,12 +109,12 @@ namespace workcube_pagos.Controllers
                 objReturn.Exception(ExceptionMessage.RawException(ex));
             }
 
-            return Ok(objReturn.build());
+            return objReturn.build();
         }
 
         [Authorize(AuthenticationSchemes = "Bearer")]
         [HttpPost("get")]
-        public async Task<ActionResult> GetCard([FromBody] UpdateCardReq cardObj)
+        public async Task<ActionResult<dynamic>> GetCard([FromBody] UpdateCardReq cardObj)
         {
             JsonReturn objReturn = new JsonReturn();
             try
@@ -134,7 +133,7 @@ namespace workcube_pagos.Controllers
                 objReturn.Exception(ExceptionMessage.RawException(ex));
             }
 
-            return Ok(objReturn.build());
+            return objReturn.build();
         }
 
 

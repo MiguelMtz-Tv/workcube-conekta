@@ -18,7 +18,7 @@ namespace workcube_pagos.Controllers
 
         [Authorize (AuthenticationSchemes = "Bearer")]
         [HttpPost("get")]
-        public async Task<ActionResult> GetCupon([FromBody]GetCuponReq model)
+        public async Task<ActionResult<dynamic>> GetCupon([FromBody]GetCuponReq model)
         {
             JsonReturn objReturn = new JsonReturn();
             try
@@ -39,12 +39,12 @@ namespace workcube_pagos.Controllers
 
             //return Ok(result);
 
-            return Ok(objReturn.build());
+            return objReturn.build();
         }
 
         [Authorize(AuthenticationSchemes = "Bearer")]
         [HttpPost("list")]
-        public async Task<ActionResult> List([FromBody]GetCuponReq model)
+        public async Task<ActionResult<dynamic>> List([FromBody]GetCuponReq model)
         {
             JsonReturn objReturn = new JsonReturn();
             try
@@ -52,7 +52,6 @@ namespace workcube_pagos.Controllers
                 var result = await _cuponesService.List(model);
 
                 objReturn.Result = result;
-                objReturn.Success(SuccessMessage.REQUEST);
             }
             catch (AppException exception)
             {
@@ -63,7 +62,7 @@ namespace workcube_pagos.Controllers
                 objReturn.Exception(ExceptionMessage.RawException(exception));
             }
 
-            return Ok(objReturn.build());
+            return objReturn.build();
         }
     }
 }

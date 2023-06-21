@@ -17,7 +17,7 @@ namespace workcube_pagos.Controllers
         }
 
         [HttpPost("add")] //creacion de usuario
-        public async Task<ActionResult> AddUser([FromBody] SingUpReq model)
+        public async Task<ActionResult<dynamic>> AddUser([FromBody] SingUpReq model)
         {
             JsonReturn objReturn = new JsonReturn();
             try
@@ -35,12 +35,12 @@ namespace workcube_pagos.Controllers
                 objReturn.Exception(ExceptionMessage.RawException(ex));
             }
 
-            return Ok(objReturn.build());
+            return objReturn.build();
         }
 
         [Authorize(AuthenticationSchemes = "Bearer")]
         [HttpPost("user")] //obtener un usuario (solo nombre y apellidos)
-        public async Task<ActionResult> GetUserNames([FromBody] JsonObject id)
+        public async Task<ActionResult<dynamic>> GetUserNames([FromBody] JsonObject id)
         {
             JsonReturn objReturn = new JsonReturn();
             try
@@ -58,12 +58,12 @@ namespace workcube_pagos.Controllers
                 objReturn.Exception(ExceptionMessage.RawException(ex));
             }
 
-            return Ok(objReturn.build());
+            return objReturn.build();
         }
 
         [Authorize(AuthenticationSchemes = "Bearer")]
         [HttpPut("update")] //actualizar un usuario
-        public async Task<ActionResult> UpdateUser([FromBody] UpdateUserReq user)
+        public async Task<ActionResult<dynamic>> UpdateUser([FromBody] UpdateUserReq user)
         {
             JsonReturn objReturn = new JsonReturn();
 
@@ -85,12 +85,12 @@ namespace workcube_pagos.Controllers
                 objReturn.Exception(ExceptionMessage.RawException(ex));
             }
 
-            return Ok(objReturn.build());
+            return objReturn.build();
         }
 
         [Authorize(AuthenticationSchemes = "Bearer")]
         [HttpPut("updatepass")] //actualizar contraseña
-        public async Task<ActionResult> UpdatePassword([FromBody] UpdatePasswordReq passwordReq)
+        public async Task<ActionResult<dynamic>> UpdatePassword([FromBody] UpdatePasswordReq passwordReq)
         {
             JsonReturn objReturn = new JsonReturn();
             try
@@ -106,7 +106,7 @@ namespace workcube_pagos.Controllers
             {
                 objReturn.Exception(ExceptionMessage.RawException(ex));
             }
-            return Ok(objReturn.build());
+            return objReturn.build();
         }
     }
 }

@@ -21,11 +21,12 @@ export class AuthService {
     return this.http.post<any>(this.baseUrl+'api/auth/login', objUser /*{UserName, Password}*/);
   }
 
-  storeData(token: string, id: string, NombreCompleto: string, IdCliente: string){
+  storeData(token: string, id: string, nombreCompleto: string, idCliente: string, email: string){
     localStorage.setItem('Token', token)
     localStorage.setItem('Id', id)
-    localStorage.setItem('NombreCompleto', NombreCompleto),
-    localStorage.setItem('IdCliente', IdCliente)
+    localStorage.setItem('NombreCompleto', nombreCompleto),
+    localStorage.setItem('IdCliente', idCliente)
+    localStorage.setItem('Email', email)
   }
 
   removeData(){

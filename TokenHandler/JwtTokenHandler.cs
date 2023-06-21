@@ -25,6 +25,7 @@ namespace workcube_pagos.TokenHandler
                 new Claim(JwtRegisteredClaimNames.UniqueName,       objAspNetUser.UserName),
                 new Claim("Id",                                     objAspNetUser.Id),
                 new Claim("Nombre",                                 objAspNetUser.NombreCompleto.ToUpper()),
+                new Claim("Email",                                  objAspNetUser.Email.ToLower()),
                 new Claim(JwtRegisteredClaimNames.Jti,              Guid.NewGuid().ToString())
             };
 
@@ -46,6 +47,7 @@ namespace workcube_pagos.TokenHandler
                 Token =             token,
                 Id =                objAspNetUser.Id,
                 NombreCompleto =    objAspNetUser.NombreCompleto,
+                Email =             objAspNetUser.Email,
                 IdCliente =         objAspNetUser.IdCliente
             };
         }

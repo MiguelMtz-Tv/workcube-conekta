@@ -2,7 +2,6 @@
 using workcube_pagos.Services;
 using workcube_pagos.ViewModel.Req.Cliente;
 using Workcube.Libraries;
-using Microsoft.DotNet.MSIdentity.Shared;
 
 namespace workcube_pagos.Controllers
 {
@@ -14,7 +13,7 @@ namespace workcube_pagos.Controllers
             _clientesService = clientesService;
         }
         [HttpPost]
-        public async Task<ActionResult> Create([FromBody] CreateClientReq ClientObj)
+        public async Task<ActionResult<dynamic>> Create([FromBody] CreateClientReq ClientObj)
         {
             JsonReturn objReturn = new JsonReturn();
             
@@ -34,7 +33,7 @@ namespace workcube_pagos.Controllers
                 objReturn.Exception(ExceptionMessage.RawException(ex));
             }
             
-            return Ok(objReturn.build());
+            return objReturn.build();
         }
     }
 }

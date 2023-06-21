@@ -16,7 +16,7 @@ namespace workcube_pagos.Controllers
 
         [Authorize(AuthenticationSchemes = "Bearer")]
         [HttpPost]
-        public async Task<ActionResult> CreateCharge([FromBody] CreateChargeReq chargeObj)
+        public async Task<ActionResult<dynamic>> CreateCharge([FromBody] CreateChargeReq chargeObj)
         {
             JsonReturn objReturn = new JsonReturn();
             try
@@ -34,19 +34,18 @@ namespace workcube_pagos.Controllers
                 objReturn.Exception(ExceptionMessage.RawException(ex));
             }
 
-            return Ok(objReturn.build());
+            return objReturn.build();
         }
 
         [Authorize(AuthenticationSchemes = "Bearer")]
         [HttpPost("list")]
-        public async Task<ActionResult> List([FromBody] int servicioId)
+        public async Task<ActionResult<dynamic>> List([FromBody] int servicioId)
         {
             JsonReturn objReturn = new JsonReturn();
             try
             {
                 var result = await _pagosService.List(servicioId);
                 objReturn.Result = result;
-                objReturn.Success(SuccessMessage.REQUEST);
             }
             catch (AppException ex) 
             {
@@ -57,7 +56,7 @@ namespace workcube_pagos.Controllers
                 objReturn.Exception(ExceptionMessage.RawException(ex));
             }
 
-            return Ok(objReturn.build());
+            return objReturn.build();
         }
 
     }

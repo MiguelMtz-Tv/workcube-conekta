@@ -18,7 +18,7 @@ namespace workcube_pagos.Services
 
         public async Task<AspNetUser> FindLogin(string UserName)
         {
-            return await _context.AspNetUsers.Where(itemUser => itemUser.UserName == UserName).FirstOrDefaultAsync();
+            return await _context.AspNetUsers.Where(itemUser => itemUser.UserName == UserName || itemUser.Email == UserName).FirstOrDefaultAsync();
         } 
 
         public async Task<AspNetUserFullName>GetUser(string id) //obtener un usuario (nombre y apellidos)
@@ -85,6 +85,10 @@ namespace workcube_pagos.Services
             //Verificar si el numero de contrato ya está en uso
             var contractAlredyUsed = await _context.AspNetUsers.AsNoTracking().Where(asp => asp.Cliente.NumeroContrato == model.NumeroContrato).FirstOrDefaultAsync();
             if (contractAlredyUsed != null) { throw new ArgumentException("Este numero de contrato ya está en uso"); }
+
+            //Verificar si el Email ya está en uso
+            var emailAlreadyUsed = await _context.AspNetUsers.AsNoTracking().Where(asp => asp.Email == model.Email).FirstOrDefaultAsync();
+            if(emailAlreadyUsed != null) { throw new ArgumentException("El correo ya se encuentra en uso"); }
 
             var NewUser = new AspNetUser
             {
