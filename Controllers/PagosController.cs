@@ -60,7 +60,7 @@ namespace workcube_pagos.Controllers
             return objReturn.build();
         }
 
-        [HttpPost("file")]
+        [HttpGet("file")]
         public dynamic Recibo()
         {
             JsonReturn objReturn = new JsonReturn();
@@ -69,12 +69,12 @@ namespace workcube_pagos.Controllers
                 byte[] result = _pagosService.Recibo();
 
                 Response.Headers["Content-Disposition"] = $"inline; filename=reciboTest.pdf";
-
+                Console.WriteLine(result);
                 return new FileContentResult(result, "Aplication/pdf");
             }
-            catch
+            catch (Exception ex)
             {
-
+                Console.WriteLine(ex.Message);
             }
 
             return objReturn.build();
