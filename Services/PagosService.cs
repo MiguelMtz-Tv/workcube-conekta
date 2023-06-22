@@ -7,6 +7,8 @@ using workcube_pagos.Libraries;
 using System.Security.Claims;
 using iTextSharp.text.pdf;
 using iTextSharp.text;
+using System.Data;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace workcube_pagos.Services
 {
@@ -41,14 +43,14 @@ namespace workcube_pagos.Services
             long total;
 
             //obtener el cupon (si existe) y realizar el descuento
-            long descuento = 0;
-            var cupon = new Cupon();
+            long descuento =    0;
+            var cupon =         new Cupon();
 
             if (chargeObj.AreCupon && chargeObj.IdCupon > 0)
             {
-                cupon = await _context.Cupones.FindAsync(chargeObj.IdCupon);
-                descuento = cupon.Monto;
-                total = amount - descuento;
+                cupon =         await _context.Cupones.FindAsync(chargeObj.IdCupon);
+                descuento =     cupon.Monto;
+                total =         amount - descuento;
             }
             else { total = amount; }
 
@@ -183,21 +185,63 @@ namespace workcube_pagos.Services
         public byte[] Recibo()
         {
             // INSTANCIAS
-            PdfTable table = null;
-            PdfPCell cell = null;
-            Paragraph parrafo = null;
+            PdfPTable   table = null;
+            PdfPCell    cell = null;
+            Paragraph   parrafo = null;
 
-            Document document = new Document(PageSize.Letter, 40f, 40f, 80f, 20f);
 
             using (MemoryStream memoryStream = new MemoryStream())
             {
-                parrafo = new Paragraph();
-                parrafo.Add(new Phrase("Me comprometo", PDFFont.FontStyle(true, 10, "#000", "Arial")));
-                parrafo.Add(new Phrase(" a no dar uso ", PDFFont.FontStyle(false, 10, "#000", "Arial")));
-                parrafo.Add(new Phrase("del certificado para efectos de ingresar el equipo a laborar, trabajar, operar y/o ejecutar cualquier actividad relevante que involucre al equipo mencionado y el requerimiento mismo del certificado.", PDFFont.FontStyle(true, 10, "#000", "Arial")));
-                parrafo.Alignment = Element.ALIGN_JUSTIFIED;
-                document.Add(parrafo);
+                Document document = new Document(PageSize.Letter, 40f, 40f, 80f, 20f);  
+                PdfWriter writer = PdfWriter.GetInstance(document, memoryStream);
 
+                document.Open();
+
+                Paragraph title = new Paragraph();
+                title.Alignment = Element.ALIGN_CENTER;
+                title.Add(new Chunk("Recibo de pago"));
+                document.Add(title);
+
+                table = new PdfPTable(4);
+                table.HorizontalAlignment = Element.ALIGN_CENTER;
+
+                cell = new PdfPCell();
+
+                //direccion y fecha
+                Paragraph pDireccion = new Paragraph();
+                pDireccion.Add(new Phrase("Dirección: ", PDFFont.FontStyle(false, 9, "#272727", "Arial")));
+                pDireccion.Add(new Phrase("direccion de _context", PDFFont.FontStyle(true, 9, "#272727", "Arial")));
+
+                Paragraph pFecha = new Paragraph();
+                pFecha.Add(new Phrase("Fecha: ", PDFFont.FontStyle(false, 9, "#272727", "Arial")));
+                pFecha.Add(new Phrase("Fecha de _context", PDFFont.FontStyle(true, 9, "#272727", "Arial")));
+
+                cell.AddElement(pDireccion);
+                cell.AddElement(pFecha);
+
+                cell.Border = 0;
+                cell.Padding = 4;
+                cell.Colspan = 2;
+                table.AddCell(cell);
+
+
+                cell = new PdfPCell();
+
+                Paragraph pFolio = new Paragraph();
+                pFolio.Add(new Phrase("Folio: ", PDFFont.FontStyle(false, 9, "#272727", "Arial")));
+                pFolio.Add(new Phrase("12321", PDFFont.FontStyle(true, 9, "#272727", "Arial")));
+
+                cell.AddElement(pFolio);
+
+                cell.Border = 0;
+                cell.Padding = 4;
+                cell.Colspan = 2;
+                table.AddCell(cell);
+
+                document.Add(table);
+
+                document.Close();
+                
                 return memoryStream.ToArray();
             }
         }

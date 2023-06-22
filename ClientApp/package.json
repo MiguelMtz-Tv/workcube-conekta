@@ -34,6 +34,7 @@
     "date-fns": "^2.29.3",
     "jose": "^4.14.4",
     "jquery": "^3.6.3",
+    "ng2-pdf-viewer": "^6.4.1",
     "ngx-mask": "^15.1.1",
     "ngx-spinner": "^15.0.1",
     "oidc-client": "^1.11.5",
@@ -41,6 +42,7 @@
     "run-script-os": "^1.1.6",
     "rxjs": "~7.8.0",
     "stream-browserify": "^3.0.0",
+    "sweetalert2": "^8.1.0",
     "tslib": "^2.5.3",
     "util": "^0.12.5",
     "zone.js": "~0.12.0"

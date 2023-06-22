@@ -3,6 +3,9 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ClienteService } from 'src/app/services/cliente.service';
 import { HotToastService } from '@ngneat/hot-toast';
 import { Router } from '@angular/router';
+import { HttpClient } from '@angular/common/http';
+import { MatDialog } from '@angular/material/dialog';
+
 
 @Component({
   selector: 'app-client',
@@ -28,6 +31,7 @@ export class ClientComponent {
     private clienteService: ClienteService,
     private toast: HotToastService,
     private route: Router,
+    private dialog: MatDialog,
     ){ }
 
   onSubmit(){
