@@ -237,7 +237,6 @@ namespace workcube_pagos.Services
                 cell.Padding = 4;
                 cell.Colspan = 2;
                 table.AddCell(cell);
-                table.HorizontalAlignment = Element.ALIGN_CENTER;
                 document.Add(table);
 
                 //tabla informacion de compra
@@ -250,11 +249,15 @@ namespace workcube_pagos.Services
                 Paragraph pMonto = new Paragraph();
                 pMonto.Add(new Phrase("Monto: ", PDFFont.FontStyle(false, 9, "#272727", "Arial")));
 
+                Paragraph pDescuento = new Paragraph();
+                pDescuento.Add(new Phrase("Monto: ", PDFFont.FontStyle(false, 9, "#272727", "Arial")));
+
                 Paragraph pTotal = new Paragraph();
                 pTotal.Add(new Phrase("Total: ", PDFFont.FontStyle(false, 9, "#272727", "Arial")));
 
                 cell.AddElement(pServicio);
                 cell.AddElement(pMonto);
+                cell.AddElement(pDescuento);
                 cell.AddElement(pTotal);
 
                 cell.Border = 0;
@@ -270,13 +273,17 @@ namespace workcube_pagos.Services
                 pServicioName.Add(new Phrase("EOS", PDFFont.FontStyle(true, 9, "#272727", "Arial")));
                 
                 Paragraph pMontoMXN = new Paragraph();
-                pMontoMXN.Add(new Phrase("Monto: ", PDFFont.FontStyle(true, 9, "#272727", "Arial")));
+                pMontoMXN.Add(new Phrase("5000MXN", PDFFont.FontStyle(true, 9, "#272727", "Arial")));
+
+                Paragraph pDescuentoMXN = new Paragraph();
+                pDescuentoMXN.Add(new Phrase("300MXN", PDFFont.FontStyle(true, 9, "#272727", "Arial")));
 
                 Paragraph pTotalMXN = new Paragraph();
-                pTotalMXN.Add(new Phrase("Total: ", PDFFont.FontStyle(true, 9, "#272727", "Arial")));
+                pTotalMXN.Add(new Phrase("4700MXN", PDFFont.FontStyle(true, 9, "#272727", "Arial")));
 
                 cell.AddElement(pServicioName);
                 cell.AddElement(pMontoMXN);
+                cell.AddElement(pDescuentoMXN);
                 cell.AddElement(pTotalMXN);
 
                 cell.Border = 0;
