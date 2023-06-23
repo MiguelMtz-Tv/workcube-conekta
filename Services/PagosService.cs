@@ -200,10 +200,10 @@ namespace workcube_pagos.Services
                 Paragraph title = new Paragraph();
                 title.Alignment = Element.ALIGN_CENTER;
                 title.Add(new Chunk("Recibo de pago"));
+                title.SpacingAfter = 20f; 
                 document.Add(title);
 
-                table = new PdfPTable(4);
-                table.HorizontalAlignment = Element.ALIGN_CENTER;
+                table = new PdfPTable(4); 
 
                 cell = new PdfPCell();
 
@@ -224,7 +224,7 @@ namespace workcube_pagos.Services
                 cell.Colspan = 2;
                 table.AddCell(cell);
 
-
+                //folio
                 cell = new PdfPCell();
 
                 Paragraph pFolio = new Paragraph();
@@ -237,11 +237,68 @@ namespace workcube_pagos.Services
                 cell.Padding = 4;
                 cell.Colspan = 2;
                 table.AddCell(cell);
-
+                table.HorizontalAlignment = Element.ALIGN_CENTER;
                 document.Add(table);
 
-                document.Close();
+                //tabla informacion de compra
+                table = new PdfPTable(4);
+                cell = new PdfPCell();
+
+                Paragraph pServicio = new Paragraph();
+                pServicio.Add(new Phrase("Servicio: ", PDFFont.FontStyle(false, 9, "#272727", "Arial")));
                 
+                Paragraph pMonto = new Paragraph();
+                pMonto.Add(new Phrase("Monto: ", PDFFont.FontStyle(false, 9, "#272727", "Arial")));
+
+                Paragraph pTotal = new Paragraph();
+                pTotal.Add(new Phrase("Total: ", PDFFont.FontStyle(false, 9, "#272727", "Arial")));
+
+                cell.AddElement(pServicio);
+                cell.AddElement(pMonto);
+                cell.AddElement(pTotal);
+
+                cell.Border = 0;
+                cell.Padding = 4;
+                cell.Colspan = 2;
+
+                table.AddCell(cell);
+                document.Add(table);  
+
+                //datos de tabla informacion de compra
+                cell = new PdfPCell();
+                Paragraph pServicioName = new Paragraph();
+                pServicioName.Add(new Phrase("EOS", PDFFont.FontStyle(true, 9, "#272727", "Arial")));
+                
+                Paragraph pMontoMXN = new Paragraph();
+                pMontoMXN.Add(new Phrase("Monto: ", PDFFont.FontStyle(true, 9, "#272727", "Arial")));
+
+                Paragraph pTotalMXN = new Paragraph();
+                pTotalMXN.Add(new Phrase("Total: ", PDFFont.FontStyle(true, 9, "#272727", "Arial")));
+
+                cell.AddElement(pServicioName);
+                cell.AddElement(pMontoMXN);
+                cell.AddElement(pTotalMXN);
+
+                cell.Border = 0;
+                cell.Padding = 4;
+                cell.Colspan = 2;
+
+                table.AddCell(cell);
+                document.Add(table);
+
+                //informacion de metodo de pago
+                Paragraph paymentMethodInfo = new Paragraph();
+                paymentMethodInfo.Add(new Phrase("pagado con Visa Debito terminada en 4131", PDFFont.FontStyle(true, 9, "#272727", "Arial")));
+                paymentMethodInfo.Alignment = Element.ALIGN_CENTER;
+                paymentMethodInfo.SpacingBefore = 20f;
+                document.Add(paymentMethodInfo);
+
+                Paragraph direccion = new Paragraph();
+                direccion.Add(new Phrase("Villahermosa, Tabasco", PDFFont.FontStyle(true, 9, "#272727", "Arial")));
+                direccion.Alignment = Element.ALIGN_CENTER;
+                document.Add(direccion);
+
+                document.Close();
                 return memoryStream.ToArray();
             }
         }
