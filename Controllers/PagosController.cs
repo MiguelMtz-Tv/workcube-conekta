@@ -60,7 +60,7 @@ namespace workcube_pagos.Controllers
             return objReturn.build();
         }
 
-        [HttpGet("file")]
+        /*[HttpGet("file")]
         public dynamic Recibo()
         {
             JsonReturn objReturn = new JsonReturn();
@@ -78,6 +78,6 @@ namespace workcube_pagos.Controllers
             }
 
             return objReturn.build();
-        }
+        }*/
     }
 }

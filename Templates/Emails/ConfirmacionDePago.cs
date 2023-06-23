@@ -1,10 +1,11 @@
 ﻿using System.Security.Policy;
+using workcube_pagos.ViewModel.Req.Pago;
 
 namespace workcube_pagos.Templates.Emails
 {
     public class ConfirmacionDePago
     {
-        public static string Html(string servicioName, string ClienteName, long monto, long descuento, long total, string last4, string CardFunding, DateTime fecha)
+        public static string Html(ConfirmationEmailReq data)
         {
             var html=
             "<body style='padding:20px !important; margin:0 !important; display:block !important; min-width:100% !important; width:100% !important; background:#f5f5f5; -webkit-text-size-adjust:none; font-family: sans-serif;'>" +
@@ -18,29 +19,30 @@ namespace workcube_pagos.Templates.Emails
                     "<table style='margin: auto; margin-top: 40px;' >" +
                        "<tr>" +
                             "<td style='padding-right: 70px; padding-bottom: 10px; color: #1e293b;'>Servicio</td>" +
-                            "<td style='padding-bottom: 10px; color: #1e293b;'>"+servicioName+"</td>" +
+                            "<td style='padding-bottom: 10px; color: #1e293b;'>"+data.ServicioName+"</td>" +
                         "</tr>" +
                         "<tr>" +
                             "<td style='padding-right: 70px; padding-bottom: 10px; color: #1e293b;'> Monto </td>" +
-                            "<td style='padding-bottom: 10px; color: #1e293b;' > "+monto+"MXN</td>" +
+                            "<td style='padding-bottom: 10px; color: #1e293b;' > "+data.Monto+"MXN</td>" +
                         "</tr >" +
                        "<tr >" +
                             "<td style='padding-right: 70px; padding-bottom: 10px; color: #1e293b;'> Descuento </td>" +
-                            "<td style='padding-bottom: 10px; color: #1e293b;' > "+descuento+ "MXN</td>" +
+                            "<td style='padding-bottom: 10px; color: #1e293b;' > "+data.Descuento+ "MXN</td>" +
                         "</tr >" +
                     "</table >" +
                     "<hr style='width: 200px; color: #ffffff; border:1px solid rgb(209, 209, 209);'/>" +
                     "<table style='margin: auto;'>" +
                         "<tr style='border-top: 1px solid black;'>" +
                            "<td style='padding-right: 70px; padding-bottom: 10px; color: #1e293b;'> Total:</td>" +
-                            "<td style='padding-bottom: 10px; color: #1e293b; font-weight: 600;'> "+total+"MXN</td>" +
+                            "<td style='padding-bottom: 10px; color: #1e293b; font-weight: 600;'> "+data.Total+"MXN</td>" +
                         "</tr>" +
                     "</table>" +
                     
-                    "<div style='margin: auto; width: fit-content; margin-top: 20px; color: #696969;'>"+ClienteName+"</div>" +
+                    "<div style='margin: auto; width: fit-content; margin-top: 20px; color: #696969;'>"+data.RazonSocial+"</div>" +
                     
-                    "<div style='margin: auto; width: fit-content; margin-top: 20px; color: #696969;'> Realizado el "+ fecha.ToString("MM/dd/yyyy h:mm tt") +"</div>" +
-                    "<div style='margin: auto; width: fit-content; color: #696969;'> pagado con Visa "+CardFunding+" terminada en "+last4+"</div>" +
+                    "<div style='margin: auto; width: fit-content; margin-top: 20px; color: #696969;'> Realizado el "+ data.Fecha.ToString("MM/dd/yyyy h:mm tt") +"</div>" +
+                    "<div style='margin: auto; width: fit-content; color: #696969;'> pagado con "+data.CardBrand+" "+data.CardFunding+" terminada en "+data.Last4+"</div>" +
+                    "<div style='margin: auto; width: fit-content; color: #696969;'>Dirección: "+data.Direccion+"</div>" +
 
                     "<table width='100%' border='0' cellspacing='0' cellpadding='0' >" +
                         "<tr>" +

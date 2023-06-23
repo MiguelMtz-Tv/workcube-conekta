@@ -103,7 +103,9 @@ namespace workcube_pagos.Services
                 PhoneNumberConfirmed =  true,
                 TwoFactorEnabled =      true,
                 LockoutEnabled =        false,
-                AccessFailedCount =     0
+                AccessFailedCount =     0,
+
+                IsActive = true,
             };
             
             //Encriptación de la contraseña

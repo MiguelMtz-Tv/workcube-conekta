@@ -56,20 +56,23 @@ namespace workcube_pagos.Services
 
             //Guardar pago en la base de datos
             var loginTransaction = _context.Database.BeginTransaction();
+            
+            //generamos un nuevo folio para el registro
+            var folio = Globals.PIN("1234567890", 8);
 
             var newPayment = new Pago
             {
-                Fecha = dateTime,
-                IdServicio = chargeObj.IdServicio,
-                ServicioName = serviceToPay.ServicioTipoName,
-                IdCliente = chargeObj.IdCliente,
-                ClienteRazonSocial = client.RazonSocial,
-                ClienteDireccion = client.Direccion,
-                ClienteRFC = client.RFC,
-                Total = total,
-                Monto = amount,
-                Descuento = descuento,
-                Folio = Globals.PIN("1234567890", 8)
+                Fecha =                 dateTime,
+                IdServicio =            chargeObj.IdServicio,
+                ServicioName =          serviceToPay.ServicioTipoName,
+                IdCliente =             chargeObj.IdCliente,
+                ClienteRazonSocial =    client.RazonSocial,
+                ClienteDireccion =      client.Direccion,
+                ClienteRFC =            client.RFC,
+                Total =                 total,
+                Monto =                 amount,
+                Descuento =             descuento,
+                Folio =                 folio,
             };
             await _context.Pagos.AddAsync(newPayment);
             await _context.SaveChangesAsync();
@@ -117,22 +120,30 @@ namespace workcube_pagos.Services
             //throw new ArgumentException($"Lanzando error para lectura {newPayment.TarjetaTitular}");
 
             await _context.SaveChangesAsync();
-            loginTransaction.Commit(); 
+            loginTransaction.Commit();
+
+            //datos para la generacion de pdf y envio de correo
+            string claimEmail = Globals.GetClaim("Email", user);
+            var reciboData = new ConfirmationEmailReq
+            {
+                Email = claimEmail,
+                RazonSocial = client.RazonSocial,
+                ServicioName = serviceToPay.ServicioTipoName,
+                Last4 = result.PaymentMethodDetails.Card.Last4,
+                CardBrand = result.PaymentMethodDetails.Card.Brand,
+                CardFunding = result.PaymentMethodDetails.Card.Funding,
+                Fecha = dateTime,
+                Monto = amount,
+                Descuento = descuento,
+                Total = total,
+                Direccion = client.Direccion,
+                Folio = folio,
+            };
+            //generacion de pdf
+            var pdfBytes = Recibo(reciboData);
 
             //Correo de confirmación
-            string claimEmail = Globals.GetClaim("Email", user);
-            Action b = () => ConfirmationEmail(new ConfirmationEmailReq
-            {
-                Email =             claimEmail,
-                RazonSocial =       client.RazonSocial,
-                ServicioName =      serviceToPay.ServicioTipoName,
-                Last4 =             result.PaymentMethodDetails.Card.Last4,
-                CardFunding =       result.PaymentMethodDetails.Card.Funding,
-                Fecha =             dateTime,
-                Monto =             amount,
-                Descuento =         descuento,
-                Total =             total,
-            }); 
+            Action b = () => ConfirmationEmail(reciboData, pdfBytes);
             
             var send = Task.Run((Action) b);
 
@@ -148,33 +159,24 @@ namespace workcube_pagos.Services
             };
         }
 
-        public void ConfirmationEmail(ConfirmationEmailReq data)
+        public void ConfirmationEmail(ConfirmationEmailReq data, byte[] pdfBytes)
         {
-            var body = ConfirmacionDePago.Html(
-                            data.ServicioName,
-                            data.RazonSocial,
-                            data.Monto,
-                            data.Descuento,
-                            data.Total,
-                            data.Last4,
-                            data.CardFunding,
-                            data.Fecha
-                        );
+            var body = ConfirmacionDePago.Html(data);
             try
             {
                 var path = _root.ContentRootPath + "\\Files\\prueba.txt";
                 byte[] bytes = System.IO.File.ReadAllBytes(path);
 
-                dynamic file = new ModelAttachment
+                dynamic pdf = new ModelAttachment
                 {
                     type = "bytes",
-                    bytes = bytes,
-                    fileName = "Recibo-prueba",
-                    extension = "txt"
+                    bytes = pdfBytes,
+                    fileName = "Recibo_de_pago",
+                    extension = "pdf"
                 };
 
                 EmailManager objMailManager = new EmailManager(ConfigEmail.Data());
-                objMailManager.html(data.Email, "Confirmación de pago", body, file);
+                objMailManager.html(data.Email, "Confirmación de pago", body, pdf);
             }
             catch (Exception ex)
             {
@@ -182,7 +184,7 @@ namespace workcube_pagos.Services
             }
         }
 
-        public byte[] Recibo()
+        public byte[] Recibo(ConfirmationEmailReq data)
         {
             // INSTANCIAS
             PdfPTable   table = null;
@@ -210,11 +212,11 @@ namespace workcube_pagos.Services
                 //direccion y fecha
                 Paragraph pDireccion = new Paragraph();
                 pDireccion.Add(new Phrase("Dirección: ", PDFFont.FontStyle(false, 9, "#272727", "Arial")));
-                pDireccion.Add(new Phrase("direccion de _context", PDFFont.FontStyle(true, 9, "#272727", "Arial")));
+                pDireccion.Add(new Phrase(data.Direccion, PDFFont.FontStyle(true, 9, "#272727", "Arial")));
 
                 Paragraph pFecha = new Paragraph();
                 pFecha.Add(new Phrase("Fecha: ", PDFFont.FontStyle(false, 9, "#272727", "Arial")));
-                pFecha.Add(new Phrase("Fecha de _context", PDFFont.FontStyle(true, 9, "#272727", "Arial")));
+                pFecha.Add(new Phrase(data.Fecha.ToShortDateString(), PDFFont.FontStyle(true, 9, "#272727", "Arial")));
 
                 cell.AddElement(pDireccion);
                 cell.AddElement(pFecha);
@@ -229,7 +231,7 @@ namespace workcube_pagos.Services
 
                 Paragraph pFolio = new Paragraph();
                 pFolio.Add(new Phrase("Folio: ", PDFFont.FontStyle(false, 9, "#272727", "Arial")));
-                pFolio.Add(new Phrase("12321", PDFFont.FontStyle(true, 9, "#272727", "Arial")));
+                pFolio.Add(new Phrase(data.Folio, PDFFont.FontStyle(true, 9, "#272727", "Arial")));
 
                 cell.AddElement(pFolio);
 
@@ -250,7 +252,7 @@ namespace workcube_pagos.Services
                 pMonto.Add(new Phrase("Monto: ", PDFFont.FontStyle(false, 9, "#272727", "Arial")));
 
                 Paragraph pDescuento = new Paragraph();
-                pDescuento.Add(new Phrase("Monto: ", PDFFont.FontStyle(false, 9, "#272727", "Arial")));
+                pDescuento.Add(new Phrase("Descuento: ", PDFFont.FontStyle(false, 9, "#272727", "Arial")));
 
                 Paragraph pTotal = new Paragraph();
                 pTotal.Add(new Phrase("Total: ", PDFFont.FontStyle(false, 9, "#272727", "Arial")));
@@ -265,21 +267,22 @@ namespace workcube_pagos.Services
                 cell.Colspan = 2;
 
                 table.AddCell(cell);
+                table.HorizontalAlignment = 20;
                 document.Add(table);  
 
                 //datos de tabla informacion de compra
                 cell = new PdfPCell();
                 Paragraph pServicioName = new Paragraph();
-                pServicioName.Add(new Phrase("EOS", PDFFont.FontStyle(true, 9, "#272727", "Arial")));
+                pServicioName.Add(new Phrase(data.ServicioName, PDFFont.FontStyle(true, 9, "#272727", "Arial")));
                 
                 Paragraph pMontoMXN = new Paragraph();
-                pMontoMXN.Add(new Phrase("5000MXN", PDFFont.FontStyle(true, 9, "#272727", "Arial")));
+                pMontoMXN.Add(new Phrase(data.Monto.ToString() + "MXN", PDFFont.FontStyle(true, 9, "#272727", "Arial")));
 
                 Paragraph pDescuentoMXN = new Paragraph();
-                pDescuentoMXN.Add(new Phrase("300MXN", PDFFont.FontStyle(true, 9, "#272727", "Arial")));
+                pDescuentoMXN.Add(new Phrase(data.Descuento.ToString() + "MXN", PDFFont.FontStyle(true, 9, "#272727", "Arial")));
 
                 Paragraph pTotalMXN = new Paragraph();
-                pTotalMXN.Add(new Phrase("4700MXN", PDFFont.FontStyle(true, 9, "#272727", "Arial")));
+                pTotalMXN.Add(new Phrase(data.Total.ToString() + "MXN", PDFFont.FontStyle(true, 9, "#272727", "Arial")));
 
                 cell.AddElement(pServicioName);
                 cell.AddElement(pMontoMXN);
@@ -295,13 +298,13 @@ namespace workcube_pagos.Services
 
                 //informacion de metodo de pago
                 Paragraph paymentMethodInfo = new Paragraph();
-                paymentMethodInfo.Add(new Phrase("pagado con Visa Debito terminada en 4131", PDFFont.FontStyle(true, 9, "#272727", "Arial")));
+                paymentMethodInfo.Add(new Phrase("pagado con "+data.CardBrand+" "+data.CardFunding+" terminada en "+data.Last4, PDFFont.FontStyle(true, 9, "#272727", "Arial")));
                 paymentMethodInfo.Alignment = Element.ALIGN_CENTER;
                 paymentMethodInfo.SpacingBefore = 20f;
                 document.Add(paymentMethodInfo);
 
                 Paragraph direccion = new Paragraph();
-                direccion.Add(new Phrase("Villahermosa, Tabasco", PDFFont.FontStyle(true, 9, "#272727", "Arial")));
+                direccion.Add(new Phrase(data.Direccion, PDFFont.FontStyle(true, 9, "#272727", "Arial")));
                 direccion.Alignment = Element.ALIGN_CENTER;
                 document.Add(direccion);
 
