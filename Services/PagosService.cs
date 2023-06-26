@@ -204,14 +204,20 @@ namespace workcube_pagos.Services
 
                 document.Open();
 
-                Paragraph title = new Paragraph();
-                //title.Alignment = Element.ALIGN_CENTER;
-                title.Add(new Chunk("Recibo de pago"));
-                title.SpacingAfter = 20f;
-                document.Add(title);
+                table = new PdfPTable(1);
+                cell = new PdfPCell();
 
+                Paragraph Title = new Paragraph();
+                Title.Add(new Chunk("Recibo de pago"));
+                cell.AddElement(Title);
+                cell.Border = 0;
+
+                table.AddCell(cell);
+                table.SpacingAfter = 10f;
+                document.Add(table);
+
+                /***********************/
                 table = new PdfPTable(4);
-
                 cell = new PdfPCell();
 
                 //direccion y fecha
@@ -226,7 +232,7 @@ namespace workcube_pagos.Services
                 cell.AddElement(pDireccion);
                 cell.AddElement(pFecha);
 
-                cell.Border = 0;
+                cell.Border = 1;
                 cell.Padding = 4;
                 cell.Colspan = 2;
                 table.AddCell(cell);
@@ -240,7 +246,7 @@ namespace workcube_pagos.Services
 
                 cell.AddElement(pFolio);
 
-                cell.Border = 0;
+                cell.Border = 1;
                 cell.Padding = 4;
                 cell.Colspan = 2;
                 table.AddCell(cell);
@@ -267,7 +273,7 @@ namespace workcube_pagos.Services
                 cell.AddElement(pDescuento);
                 cell.AddElement(pTotal);
 
-                cell.Border = 0;
+                cell.Border = 1;
                 cell.Padding = 4;
                 cell.Colspan = 2;
 
@@ -294,24 +300,34 @@ namespace workcube_pagos.Services
                 cell.AddElement(pDescuentoMXN);
                 cell.AddElement(pTotalMXN);
 
-                cell.Border = 0;
+                cell.Border = 1;
                 cell.Padding = 4;
                 cell.Colspan = 2;
 
                 table.AddCell(cell);
+                table.SpacingBefore = 10f;
                 document.Add(table);
 
                 //informacion de metodo de pago
+                table = new PdfPTable(1);
+                cell = new PdfPCell();
+
                 Paragraph paymentMethodInfo = new Paragraph();
                 paymentMethodInfo.Add(new Phrase("Pagado con " + paymentObj.TarjetaMarca + " " + paymentObj.TarjetaFinanciacion + " terminada en " + paymentObj.TarjetaTerminacion, PDFFont.FontStyle(true, 9, "#272727", "Arial")));
                 //paymentMethodInfo.Alignment = Element.ALIGN_CENTER;
                 paymentMethodInfo.SpacingBefore = 20f;
-                document.Add(paymentMethodInfo);
 
                 Paragraph direccion = new Paragraph();
                 direccion.Add(new Phrase(paymentObj.ClienteRazonSocial+", "+paymentObj.ClienteDireccion, PDFFont.FontStyle(true, 9, "#272727", "Arial")));
                 //direccion.Alignment = Element.ALIGN_CENTER
-                document.Add(direccion);
+
+                cell.AddElement(paymentMethodInfo);
+                cell.AddElement(direccion);
+                cell.Border = 1;
+                table.SpacingBefore = 10f;
+                cell.Padding = 4;
+                table.AddCell(cell);  
+                document.Add(table);    
 
                 document.Close();
                 return memoryStream.ToArray();
