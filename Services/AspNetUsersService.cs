@@ -1,4 +1,5 @@
-﻿using workcube_pagos.ViewModel.Req.Usuario;
+﻿using Microsoft.CodeAnalysis.FlowAnalysis;
+using workcube_pagos.ViewModel.Req.Usuario;
 using workcube_pagos.ViewModel.Statics;
 
 namespace workcube_pagos.Services
@@ -18,8 +19,11 @@ namespace workcube_pagos.Services
 
         public async Task<AspNetUser> FindLogin(string UserName)
         {
-            return await _context.AspNetUsers.Where(itemUser => itemUser.UserName == UserName || itemUser.Email == UserName).FirstOrDefaultAsync();
-        } 
+            try 
+            {
+                return await _context.AspNetUsers.Where(itemUser => itemUser.UserName == UserName || itemUser.Email == UserName).FirstOrDefaultAsync();
+            }catch (Exception) {  return null; }
+        }
 
         public async Task<AspNetUserFullName>GetUser(string id) //obtener un usuario (nombre y apellidos)
         {

@@ -80,9 +80,9 @@ namespace workcube_pagos.Services
             //Console.WriteLine($"Se guardaron los primeros datos y se asignó el numero de folio: {newPayment.NroFolio}");
 
             //cambiamos el estado del cupón a vencido
-            if (cupon.IdCupon > 0 && cupon.Status != CuponEstatus.Disponible)
+            if (cupon.Status == CuponEstatus.Disponible)
             {
-                cupon.Status = CuponEstatus.Disponible;
+                cupon.Status = CuponEstatus.Usado;
             }
             
             //actualizamos la vigencia del servicio
@@ -124,7 +124,7 @@ namespace workcube_pagos.Services
             loginTransaction.Commit();
 
             //generacion de pdf
-            var pdfBytes = Recibopdf(newPayment.IdPago);
+            byte[] pdfBytes = Recibopdf(newPayment.IdPago);
 
             //datos para envio de correo
             string claimEmail = Globals.GetClaim("Email", user);
@@ -166,9 +166,6 @@ namespace workcube_pagos.Services
             var body = ConfirmacionDePago.Html(data);
             try
             {
-                var path = _root.ContentRootPath + "\\Files\\prueba.txt";
-                byte[] bytes = System.IO.File.ReadAllBytes(path);
-
                 dynamic pdf = new ModelAttachment
                 {
                     type = "bytes",
@@ -182,7 +179,7 @@ namespace workcube_pagos.Services
             }
             catch (Exception ex)
             {
-                throw new ArgumentException("Problemas en el envio de correos: " + ex);
+                Console.WriteLine(ex.ToString());
             }
         }
 
@@ -205,14 +202,22 @@ namespace workcube_pagos.Services
                 document.Open();
 
                 table = new PdfPTable(1);
-                cell = new PdfPCell();
 
+                string imageFile = Path.Combine(_root.ContentRootPath + "\\Images\\LOGOPIXL.png");
+                Image image = Image.GetInstance(imageFile);
+                image.ScaleToFit(30f, 30f);
+                image.Alignment = Element.ALIGN_CENTER;
+
+                cell = new PdfPCell();
                 Paragraph Title = new Paragraph();
                 Title.Add(new Chunk("Recibo de pago"));
+                Title.Alignment = Element.ALIGN_CENTER;
+
+                cell.AddElement(image);
                 cell.AddElement(Title);
                 cell.Border = 0;
-
                 table.AddCell(cell);
+
                 table.SpacingAfter = 10f;
                 document.Add(table);
 
@@ -284,7 +289,7 @@ namespace workcube_pagos.Services
                 //datos de tabla informacion de compra
                 cell = new PdfPCell();
                 Paragraph pServicioName = new Paragraph();
-                pServicioName.Add(new Phrase(paymentObj.ServicioName, PDFFont.FontStyle(true, 9, "#272727", "Arial")));
+                pServicioName.Add(new Phrase(paymentObj.ServicioName, PDFFont.FontStyle(false, 9, "#272727", "Arial")));
 
                 Paragraph pMontoMXN = new Paragraph();
                 pMontoMXN.Add(new Phrase(paymentObj.Monto.ToString() + "MXN", PDFFont.FontStyle(true, 9, "#272727", "Arial")));
@@ -314,17 +319,17 @@ namespace workcube_pagos.Services
 
                 Paragraph paymentMethodInfo = new Paragraph();
                 paymentMethodInfo.Add(new Phrase("Pagado con " + paymentObj.TarjetaMarca + " " + paymentObj.TarjetaFinanciacion + " terminada en " + paymentObj.TarjetaTerminacion, PDFFont.FontStyle(true, 9, "#272727", "Arial")));
-                //paymentMethodInfo.Alignment = Element.ALIGN_CENTER;
+                paymentMethodInfo.Alignment = Element.ALIGN_CENTER;
                 paymentMethodInfo.SpacingBefore = 20f;
 
                 Paragraph direccion = new Paragraph();
                 direccion.Add(new Phrase(paymentObj.ClienteRazonSocial+", "+paymentObj.ClienteDireccion, PDFFont.FontStyle(true, 9, "#272727", "Arial")));
-                //direccion.Alignment = Element.ALIGN_CENTER
+                direccion.Alignment = Element.ALIGN_CENTER;
 
                 cell.AddElement(paymentMethodInfo);
                 cell.AddElement(direccion);
                 cell.Border = 1;
-                table.SpacingBefore = 10f;
+                table.SpacingBefore = 15f;
                 cell.Padding = 4;
                 table.AddCell(cell);  
                 document.Add(table);    
