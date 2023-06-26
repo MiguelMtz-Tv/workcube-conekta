@@ -18,11 +18,11 @@
         </ng-container>
         <ng-container matColumnDef="monto">
             <th mat-header-cell *matHeaderCellDef>Monto</th>
-            <td mat-cell *matCellDef="let p">{{p.monto}}MXN</td>
+            <td mat-cell *matCellDef="let p">{{p.monto | currency}} MXN</td>
         </ng-container>
         <ng-container matColumnDef="descuento">
             <th mat-header-cell *matHeaderCellDef>Descuento</th>
-            <td mat-cell *matCellDef="let p">{{p.descuento}}MXN</td>
+            <td mat-cell *matCellDef="let p">{{p.descuento | currency}}MXN</td>
         </ng-container>
         <ng-container matColumnDef="imprimir">
             <th mat-header-cell *matHeaderCellDef>Imprimir</th>

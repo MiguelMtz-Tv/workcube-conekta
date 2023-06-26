@@ -37,7 +37,7 @@ builder.Services.AddAuthentication(options =>
 });
 
 //connection
-builder.Services.AddDbContext<DataContext>(opt => opt.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+builder.Services.AddDbContext<DataContext>(opt => opt.UseSqlServer(builder.Configuration.GetConnectionString(builder.Environment.IsProduction() ? "Production" : "Development")));
 
 //Registrar servicios
 builder.Services.AddScoped<AspNetUsersService, AspNetUsersService>();
@@ -86,6 +86,17 @@ if (!app.Environment.IsDevelopment())
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
+
+string json = "";
+
+if(app.Environment.IsProduction())
+{
+    // LECTURA DE ARCHIVO ConfigProducrtion.txt
+} else
+{
+    // LECTURA DE ARCHIVO ConfigProducrtion.txt
+}
+
 
 app.MapControllers();
 app.UseHttpsRedirection();
