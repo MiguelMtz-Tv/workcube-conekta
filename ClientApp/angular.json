@@ -27,7 +27,12 @@
               "oidc-client"
             ],
             "assets": [
-              "src/assets"
+              "src/assets",
+              {
+                "glob": "**/*",
+                "input": "./node_modules/ngx-extended-pdf-viewer/assets/",
+                "output": "/assets/"
+              }
             ],
             "styles": [
               "@angular/material/prebuilt-themes/pink-bluegrey.css",

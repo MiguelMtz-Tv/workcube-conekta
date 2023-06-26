@@ -5,6 +5,7 @@ import { CommonModule } from '@angular/common';
 import { LayoutsModule } from './layouts/layout.module';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AuthInterceptor } from './auth/auth.interceptor';
+import { NgxExtendedPdfViewerModule } from 'ngx-extended-pdf-viewer';
 
 @NgModule({
   declarations: [
@@ -15,6 +16,7 @@ import { AuthInterceptor } from './auth/auth.interceptor';
     CommonModule,
     AppRoutingModule,
     LayoutsModule,
+    NgxExtendedPdfViewerModule,
   ],
 
   exports:[

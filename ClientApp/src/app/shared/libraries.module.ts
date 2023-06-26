@@ -6,6 +6,9 @@ import { HotToastModule } from '@ngneat/hot-toast'
 import { BrowserModule } from '@angular/platform-browser'
 import { RouterModule } from '@angular/router'
 import { HttpClientModule } from '@angular/common/http'
+import { PdfViewerModule } from 'ng2-pdf-viewer'
+import { NgxExtendedPdfViewerModule } from 'ngx-extended-pdf-viewer'
+import { NgxExtendedPdfViewerCommonModule } from 'ngx-extended-pdf-viewer/lib/ngx-extended-pdf-viewer-common.module'
 
 
 @NgModule({
@@ -18,7 +21,9 @@ import { HttpClientModule } from '@angular/common/http'
         ReactiveFormsModule,
         BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
         RouterModule,
-        HttpClientModule
+        HttpClientModule,
+        PdfViewerModule,
+        NgxExtendedPdfViewerModule,
     ],
 
     exports:[
@@ -30,7 +35,9 @@ import { HttpClientModule } from '@angular/common/http'
         ReactiveFormsModule,
         BrowserModule,
         RouterModule,
-        HttpClientModule
+        HttpClientModule,
+        PdfViewerModule,
+        NgxExtendedPdfViewerModule
     ],
     providers: [provideNgxMask()],
 })

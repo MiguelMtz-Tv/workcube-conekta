@@ -312,5 +312,134 @@ namespace workcube_pagos.Services
                 return memoryStream.ToArray();
             }
         }
+
+        public byte[] testpdf()
+        {
+            // INSTANCIAS
+            PdfPTable table = null;
+            PdfPCell cell = null;
+            Paragraph parrafo = null;
+
+
+            using (MemoryStream memoryStream = new MemoryStream())
+            {
+                Document document = new Document(PageSize.Letter, 40f, 40f, 80f, 20f);
+                PdfWriter writer = PdfWriter.GetInstance(document, memoryStream);
+
+                document.Open();
+
+                Paragraph title = new Paragraph();
+                title.Alignment = Element.ALIGN_CENTER;
+                title.Add(new Chunk("Recibo de pago"));
+                title.SpacingAfter = 20f;
+                document.Add(title);
+
+                table = new PdfPTable(4);
+
+                cell = new PdfPCell();
+
+                //direccion y fecha
+                Paragraph pDireccion = new Paragraph();
+                pDireccion.Add(new Phrase("Dirección: ", PDFFont.FontStyle(false, 9, "#272727", "Arial")));
+                pDireccion.Add(new Phrase("test", PDFFont.FontStyle(true, 9, "#272727", "Arial")));
+
+                Paragraph pFecha = new Paragraph();
+                pFecha.Add(new Phrase("Fecha: ", PDFFont.FontStyle(false, 9, "#272727", "Arial")));
+                pFecha.Add(new Phrase("test", PDFFont.FontStyle(true, 9, "#272727", "Arial")));
+
+                cell.AddElement(pDireccion);
+                cell.AddElement(pFecha);
+
+                cell.Border = 0;
+                cell.Padding = 4;
+                cell.Colspan = 2;
+                table.AddCell(cell);
+
+                //folio
+                cell = new PdfPCell();
+
+                Paragraph pFolio = new Paragraph();
+                pFolio.Add(new Phrase("Folio: ", PDFFont.FontStyle(false, 9, "#272727", "Arial")));
+                pFolio.Add(new Phrase("test", PDFFont.FontStyle(true, 9, "#272727", "Arial")));
+
+                cell.AddElement(pFolio);
+
+                cell.Border = 0;
+                cell.Padding = 4;
+                cell.Colspan = 2;
+                table.AddCell(cell);
+                document.Add(table);
+
+                //tabla informacion de compra
+                table = new PdfPTable(4);
+                cell = new PdfPCell();
+
+                Paragraph pServicio = new Paragraph();
+                pServicio.Add(new Phrase("Servicio: ", PDFFont.FontStyle(false, 9, "#272727", "Arial")));
+
+                Paragraph pMonto = new Paragraph();
+                pMonto.Add(new Phrase("Monto: ", PDFFont.FontStyle(false, 9, "#272727", "Arial")));
+
+                Paragraph pDescuento = new Paragraph();
+                pDescuento.Add(new Phrase("Descuento: ", PDFFont.FontStyle(false, 9, "#272727", "Arial")));
+
+                Paragraph pTotal = new Paragraph();
+                pTotal.Add(new Phrase("Total: ", PDFFont.FontStyle(false, 9, "#272727", "Arial")));
+
+                cell.AddElement(pServicio);
+                cell.AddElement(pMonto);
+                cell.AddElement(pDescuento);
+                cell.AddElement(pTotal);
+
+                cell.Border = 0;
+                cell.Padding = 4;
+                cell.Colspan = 2;
+
+                table.AddCell(cell);
+                table.HorizontalAlignment = 20;
+                document.Add(table);
+
+                //datos de tabla informacion de compra
+                cell = new PdfPCell();
+                Paragraph pServicioName = new Paragraph();
+                pServicioName.Add(new Phrase("test", PDFFont.FontStyle(true, 9, "#272727", "Arial")));
+
+                Paragraph pMontoMXN = new Paragraph();
+                pMontoMXN.Add(new Phrase("test", PDFFont.FontStyle(true, 9, "#272727", "Arial")));
+
+                Paragraph pDescuentoMXN = new Paragraph();
+                pDescuentoMXN.Add(new Phrase("test", PDFFont.FontStyle(true, 9, "#272727", "Arial")));
+
+                Paragraph pTotalMXN = new Paragraph();
+                pTotalMXN.Add(new Phrase("test", PDFFont.FontStyle(true, 9, "#272727", "Arial")));
+
+                cell.AddElement(pServicioName);
+                cell.AddElement(pMontoMXN);
+                cell.AddElement(pDescuentoMXN);
+                cell.AddElement(pTotalMXN);
+
+                cell.Border = 0;
+                cell.Padding = 4;
+                cell.Colspan = 2;
+
+                table.AddCell(cell);
+                document.Add(table);
+
+                //informacion de metodo de pago
+                Paragraph paymentMethodInfo = new Paragraph();
+                paymentMethodInfo.Add(new Phrase("test", PDFFont.FontStyle(true, 9, "#272727", "Arial")));
+                paymentMethodInfo.Alignment = Element.ALIGN_CENTER;
+                paymentMethodInfo.SpacingBefore = 20f;
+                document.Add(paymentMethodInfo);
+
+                Paragraph direccion = new Paragraph();
+                direccion.Add(new Phrase("test", PDFFont.FontStyle(true, 9, "#272727", "Arial")));
+                direccion.Alignment = Element.ALIGN_CENTER;
+                document.Add(direccion);
+
+                document.Close();
+                return memoryStream.ToArray();
+            }
+        }
     }
 }

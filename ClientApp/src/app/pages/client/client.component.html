@@ -2,7 +2,7 @@
     <button mat-flat-button [routerLink]="['/']" class="text-xs">Regresar</button>
 </div>
 
-<div class="fixed mx-8 mt-20">
+<div class="fixed mx-8 mt-20" (click)="viewPdf()">
     <button mat-flat-button>Ver PDF</button>
 </div>
 
@@ -60,5 +60,9 @@
             </button>
         </div>
     </form>
+</div>
+
+<div class="w-1/2">
+    <ngx-extended-pdf-viewer></ngx-extended-pdf-viewer>
 </div>
 

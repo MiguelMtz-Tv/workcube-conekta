@@ -14,7 +14,7 @@ import { MatDialog } from '@angular/material/dialog';
 })
 export class ClientComponent {
   isLoading: boolean = false
-
+  pdfSrc!: string
   form =              new FormGroup({
     RFC:              new FormControl('', Validators['required']),
     RazonSocial:      new FormControl('', Validators['required']),
@@ -29,10 +29,11 @@ export class ClientComponent {
 
   constructor(
     private clienteService: ClienteService,
-    private toast: HotToastService,
-    private route: Router,
-    private dialog: MatDialog,
-    ){ }
+    private toast:          HotToastService,
+    private route:          Router,
+    private dialog:         MatDialog,
+    private http:           HttpClient,
+    ){}
 
   onSubmit(){
     this.isLoading = true
@@ -47,5 +48,9 @@ export class ClientComponent {
         this.toast.error(error)
       }
     )
+  }
+
+  viewPdf(){
+    this.pdfSrc = "https://localhost:44484/api/pagos/file"
   }
 }
