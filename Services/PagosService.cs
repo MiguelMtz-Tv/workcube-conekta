@@ -123,7 +123,10 @@ namespace workcube_pagos.Services
             await _context.SaveChangesAsync();
             loginTransaction.Commit();
 
-            //datos para la generacion de pdf y envio de correo
+            //generacion de pdf
+            var pdfBytes = Recibopdf(newPayment.IdPago);
+
+            //datos para envio de correo
             string claimEmail = Globals.GetClaim("Email", user);
             var reciboData = new ConfirmationEmailReq
             {
@@ -140,12 +143,10 @@ namespace workcube_pagos.Services
                 Direccion = client.Direccion,
                 Folio = folio,
             };
-            //generacion de pdf
-            var pdfBytes = Recibo(reciboData);
 
             //Correo de confirmación
             Action b = () => ConfirmationEmail(reciboData, pdfBytes);
-            
+            //envio de correo en segundo plano
             var send = Task.Run((Action) b);
 
             return new 
@@ -185,136 +186,8 @@ namespace workcube_pagos.Services
             }
         }
 
-        public byte[] Recibo(ConfirmationEmailReq data)
-        {
-            // INSTANCIAS
-            PdfPTable   table = null;
-            PdfPCell    cell = null;
-            Paragraph   parrafo = null;
 
-
-            using (MemoryStream memoryStream = new MemoryStream())
-            {
-                Document document = new Document(PageSize.Letter, 40f, 40f, 80f, 20f);  
-                PdfWriter writer = PdfWriter.GetInstance(document, memoryStream);
-
-                document.Open();
-
-                Paragraph title = new Paragraph();
-                title.Alignment = Element.ALIGN_CENTER;
-                title.Add(new Chunk("Recibo de pago"));
-                title.SpacingAfter = 20f; 
-                document.Add(title);
-
-                table = new PdfPTable(4); 
-
-                cell = new PdfPCell();
-
-                //direccion y fecha
-                Paragraph pDireccion = new Paragraph();
-                pDireccion.Add(new Phrase("Dirección: ", PDFFont.FontStyle(false, 9, "#272727", "Arial")));
-                pDireccion.Add(new Phrase(data.Direccion, PDFFont.FontStyle(true, 9, "#272727", "Arial")));
-
-                Paragraph pFecha = new Paragraph();
-                pFecha.Add(new Phrase("Fecha: ", PDFFont.FontStyle(false, 9, "#272727", "Arial")));
-                pFecha.Add(new Phrase(data.Fecha.ToShortDateString(), PDFFont.FontStyle(true, 9, "#272727", "Arial")));
-
-                cell.AddElement(pDireccion);
-                cell.AddElement(pFecha);
-
-                cell.Border = 0;
-                cell.Padding = 4;
-                cell.Colspan = 2;
-                table.AddCell(cell);
-
-                //folio
-                cell = new PdfPCell();
-
-                Paragraph pFolio = new Paragraph();
-                pFolio.Add(new Phrase("Folio: ", PDFFont.FontStyle(false, 9, "#272727", "Arial")));
-                pFolio.Add(new Phrase(data.Folio, PDFFont.FontStyle(true, 9, "#272727", "Arial")));
-
-                cell.AddElement(pFolio);
-
-                cell.Border = 0;
-                cell.Padding = 4;
-                cell.Colspan = 2;
-                table.AddCell(cell);
-                document.Add(table);
-
-                //tabla informacion de compra
-                table = new PdfPTable(4);
-                cell = new PdfPCell();
-
-                Paragraph pServicio = new Paragraph();
-                pServicio.Add(new Phrase("Servicio: ", PDFFont.FontStyle(false, 9, "#272727", "Arial")));
-                
-                Paragraph pMonto = new Paragraph();
-                pMonto.Add(new Phrase("Monto: ", PDFFont.FontStyle(false, 9, "#272727", "Arial")));
-
-                Paragraph pDescuento = new Paragraph();
-                pDescuento.Add(new Phrase("Descuento: ", PDFFont.FontStyle(false, 9, "#272727", "Arial")));
-
-                Paragraph pTotal = new Paragraph();
-                pTotal.Add(new Phrase("Total: ", PDFFont.FontStyle(false, 9, "#272727", "Arial")));
-
-                cell.AddElement(pServicio);
-                cell.AddElement(pMonto);
-                cell.AddElement(pDescuento);
-                cell.AddElement(pTotal);
-
-                cell.Border = 0;
-                cell.Padding = 4;
-                cell.Colspan = 2;
-
-                table.AddCell(cell);
-                table.HorizontalAlignment = 20;
-                document.Add(table);  
-
-                //datos de tabla informacion de compra
-                cell = new PdfPCell();
-                Paragraph pServicioName = new Paragraph();
-                pServicioName.Add(new Phrase(data.ServicioName, PDFFont.FontStyle(true, 9, "#272727", "Arial")));
-                
-                Paragraph pMontoMXN = new Paragraph();
-                pMontoMXN.Add(new Phrase(data.Monto.ToString() + "MXN", PDFFont.FontStyle(true, 9, "#272727", "Arial")));
-
-                Paragraph pDescuentoMXN = new Paragraph();
-                pDescuentoMXN.Add(new Phrase(data.Descuento.ToString() + "MXN", PDFFont.FontStyle(true, 9, "#272727", "Arial")));
-
-                Paragraph pTotalMXN = new Paragraph();
-                pTotalMXN.Add(new Phrase(data.Total.ToString() + "MXN", PDFFont.FontStyle(true, 9, "#272727", "Arial")));
-
-                cell.AddElement(pServicioName);
-                cell.AddElement(pMontoMXN);
-                cell.AddElement(pDescuentoMXN);
-                cell.AddElement(pTotalMXN);
-
-                cell.Border = 0;
-                cell.Padding = 4;
-                cell.Colspan = 2;
-
-                table.AddCell(cell);
-                document.Add(table);
-
-                //informacion de metodo de pago
-                Paragraph paymentMethodInfo = new Paragraph();
-                paymentMethodInfo.Add(new Phrase("pagado con "+data.CardBrand+" "+data.CardFunding+" terminada en "+data.Last4, PDFFont.FontStyle(true, 9, "#272727", "Arial")));
-                paymentMethodInfo.Alignment = Element.ALIGN_CENTER;
-                paymentMethodInfo.SpacingBefore = 20f;
-                document.Add(paymentMethodInfo);
-
-                Paragraph direccion = new Paragraph();
-                direccion.Add(new Phrase(data.Direccion, PDFFont.FontStyle(true, 9, "#272727", "Arial")));
-                direccion.Alignment = Element.ALIGN_CENTER;
-                document.Add(direccion);
-
-                document.Close();
-                return memoryStream.ToArray();
-            }
-        }
-
-        public byte[] testpdf(int id)
+        public byte[] Recibopdf(int id)
         {
             var paymentObj = _context.Pagos.Find(id);
 

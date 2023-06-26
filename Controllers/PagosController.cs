@@ -66,7 +66,7 @@ namespace workcube_pagos.Controllers
             JsonReturn objReturn = new JsonReturn();
             try
             {
-                byte[] result = _pagosService.testpdf(id);
+                byte[] result = _pagosService.Recibopdf(id);
 
                 Response.Headers["Content-Disposition"] = $"inline; filename=recibo_de_pago_workcube.pdf";
                 return new FileContentResult(result, "Aplication/pdf");
