@@ -17,6 +17,7 @@ import { CuponsDialogComponent } from './dialogs/cupons-dialog/cupons-dialog.com
 import { DeleteCardComponent } from './dialogs/delete-card/delete-card.component';
 import { UpdateCardComponent } from './dialogs/update-card/update-card.component';
 import { FormsModule } from "@angular/forms";
+import { ViewPdfPaymentComponent } from './dialgos/view-pdf-payment/view-pdf-payment.component';
 
 
 @NgModule({
@@ -35,6 +36,7 @@ import { FormsModule } from "@angular/forms";
         CuponsDialogComponent,
         DeleteCardComponent,
         UpdateCardComponent,
+        ViewPdfPaymentComponent,
     ],
     imports:[
         CommonModule,

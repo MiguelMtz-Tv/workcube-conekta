@@ -6,7 +6,8 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { ServiciosService } from 'src/app/services/servicios.service';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { MatPaginatorIntl } from '@angular/material/paginator';
+import { MatDialog } from '@angular/material/dialog';
+import { ViewPdfPaymentComponent } from 'src/app/components/dialgos/view-pdf-payment/view-pdf-payment.component';
 
 @Component({
   selector: 'app-historial-pagos',
@@ -28,7 +29,7 @@ export class HistorialPagosComponent implements OnInit, AfterViewInit{
     private route: ActivatedRoute,
     private serviciosService: ServiciosService,
     private spinner: NgxSpinnerService,
-    private paginatorIntl: MatPaginatorIntl,
+    private dialgo: MatDialog,
     ) 
     { 
       this.id = Number(this.route.snapshot.paramMap.get('id'))
@@ -53,5 +54,15 @@ export class HistorialPagosComponent implements OnInit, AfterViewInit{
       this.dataSource.paginator = this.paginator
       this.dataSource.sort = this.sort
     }
+  }
+
+  openPdf(idPago : number){
+    this.dialgo.open(ViewPdfPaymentComponent, {
+      data: idPago,
+      width: '768px',
+      height:   '90%',
+      enterAnimationDuration: '150ms',
+      exitAnimationDuration: '150ms',
+    })
   }
 }

@@ -1,0 +1,23 @@
+.container {
+    position: relative;
+    width: 100%;
+    height: 94%;
+    margin: auto;
+    overflow-y: hidden;
+}
+
+.pdf-viewer {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+ngx-spinner[name="view-pdf"] {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}

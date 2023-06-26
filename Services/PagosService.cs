@@ -9,6 +9,7 @@ using iTextSharp.text.pdf;
 using iTextSharp.text;
 using System.Data;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace workcube_pagos.Services
 {
@@ -313,8 +314,10 @@ namespace workcube_pagos.Services
             }
         }
 
-        public byte[] testpdf()
+        public byte[] testpdf(int id)
         {
+            var paymentObj = _context.Pagos.Find(id);
+
             // INSTANCIAS
             PdfPTable table = null;
             PdfPCell cell = null;
@@ -329,7 +332,7 @@ namespace workcube_pagos.Services
                 document.Open();
 
                 Paragraph title = new Paragraph();
-                title.Alignment = Element.ALIGN_CENTER;
+                //title.Alignment = Element.ALIGN_CENTER;
                 title.Add(new Chunk("Recibo de pago"));
                 title.SpacingAfter = 20f;
                 document.Add(title);
@@ -341,11 +344,11 @@ namespace workcube_pagos.Services
                 //direccion y fecha
                 Paragraph pDireccion = new Paragraph();
                 pDireccion.Add(new Phrase("Dirección: ", PDFFont.FontStyle(false, 9, "#272727", "Arial")));
-                pDireccion.Add(new Phrase("test", PDFFont.FontStyle(true, 9, "#272727", "Arial")));
+                pDireccion.Add(new Phrase(paymentObj.ClienteDireccion, PDFFont.FontStyle(true, 9, "#272727", "Arial")));
 
                 Paragraph pFecha = new Paragraph();
                 pFecha.Add(new Phrase("Fecha: ", PDFFont.FontStyle(false, 9, "#272727", "Arial")));
-                pFecha.Add(new Phrase("test", PDFFont.FontStyle(true, 9, "#272727", "Arial")));
+                pFecha.Add(new Phrase(paymentObj.Fecha.ToShortDateString(), PDFFont.FontStyle(true, 9, "#272727", "Arial")));
 
                 cell.AddElement(pDireccion);
                 cell.AddElement(pFecha);
@@ -360,7 +363,7 @@ namespace workcube_pagos.Services
 
                 Paragraph pFolio = new Paragraph();
                 pFolio.Add(new Phrase("Folio: ", PDFFont.FontStyle(false, 9, "#272727", "Arial")));
-                pFolio.Add(new Phrase("test", PDFFont.FontStyle(true, 9, "#272727", "Arial")));
+                pFolio.Add(new Phrase(paymentObj.Folio, PDFFont.FontStyle(true, 9, "#272727", "Arial")));
 
                 cell.AddElement(pFolio);
 
@@ -402,16 +405,16 @@ namespace workcube_pagos.Services
                 //datos de tabla informacion de compra
                 cell = new PdfPCell();
                 Paragraph pServicioName = new Paragraph();
-                pServicioName.Add(new Phrase("test", PDFFont.FontStyle(true, 9, "#272727", "Arial")));
+                pServicioName.Add(new Phrase(paymentObj.ServicioName, PDFFont.FontStyle(true, 9, "#272727", "Arial")));
 
                 Paragraph pMontoMXN = new Paragraph();
-                pMontoMXN.Add(new Phrase("test", PDFFont.FontStyle(true, 9, "#272727", "Arial")));
+                pMontoMXN.Add(new Phrase(paymentObj.Monto.ToString() + "MXN", PDFFont.FontStyle(true, 9, "#272727", "Arial")));
 
                 Paragraph pDescuentoMXN = new Paragraph();
-                pDescuentoMXN.Add(new Phrase("test", PDFFont.FontStyle(true, 9, "#272727", "Arial")));
+                pDescuentoMXN.Add(new Phrase(paymentObj.Descuento.ToString() + "MXN", PDFFont.FontStyle(true, 9, "#272727", "Arial")));
 
                 Paragraph pTotalMXN = new Paragraph();
-                pTotalMXN.Add(new Phrase("test", PDFFont.FontStyle(true, 9, "#272727", "Arial")));
+                pTotalMXN.Add(new Phrase(paymentObj.Total.ToString() + "MXN", PDFFont.FontStyle(true, 9, "#272727", "Arial")));
 
                 cell.AddElement(pServicioName);
                 cell.AddElement(pMontoMXN);
@@ -427,14 +430,14 @@ namespace workcube_pagos.Services
 
                 //informacion de metodo de pago
                 Paragraph paymentMethodInfo = new Paragraph();
-                paymentMethodInfo.Add(new Phrase("test", PDFFont.FontStyle(true, 9, "#272727", "Arial")));
-                paymentMethodInfo.Alignment = Element.ALIGN_CENTER;
+                paymentMethodInfo.Add(new Phrase("Pagado con " + paymentObj.TarjetaMarca + " " + paymentObj.TarjetaFinanciacion + " terminada en " + paymentObj.TarjetaTerminacion, PDFFont.FontStyle(true, 9, "#272727", "Arial")));
+                //paymentMethodInfo.Alignment = Element.ALIGN_CENTER;
                 paymentMethodInfo.SpacingBefore = 20f;
                 document.Add(paymentMethodInfo);
 
                 Paragraph direccion = new Paragraph();
-                direccion.Add(new Phrase("test", PDFFont.FontStyle(true, 9, "#272727", "Arial")));
-                direccion.Alignment = Element.ALIGN_CENTER;
+                direccion.Add(new Phrase(paymentObj.ClienteRazonSocial+", "+paymentObj.ClienteDireccion, PDFFont.FontStyle(true, 9, "#272727", "Arial")));
+                //direccion.Alignment = Element.ALIGN_CENTER
                 document.Add(direccion);
 
                 document.Close();

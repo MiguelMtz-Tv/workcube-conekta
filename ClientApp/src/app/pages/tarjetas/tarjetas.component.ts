@@ -54,7 +54,7 @@ export class TarjetasComponent implements OnInit {
 
   openAddCardModal(enterAnimations: string, exitAnimation: string){
     this.dialod.open(AddCardComponent, {
-      width: '90%',
+        width: '90%',
         maxWidth: '500px',
         minHeight: '300px',
         maxHeight: '1000px',

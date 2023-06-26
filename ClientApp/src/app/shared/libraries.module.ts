@@ -8,7 +8,6 @@ import { RouterModule } from '@angular/router'
 import { HttpClientModule } from '@angular/common/http'
 import { PdfViewerModule } from 'ng2-pdf-viewer'
 import { NgxExtendedPdfViewerModule } from 'ngx-extended-pdf-viewer'
-import { NgxExtendedPdfViewerCommonModule } from 'ngx-extended-pdf-viewer/lib/ngx-extended-pdf-viewer-common.module'
 
 
 @NgModule({
