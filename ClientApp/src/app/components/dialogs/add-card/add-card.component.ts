@@ -78,7 +78,7 @@ export class AddCardComponent implements OnInit {
         .subscribe(
           res => {
             if(res.action){
-              this.data.updateData('any')
+              this.data.updateData('Tarjeta añadida')
               this.dialogRef.close()
             }else{
               this.isLoading = false

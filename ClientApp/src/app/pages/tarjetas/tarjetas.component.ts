@@ -49,7 +49,20 @@ export class TarjetasComponent implements OnInit {
   ngOnInit(): void {
     this.getCards()
     //observamos cada que se añada una tarjeta
-    this.dataService.data$.subscribe(data => this.getCards())
+    this.dataService.data$.subscribe(data => {
+      this.getCards()
+      this.toast.success(data, {
+        style: {
+          border: '1px solid #3F51B5',
+          margin: '100px 20px',
+          padding: '15px'
+        },
+        iconTheme: {
+          primary: '#3F51B5'
+        },
+        position: 'top-right'
+      });
+    })
   }
 
   openAddCardModal(enterAnimations: string, exitAnimation: string){

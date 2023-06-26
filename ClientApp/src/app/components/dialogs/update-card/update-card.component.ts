@@ -4,7 +4,6 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { TarjetasService } from 'src/app/services/tarjetas.service';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { DataService } from 'src/app/services/data.service';
-
 @Component({
   selector: 'app-update-card',
   templateUrl: './update-card.component.html',
@@ -63,7 +62,7 @@ export class UpdateCardComponent implements OnInit {
     .subscribe(res => {
       console.log(res)
       this.thisDialog.close()
-      this.dataService.updateData('update-card')
+      this.dataService.updateData('Tarjeta actualizada')
     })
   }
 
