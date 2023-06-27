@@ -53,7 +53,7 @@ namespace workcube_pagos.Templates.Emails
                                     "</tr>" +
                                     "<tr>" +
                                         "<td class='text-footer2' style='color:#5a5a5a; font-family: Arial,sans-serif; font-size:12px; text-align:center;'>" +
-                                            "<multiline>Carretera Federal Coatzacoalcos a Villahermosa Km. 165 Col.Anacleto Canabal 1a Sección. CP. 86220</multiline>" +
+                                            "<multiline>DESARROLLOS DE INGENIERIA EN SISTEMAS TECNOLOGICOS Y CONTROL INTEGRAL S.A. DE C.V.Av. de Los Ríos 201, Los Rios, 86035 Villahermosa, Tab., México</multiline>" +
                                         "</td>" +
                                     "</tr>" +
                                 "</table>" +

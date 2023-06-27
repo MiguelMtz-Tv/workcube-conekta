@@ -191,7 +191,6 @@ namespace workcube_pagos.Services
             // INSTANCIAS
             PdfPTable table = null;
             PdfPCell cell = null;
-            Paragraph parrafo = null;
 
 
             using (MemoryStream memoryStream = new MemoryStream())
@@ -248,6 +247,10 @@ namespace workcube_pagos.Services
                 Paragraph pFolio = new Paragraph();
                 pFolio.Add(new Phrase("Folio: ", PDFFont.FontStyle(false, 9, "#272727", "Arial")));
                 pFolio.Add(new Phrase(paymentObj.Folio, PDFFont.FontStyle(true, 9, "#272727", "Arial")));
+                
+                Paragraph pCliente = new Paragraph();
+                pCliente.Add(new Phrase("Cliente: ", PDFFont.FontStyle(false, 9, "#272727", "Arial")));
+                pCliente.Add(new Phrase(paymentObj.ClienteRazonSocial, PDFFont.FontStyle(true, 9, "#272727", "Arial")));
 
                 cell.AddElement(pFolio);
 
@@ -323,8 +326,9 @@ namespace workcube_pagos.Services
                 paymentMethodInfo.SpacingBefore = 20f;
 
                 Paragraph direccion = new Paragraph();
-                direccion.Add(new Phrase(paymentObj.ClienteRazonSocial+", "+paymentObj.ClienteDireccion, PDFFont.FontStyle(true, 9, "#272727", "Arial")));
+                direccion.Add(new Phrase("DESARROLLOS DE INGENIERIA EN SISTEMAS TECNOLOGICOS Y CONTROL INTEGRAL S.A. DE C.V.Av. de Los Ríos 201, Los Rios, 86035 Villahermosa, Tab., México", PDFFont.FontStyle(true, 9, "#272727", "Arial")));
                 direccion.Alignment = Element.ALIGN_CENTER;
+                direccion.SpacingBefore = 10f;
 
                 cell.AddElement(paymentMethodInfo);
                 cell.AddElement(direccion);
