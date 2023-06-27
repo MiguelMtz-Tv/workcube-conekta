@@ -26,7 +26,7 @@ export class DeleteCardComponent {
     this.tarjetasService.deleteCard(this.data)
       .subscribe(res => {
         this.thisDialog.close()
-        this.dataService.updateData('data')
+        this.dataService.updateData('Tarjeta eliminada')
         this.isDeleting = false
       })
   }
