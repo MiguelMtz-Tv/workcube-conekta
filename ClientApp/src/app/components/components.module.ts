@@ -18,6 +18,7 @@ import { DeleteCardComponent } from './dialogs/delete-card/delete-card.component
 import { UpdateCardComponent } from './dialogs/update-card/update-card.component';
 import { FormsModule } from "@angular/forms";
 import { ViewPdfPaymentComponent } from './dialgos/view-pdf-payment/view-pdf-payment.component';
+import { CardsBrandsComponent } from './cards-brands/cards-brands.component';
 
 
 @NgModule({
@@ -37,6 +38,7 @@ import { ViewPdfPaymentComponent } from './dialgos/view-pdf-payment/view-pdf-pay
         DeleteCardComponent,
         UpdateCardComponent,
         ViewPdfPaymentComponent,
+        CardsBrandsComponent,
     ],
     imports:[
         CommonModule,
