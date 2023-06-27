@@ -18,7 +18,7 @@ export class HistorialPagosComponent implements OnInit, AfterViewInit{
   id!: number
   dataSource!: MatTableDataSource<any>
 
-  displayedColumns: string[] = ['fecha', 'monto', 'descuento', 'imprimir'];
+  displayedColumns: string[] = ['folio','fecha', 'monto', 'descuento', 'total', 'pago', 'imprimir'];
   service!: any
 
   @ViewChild(MatPaginator) paginator!: MatPaginator
