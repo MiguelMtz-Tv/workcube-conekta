@@ -67,7 +67,7 @@ export class AddCardComponent implements OnInit {
     this.isLoading = true
     this.stripe.createToken(this.cardElement).then(res => {
       if(res.error){
-        this.errorToast(res.error.message || '')
+        this.errorToast(res.error.message+' '+res.error.decline_code || '')
         this.isLoading = false
       }else{
         this.tarjetasService.addCard({
@@ -82,7 +82,7 @@ export class AddCardComponent implements OnInit {
               this.dialogRef.close()
             }else{
               this.isLoading = false
-              this.errorToast('Esta tarjeta no es valida o tiene fondos insuficientes.')
+              this.errorToast(res.message)
             }
           }
         )

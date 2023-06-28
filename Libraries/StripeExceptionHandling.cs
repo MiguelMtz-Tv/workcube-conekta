@@ -10,7 +10,7 @@ namespace workcube_pagos.Libraries
             if (e.StripeError.Type == "card_error")
             {
                
-                switch (e.StripeError.Code)
+                switch (e.StripeError.DeclineCode)
                 {
                     case "incorrect_cvc":
                         throw new ArgumentException("CVC incorrecto");
@@ -32,6 +32,10 @@ namespace workcube_pagos.Libraries
                         throw new ArgumentException("El pago no fue permitido, contacta a tu banco para obtener mas información");
                     case "try_again_later":
                         throw new ArgumentException("El metodo de pago fue rechazado por razones desconocidas. Por favor, intenta mas tarde");
+                    case "card_not_supported":
+                        throw new ArgumentException("De momento no contamos con soporte para esta tarjeta");
+                    case "insufficient_funds":
+                        throw new ArgumentException("De momento no contamos con soporte para esta tarjeta");
                     default: 
                         throw new ArgumentException("Algo salió mal con el metodo de pago");
                 }
