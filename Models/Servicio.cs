@@ -32,5 +32,9 @@ namespace workcube_pagos.Models
         public DateTime Vigencia                        { get; set; }
         public bool IsCanceled                          { get; set; }
         public string KeyServicio                       { get; set; }
+
+        public string IdAspNetUser                      { get; set; }
+        public DateTime CreatedDate                     { get; set; }
+        public DateTime UpdatedDate                     { get; set; }
     }
 }

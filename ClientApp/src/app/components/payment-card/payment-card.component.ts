@@ -1,6 +1,5 @@
 import { Component, Input } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { HotToastService } from '@ngneat/hot-toast';
 import { MatDialog } from '@angular/material/dialog';
 import { DeleteCardComponent } from '../dialogs/delete-card/delete-card.component';
 import { AuthService } from 'src/app/services/auth.service';
@@ -20,7 +19,6 @@ export class PaymentCardComponent {
   @Input() brand: string;
 
   constructor( 
-    private toast: HotToastService,
     private dialog: MatDialog,
     private auth: AuthService,
     )
@@ -61,14 +59,4 @@ export class PaymentCardComponent {
       exitAnimationDuration: exitAnimation,
     })
   }
-
-  //update form:
-  form = new FormGroup({
-     /* owner: new FormControl('', [Validators.required]), */
-     expiration: new FormControl('', [Validators.required])
-  })
-
-  onSubmit(id: any){
-  }
-  //
 }
