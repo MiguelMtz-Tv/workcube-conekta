@@ -59,7 +59,7 @@ export class HistorialPagosComponent implements OnInit, AfterViewInit{
   openPdf(idPago : number){
     this.dialgo.open(ViewPdfPaymentComponent, {
       data: idPago,
-      width: '768px',
+      width: '1024px',
       height:   '90%',
       enterAnimationDuration: '150ms',
       exitAnimationDuration: '150ms',

@@ -74,7 +74,7 @@ export class PagarComponent implements OnInit {
     //obtener tarjetas de la api de stripe
     this.getCards()
     //observamos cuando se añade una nueva tarjeta
-    this.dataService.data$.subscribe(data => {
+    this.dataService.observeData().subscribe(data => {
       this.getCards()
     })
   }

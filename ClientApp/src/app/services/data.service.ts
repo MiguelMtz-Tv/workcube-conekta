@@ -1,67 +1,32 @@
-import { Injectable } from '@angular/core';
-import { Subject } from 'rxjs';
+import { Injectable, OnDestroy } from '@angular/core';
+import { Subject, Observable } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
 })
-export class DataService {
-  private modalCloser = new Subject<any>()
-  private paymentCardId = new Subject<any>()
-  private paymentCardNewData = new Subject<any>()
-  private cancelService = new Subject<any>()
-  private statusColor = new Subject<any>()
-  private paymentCardData = new Subject<any>()
+export class DataService implements OnDestroy {
+  private dataSubject = new Subject<any>();
+  private isCalled = false;
+  private destroy$ = new Subject<void>();
 
-  private dataSubject = new Subject<any>()
+  constructor() {}
 
-  constructor(){}
-  
-
-  public data$ = this.dataSubject.asObservable()
-  updateData(data : any){
-    this.dataSubject.next(data)
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
-
-  
-  //global modal closer :)
-/*   setModalClose(value: any){
-    this.modalCloser.next(value)
-  }
-  getModalClose(){
-    return this.modalCloser.asObservable()
+  updateData(data: any) {
+    this.dataSubject.next(data);
   }
 
-  //to get a card id
-  setPaymentCardId(value: any){
-    this.paymentCardId.next(value);
+  observeData(): Observable<any> {
+    if (!this.isCalled) {
+      this.isCalled = true;
+      return this.dataSubject.pipe(takeUntil(this.destroy$));
+    } else {
+      throw new Error('observeData() solo se puede llamar una vez en cada componente.');
+    }
   }
-  getPaymentCardId(){
-    return this.paymentCardId.asObservable()
-  }
-
-  //to get the data of edit payment card
-  setPaymentCardNewData(value: any){
-    this.paymentCardNewData.next(value)
-  }
-  getPaymentCardNewData(){
-    return this.paymentCardNewData.asObservable()
-  }
-
-  //to get data of services card
-  setCancelService(value: any){
-    this.cancelService.next(value)
-  }
-
-  getCancelService(){
-    return this.cancelService.asObservable()
-  }
-
-  //to get data of add card in payment
-  setCardDataService(value: any){
-    this.paymentCardData.next(value)
-  }
-  getCardDataService(){
-    return this.paymentCardData.asObservable()
-  } */
 }

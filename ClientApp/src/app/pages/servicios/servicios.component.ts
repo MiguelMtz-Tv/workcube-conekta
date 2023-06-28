@@ -36,7 +36,7 @@ export class ServiciosComponent implements OnInit {
   ngOnInit(): void {
     this.getServices()
     //observamos el cambio de un servicio
-    this.dataService.data$.subscribe(event => this.getServices())
+    this.dataService.observeData().subscribe(event => this.getServices())
   }
 
 }

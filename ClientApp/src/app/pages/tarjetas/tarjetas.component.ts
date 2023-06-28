@@ -12,7 +12,7 @@ import { NgxSpinnerService } from 'ngx-spinner';
   templateUrl: './tarjetas.component.html',
   styleUrls: ['./tarjetas.component.css']
 })
-export class TarjetasComponent implements OnInit {
+export class TarjetasComponent implements OnInit{
   constructor(
     private toast: HotToastService, 
     private dialod: MatDialog,
@@ -49,7 +49,7 @@ export class TarjetasComponent implements OnInit {
   ngOnInit(): void {
     this.getCards()
     //observamos cada que se añada una tarjeta
-    this.dataService.data$.subscribe(data => {
+    this.dataService.observeData().subscribe(data => {
       this.getCards()
       this.toast.success(data, {
         style: {
