@@ -51,17 +51,6 @@ export class TarjetasComponent implements OnInit{
     //observamos cada que se añada una tarjeta
     this.dataService.observeData().subscribe(data => {
       this.getCards()
-      this.toast.success(data, {
-        style: {
-          border: '1px solid #3F51B5',
-          margin: '100px 20px',
-          padding: '15px'
-        },
-        iconTheme: {
-          primary: '#3F51B5'
-        },
-        position: 'top-right'
-      });
     })
   }
 

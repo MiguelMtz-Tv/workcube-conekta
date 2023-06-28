@@ -4,6 +4,7 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { TarjetasService } from 'src/app/services/tarjetas.service';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { DataService } from 'src/app/services/data.service';
+import { HotToastService } from '@ngneat/hot-toast';
 @Component({
   selector: 'app-update-card',
   templateUrl: './update-card.component.html',
@@ -26,6 +27,7 @@ export class UpdateCardComponent implements OnInit {
     private thisDialog: MatDialogRef<UpdateCardComponent>,
     private spinner: NgxSpinnerService,
     private dataService: DataService,
+    private toast: HotToastService,
   ){}
 
   ngOnInit(){
@@ -62,7 +64,18 @@ export class UpdateCardComponent implements OnInit {
     .subscribe(res => {
       console.log(res)
       this.thisDialog.close()
-      this.dataService.updateData('Tarjeta actualizada')
+      this.dataService.updateData('');
+              this.toast.success('Metodo de pago actualizado', {
+                style: {
+                  border: '1px solid #3F51B5',
+                  margin: '100px 20px',
+                  padding: '15px'
+                },
+                iconTheme: {
+                  primary: '#3F51B5'
+                },
+                position: 'top-right'
+              });
     })
   }
 

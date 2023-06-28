@@ -78,7 +78,18 @@ export class AddCardComponent implements OnInit {
         .subscribe(
           res => {
             if(res.action){
-              this.data.updateData('Tarjeta añadida')
+              this.data.updateData('');
+              this.toast.success('Metodo de pago añadido', {
+                style: {
+                  border: '1px solid #3F51B5',
+                  margin: '100px 20px',
+                  padding: '15px'
+                },
+                iconTheme: {
+                  primary: '#3F51B5'
+                },
+                position: 'top-right'
+              });
               this.dialogRef.close()
             }else{
               this.isLoading = false
