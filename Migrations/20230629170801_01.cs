@@ -41,7 +41,10 @@ namespace workcube_pagos.Migrations
                     Direccion = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CodigoPostal = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Code = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    IsActive = table.Column<bool>(type: "bit", nullable: false)
+                    IsActive = table.Column<bool>(type: "bit", nullable: false),
+                    IdAspNetUser = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdatedDate = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -135,26 +138,6 @@ namespace workcube_pagos.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Tarjeta",
-                columns: table => new
-                {
-                    IdTarjeta = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    StripeCardID = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ClienteIdCliente = table.Column<int>(type: "int", nullable: true),
-                    IdCliente = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Tarjeta", x => x.IdTarjeta);
-                    table.ForeignKey(
-                        name: "FK_Tarjeta_Clientes_ClienteIdCliente",
-                        column: x => x.ClienteIdCliente,
-                        principalTable: "Clientes",
-                        principalColumn: "IdCliente");
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Servicios",
                 columns: table => new
                 {
@@ -170,7 +153,10 @@ namespace workcube_pagos.Migrations
                     PeriodoName = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Vigencia = table.Column<DateTime>(type: "datetime2", nullable: false),
                     IsCanceled = table.Column<bool>(type: "bit", nullable: false),
-                    KeyServicio = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    KeyServicio = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    IdAspNetUser = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdatedDate = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -292,7 +278,10 @@ namespace workcube_pagos.Migrations
                     IdCliente = table.Column<int>(type: "int", nullable: false),
                     Monto = table.Column<long>(type: "bigint", nullable: false),
                     Status = table.Column<int>(type: "int", nullable: false),
-                    Vigencia = table.Column<DateTime>(type: "datetime2", nullable: false)
+                    Vigencia = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    IdAspNetUser = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdatedDate = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -441,11 +430,6 @@ namespace workcube_pagos.Migrations
                 name: "IX_Servicios_IdServicioTipo",
                 table: "Servicios",
                 column: "IdServicioTipo");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Tarjeta_ClienteIdCliente",
-                table: "Tarjeta",
-                column: "ClienteIdCliente");
         }
 
         /// <inheritdoc />
@@ -471,9 +455,6 @@ namespace workcube_pagos.Migrations
 
             migrationBuilder.DropTable(
                 name: "Pagos");
-
-            migrationBuilder.DropTable(
-                name: "Tarjeta");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");

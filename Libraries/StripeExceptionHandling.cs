@@ -39,7 +39,7 @@ namespace workcube_pagos.Libraries
                     case "lost_card":
                         throw new ArgumentException("Este metodo de pago está registrado como perdido.");
                     default: 
-                        throw new ArgumentException("Algo salió mal con el metodo de pago." + e.StripeError.DeclineCode);
+                        throw new ArgumentException("Algo salió mal con el metodo de pago: " + e.StripeError.DeclineCode);
                 }
             }
             else

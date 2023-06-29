@@ -10,12 +10,8 @@ using Quartz;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
-using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
-
-//configuring stripe test key
-//StripeConfiguration.ApiKey = "sk_test_51NDAKSHo0a7qOJb8fswzrmT31QLoRDB6Hp8HWXNvEEg8JXpE3xnxGMWDrGOFiW5lo5AZ8Cjshh4RT7MJIpBatsUt006xpsXGTR";
 
 //inject jwt authentication
 builder.Services.AddAuthentication(options =>
@@ -36,8 +32,9 @@ builder.Services.AddAuthentication(options =>
     };
 });
 
-//connection
-builder.Services.AddDbContext<DataContext>(opt => opt.UseSqlServer(builder.Configuration.GetConnectionString(builder.Environment.IsProduction() ? "Production" : "Production")));
+//connection to database
+builder.Services.AddDbContext<DataContext>(opt => opt.UseSqlServer(builder.Configuration.GetConnectionString(builder.Environment.IsProduction() ? "Production" : "Development")));
+//configuring stripe test key
 StripeConfiguration.ApiKey = builder.Configuration.GetConnectionString(builder.Environment.IsProduction() ? "StripeLive" : "StripeTest");
 
 //Registrar servicios

@@ -18,7 +18,6 @@ namespace workcube_pagos.Models
         public virtual ICollection<Pago> Pagos              { get; set; }
 
         public virtual List<Cupon> Cupones                  { get; set; }
-        public List<Tarjeta> Tarjetas                       { get; set; }
         public string RFC                                   { get; set; }  
         public string RazonSocial                           { get; set; }  
         public string NombreComercial                       { get; set; }  
@@ -30,8 +29,8 @@ namespace workcube_pagos.Models
         public string Code                                  { get; set; }  
         public bool IsActive                                { get; set; }
 
-        /* public string IdAspNetUser                          { get; set; }
+        public string IdAspNetUser                          { get; set; }
         public DateTime CreatedDate                         { get; set; }
-        public DateTime UpdatedDate                         { get; set; } */
+        public DateTime UpdatedDate                         { get; set; }
     }
 }

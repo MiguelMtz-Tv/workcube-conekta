@@ -13,6 +13,7 @@ import { PagosService } from 'src/app/services/pagos.service';
 import { AuthService } from 'src/app/services/auth.service';
 import { DataService } from 'src/app/services/data.service';
 import { Router } from '@angular/router';
+import { Action } from 'rxjs/internal/scheduler/Action';
 
 @Component({
   selector: 'app-pagar',
@@ -25,6 +26,8 @@ export class PagarComponent implements OnInit {
   id: number = 0
   selectedId!: string
   selected: boolean = false
+
+  arePaymentMethods!: boolean
 
   servicio: any = []
   total: number = 0
@@ -58,7 +61,12 @@ export class PagarComponent implements OnInit {
   getCards(){
     this.tarjetasService.listCards()
       .subscribe(res => {
-        this.cards = res.result
+        if(res.action){
+          res.result.length == 0 ? this.arePaymentMethods = false : this.arePaymentMethods = true 
+          this.cards = res.result
+        }else{
+          console.error('No se pudieron recuperar los metodos de pago')
+        }
       })
   }
 

@@ -49,9 +49,6 @@ namespace workcube_pagos.Templates.Emails
                             "<td class='p30-15 bbrr' style='padding: 30px 30px; border-radius:0px 0px 26px 26px;' bgcolor='white'>" +
                                "<table width='100%' border='0' cellspacing='0' cellpadding='0'>" +
                                     "<tr>" +
-                                        "<td class='text-footer1 pb10' style='color:#5a5a5a; font-family: Arial,sans-serif; font-size:12px; text-align:center; font-weight: bolder;'><multiline>Oil Field Trainning and Certification S.A.de C.V.</multiline></td>" +
-                                    "</tr>" +
-                                    "<tr>" +
                                         "<td class='text-footer2' style='color:#5a5a5a; font-family: Arial,sans-serif; font-size:12px; text-align:center;'>" +
                                             "<multiline>DESARROLLOS DE INGENIERIA EN SISTEMAS TECNOLOGICOS Y CONTROL INTEGRAL S.A. DE C.V.Av. de Los Ríos 201, Los Rios, 86035 Villahermosa, Tab., México</multiline>" +
                                         "</td>" +
@@ -67,76 +64,3 @@ namespace workcube_pagos.Templates.Emails
         }
     }
 }
-
-//"<body style='padding:0 !important; margin:0 !important; display:block !important; min-width:100% !important; width:100% !important; background:#f5f5f5; -webkit-text-size-adjust:none;'>" +
-//                "<table width='100%' border='0' cellspacing='0' cellpadding='0' style='background-color: #f5f5f5'>" +
-//                    "<tr>" +
-//                        "<td align='center' valign='top'>" +
-//                            "<table width='650' border='0' cellspacing='0' cellpadding='0' class='mobile-shell'>" +
-//                                "<tr>" +
-//                                    "<td class='td container' style='width:650px; min-width:650px; margin:0; font-weight:normal; padding:55px 0px;'>" 
-//                                        "<repeater>" +
-//                                            "<layout label='Intro'>" +
-//                                                "<table width='100%' border='0' cellspacing='0' cellpadding='0'>" +
-//                                                    "<tr>" +
-//                                                        "<td>" +
-//                                                            "<table width='100%' border='0' cellspacing='0' cellpadding='0'>" +
-//                                                                "<tr>" +
-//                                                                    "<td class='tbrr p30-15' style='padding: 30px 30px; border-radius:26px 26px 0px 0px;' bgcolor='white'>" +
-//                                                                        "<table width='100%' border='0' cellspacing='0' cellpadding='0'>" +
-//                                                                            "<tr>" +
-//                                                                                "<td class='h1 pb25' style='color:#5a5a5a; font-family: Arial,sans-serif; font-size:24px; text-align:center; padding-bottom:16px;'><multiline>Hola, " + "</multiline></td>" +
-//                                                                            "</tr>" +
-//                                                                            "<tr>" +
-//                                                                                "<td class='text-center pb25' style='color:#5a5a5a; font-family: Arial,sans-serif; font-size:16px; text-align:center; padding-bottom:25px;'><multiline>Recientemente solicitó un restablecimiento de contraseña para su cuenta. Para restablecer la contraseña, haga clic en el botón de abajo.</multiline></td>" +
-//                                                                            "</tr>" +
-
-//                                                                            "<tr>" +
-//                                                                                "<td align='center' style='padding-bottom: 15px;'>" +
-//                                                                                    "<table class='center' border='0' cellspacing='0' cellpadding='0' style='text-align:center;'>" +
-//                                                                                        "<tr>" +
-//                                                                                            "<td class='pink-button text-button' style='background:#37a58d; color:white; font-family: Arial,sans-serif; font-size:14px; line-height:18px; padding:12px 30px; text-align:center; border-radius:22px 22px 22px 22px; font-weight:bold;'><multiline><a href='" + url + "' target='_blank' class='link-white' style='color:#ffffff; text-decoration:none;'><span class='link-white' style='color:#ffffff; text-decoration:none;'>Restablecer contraseña</span></a></multiline></td>" +
-//                                                                                        "</tr>" +
-//                                                                                    "</table>" +
-//                                                                                "</td>" +
-//                                                                            "</tr>" +
-//                                                                            "<tr>" +
-//                                                                                "<td class='text-center pb25' style='color:#5a5a5a; font-family: Arial,sans-serif; font-size:16px; text-align:center;'><multiline>El enlace caducará en 30 minutos</multiline></td>" +
-//                                                                            "</tr>" +
-
-//                                                                        "</table>" +
-//                                                                    "</td>" +
-//                                                                "</tr>" +
-//                                                            "</table>" +
-//                                                        "</td>" +
-//                                                    "</tr>" +
-//                                                "</table>" +
-//                                            "</layout>" +
-
-//                                        "</repeater>" +
-
-
-//                                        "<table width='100%' border='0' cellspacing='0' cellpadding='0'>" +
-//                                            "<tr>" +
-//                                                "<td class='p30-15 bbrr' style='padding: 30px 30px; border-radius:0px 0px 26px 26px;' bgcolor='white'>" +
-//                                                    "<table width='100%' border='0' cellspacing='0' cellpadding='0'>" +
-//                                                        "<tr>" +
-//                                                            "<td class='text-footer1 pb10' style='color:#5a5a5a; font-family: Arial,sans-serif; font-size:12px; text-align:center; font-weight: bolder;'><multiline>Oil Field Trainning and Certification S.A. de C.V.</multiline></td>" +
-//                                                        "</tr>" +
-//                                                        "<tr>" +
-//                                                            "<td class='text-footer2' style='color:#5a5a5a; font-family: Arial,sans-serif; font-size:12px; text-align:center;'>" +
-//                                                                "<multiline>Carretera Federal Coatzacoalcos a Villahermosa Km. 165 Col. Anacleto Canabal 1a Sección. CP. 86220</multiline>" +
-//                                                            "</td>" +
-//                                                        "</tr>" +
-//                                                    "</table>" +
-//                                                "</td>" +
-//                                            "</tr>" +
-//                                        "</table>" +
-
-//                                    "</td>" +
-//                                "</tr>" +
-//                            "</table>" +
-//                        "</td>" +
-//                    "</tr>" +
-//                "</table>" +
-//            "</body>";

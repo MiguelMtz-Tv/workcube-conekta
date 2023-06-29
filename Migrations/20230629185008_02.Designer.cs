@@ -12,8 +12,8 @@ using workcube_pagos.Data;
 namespace workcube_pagos.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20230629162128_01")]
-    partial class _01
+    [Migration("20230629185008_02")]
+    partial class _02
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -248,7 +248,13 @@ namespace workcube_pagos.Migrations
                     b.Property<string>("Correo")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("Direccion")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("IdAspNetUser")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IsActive")
@@ -272,6 +278,9 @@ namespace workcube_pagos.Migrations
                     b.Property<string>("Telefono")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<DateTime>("UpdatedDate")
+                        .HasColumnType("datetime2");
+
                     b.HasKey("IdCliente");
 
                     b.ToTable("Clientes");
@@ -288,7 +297,13 @@ namespace workcube_pagos.Migrations
                     b.Property<string>("Codigo")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("Descripcion")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("IdAspNetUser")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("IdCliente")
@@ -302,6 +317,9 @@ namespace workcube_pagos.Migrations
 
                     b.Property<int>("Status")
                         .HasColumnType("int");
+
+                    b.Property<DateTime>("UpdatedDate")
+                        .HasColumnType("datetime2");
 
                     b.Property<DateTime>("Vigencia")
                         .HasColumnType("datetime2");
@@ -420,6 +438,12 @@ namespace workcube_pagos.Migrations
                     b.Property<string>("ClienteRazonSocial")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("IdAspNetUser")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("IdCliente")
                         .HasColumnType("int");
 
@@ -446,6 +470,9 @@ namespace workcube_pagos.Migrations
 
                     b.Property<string>("ServicioTipoName")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("UpdatedDate")
+                        .HasColumnType("datetime2");
 
                     b.Property<DateTime>("Vigencia")
                         .HasColumnType("datetime2");
@@ -481,30 +508,6 @@ namespace workcube_pagos.Migrations
                     b.HasKey("IdServicioTipo");
 
                     b.ToTable("ServiciosTipos");
-                });
-
-            modelBuilder.Entity("workcube_pagos.Models.Tarjeta", b =>
-                {
-                    b.Property<int>("IdTarjeta")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdTarjeta"));
-
-                    b.Property<int?>("ClienteIdCliente")
-                        .HasColumnType("int");
-
-                    b.Property<int>("IdCliente")
-                        .HasColumnType("int");
-
-                    b.Property<string>("StripeCardID")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("IdTarjeta");
-
-                    b.HasIndex("ClienteIdCliente");
-
-                    b.ToTable("Tarjeta");
                 });
 
             modelBuilder.Entity("workcube_pagos.Models.AspNetUser", b =>
@@ -649,15 +652,6 @@ namespace workcube_pagos.Migrations
                     b.Navigation("ServicioTipo");
                 });
 
-            modelBuilder.Entity("workcube_pagos.Models.Tarjeta", b =>
-                {
-                    b.HasOne("workcube_pagos.Models.Cliente", "Cliente")
-                        .WithMany("Tarjetas")
-                        .HasForeignKey("ClienteIdCliente");
-
-                    b.Navigation("Cliente");
-                });
-
             modelBuilder.Entity("workcube_pagos.Models.AspNetUser", b =>
                 {
                     b.HasOne("workcube_pagos.Models.Cliente", "Cliente")
@@ -676,8 +670,6 @@ namespace workcube_pagos.Migrations
                     b.Navigation("Pagos");
 
                     b.Navigation("Servicios");
-
-                    b.Navigation("Tarjetas");
 
                     b.Navigation("Usuario");
                 });
