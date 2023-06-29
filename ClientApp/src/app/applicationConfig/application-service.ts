@@ -28,6 +28,22 @@ export class Sessions {
         }
     }
 
+    public static getItem(key : string) {
+
+        if (localStorage.getItem(key) !== undefined && localStorage.getItem(key) !== null) {
+            try {
+                var valueKey : any = localStorage.getItem(key);
+                let jsonValue : any = JSON.parse(valueKey);
+                return jsonValue;
+            } catch (e) {
+                return localStorage.getItem(key);
+            }
+        } else {
+            return null;
+        }
+       
+    }
+
     public static header() {
         let obj ={
             headers:{

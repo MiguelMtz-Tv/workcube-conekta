@@ -5,8 +5,7 @@ import { HotToastService } from '@ngneat/hot-toast'
 import { AuthService } from 'src/app/services/auth.service'
 import { catchError, throwError } from 'rxjs'
 import { NgxSpinnerService } from 'ngx-spinner'
-
-
+import { Sessions } from 'src/app/applicationConfig/application-service'
 
 @Component({
   selector: 'app-perfil',
@@ -28,14 +27,26 @@ export class PerfilComponent implements OnInit {
     ) {}
 
   ngOnInit(): void {
+    this.initialization();
+  }
+
+  initialization()
+  {
     this.spinner.show()
-    this.objUSerService.getUserFullName().subscribe(res => {
-      this.userForm.setValue({
-        Id:           this.auth.getUserId(),
-        Nombre:       res.result.nombre || '',
-        ApellidoPat:  res.result.apellidoPat || '',
-        ApellidoMat:  res.result.apellidoMat || ''
-      })
+
+    let objUser : any = { id : Sessions.getItem("Id") };
+
+    this.objUSerService.getUserFullName(objUser)
+    .subscribe(res => {
+      if(res.session && res.action)
+      {
+        this.userForm.setValue({
+          Id:           this.auth.getUserId(),
+          Nombre:       res?.result.nombre || '',
+          ApellidoPat:  res?.result.apellidoPat || '',
+          ApellidoMat:  res?.result.apellidoMat || ''
+        });
+      }
       this.spinner.hide()
     })
   }

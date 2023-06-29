@@ -37,6 +37,6 @@ namespace workcube_pagos.Models
         public long Descuento               { get; set; }  
         public long Total                   { get; set; } 
         public string CargoObj              { get; set; }   
-        public string Folio              { get; set; }
+        public string Folio                 { get; set; }
     }
 }

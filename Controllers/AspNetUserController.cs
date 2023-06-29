@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using System.Text.Json.Nodes;
 using Workcube.Libraries;
 using workcube_pagos.Services;
@@ -38,14 +39,20 @@ namespace workcube_pagos.Controllers
             return objReturn.build();
         }
 
+        [HttpPost("GetUserNames")] //obtener un usuario (solo nombre y apellidos)
         [Authorize(AuthenticationSchemes = "Bearer")]
-        [HttpPost("user")] //obtener un usuario (solo nombre y apellidos)
-        public async Task<ActionResult<dynamic>> GetUserNames([FromBody] JsonObject id)
+        public async Task<ActionResult<dynamic>> GetUserNames([FromBody] JsonObject data)
         {
             JsonReturn objReturn = new JsonReturn();
+
             try
             {
-                var result = await _usersService.GetUser(id["id"].ToString());
+                dynamic dynamicDFata = Globals.JsonData(data);
+
+                var id = Globals.ParseGuid(dynamicDFata.id);
+
+                Console.WriteLine(id); 
+                var result = await _usersService.GetUser(id);
                 objReturn.Result = result;
                 objReturn.Success(SuccessMessage.REQUEST);
             }

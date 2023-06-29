@@ -25,13 +25,22 @@ namespace workcube_pagos.Services
             }catch (Exception) {  return null; }
         }
 
-        public async Task<AspNetUserFullName>GetUser(string id) //obtener un usuario (nombre y apellidos)
+        public async Task<dynamic>GetUser(string id) //obtener un usuario (nombre y apellidos)
         {
             if(id == null) { throw new ArgumentException("Se recibió un id nulo"); }
-            var user = await _context.AspNetUsers.FindAsync(id);
-            if(user == null) {throw new ArgumentException("No se pudieron recuperar los datos del usuario");}
+            AspNetUser user = new AspNetUser{};
 
-            var resUser = new AspNetUserFullName
+            try
+            {
+                user = await _context.AspNetUsers.FindAsync(id);
+                if(user == null) {throw new ArgumentException("No se pudieron recuperar los datos del usuario");}
+            }
+            catch(Exception e)
+            {
+                throw new ArgumentException("Error al encontrar el usuario: " + e.Message);
+            }
+
+            var resUser = new 
             {
                 Nombre = user.Nombre,
                 ApellidoPat = user.ApellidoPat,

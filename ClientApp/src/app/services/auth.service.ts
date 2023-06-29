@@ -39,7 +39,7 @@ export class AuthService {
   }
 
   getUserId(){
-    return localStorage.getItem('Id')
+    return localStorage.getItem('Id') || ''
   }
 
   getClientId(){

@@ -14,14 +14,14 @@ namespace workcube_pagos.Data
 
             //relacion usuario/cliente 1:1
             modelBuilder.Entity<AspNetUser>().HasOne(u => u.Cliente).WithOne(c => c.Usuario).HasForeignKey<AspNetUser>(u => u.IdCliente);
+            modelBuilder.Entity<Cliente>().HasIndex(c => c.NumeroContrato).IsUnique();
 
 
             //Relacion servicioTipo/servicio 1:N
             modelBuilder.Entity<Servicio>().HasOne(s => s.ServicioTipo).WithMany(st => st.Servicio).HasForeignKey(s => s.IdServicioTipo);
             //relacion servicio/periodo N:1
             modelBuilder.Entity<Servicio>().HasOne(s => s.Periodo).WithMany(p => p.Servicio).HasForeignKey(s => s.IdPeriodo);
-
-
+            
             //relacion cliente/servicio 1:N
             modelBuilder.Entity<Servicio>().HasOne(s => s.Cliente).WithMany(c => c.Servicios).HasForeignKey(s => s.IdCliente);
 
