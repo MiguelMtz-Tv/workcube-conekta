@@ -30,8 +30,8 @@ namespace workcube_pagos.Models
         public string Code                                  { get; set; }  
         public bool IsActive                                { get; set; }
 
-        public string IdAspNetUser                          { get; set; }
+        /* public string IdAspNetUser                          { get; set; }
         public DateTime CreatedDate                         { get; set; }
-        public DateTime UpdatedDate                         { get; set; }
+        public DateTime UpdatedDate                         { get; set; } */
     }
 }

@@ -29,7 +29,7 @@
             </div>
             <div class="flex flex-col mb-6">
                 <label class="text-sm  mb-2" for="">Correo</label>
-                <input type="text" class="p-2 border border-zinc-300 rounded" placeholder="Ingresa tu correo" [disabled]="isLoading" formControlName="Email">
+                <input type="email" [email]="true" class="p-2 border border-zinc-300 rounded" placeholder="Ingresa tu correo" [disabled]="isLoading" formControlName="Email">
             </div>
             <div class="flex flex-col mb-6">
                 <label class="text-sm  mb-2" for="">Numero de contrato</label>

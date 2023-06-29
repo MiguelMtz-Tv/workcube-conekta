@@ -19,9 +19,9 @@ namespace workcube_pagos.Models
         public CuponEstatus Status              { get; set; }
         public DateTime Vigencia                { get; set; }
 
-        public string IdAspNetUser              { get; set; }
+       /*  public string IdAspNetUser              { get; set; }
         public DateTime CreatedDate             { get; set; }
-        public DateTime UpdatedDate             { get; set; }
+        public DateTime UpdatedDate             { get; set; } */
     }
 
     public enum CuponEstatus

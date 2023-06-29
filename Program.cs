@@ -37,7 +37,7 @@ builder.Services.AddAuthentication(options =>
 });
 
 //connection
-builder.Services.AddDbContext<DataContext>(opt => opt.UseSqlServer(builder.Configuration.GetConnectionString(builder.Environment.IsProduction() ? "Production" : "Development")));
+builder.Services.AddDbContext<DataContext>(opt => opt.UseSqlServer(builder.Configuration.GetConnectionString(builder.Environment.IsProduction() ? "Production" : "Production")));
 StripeConfiguration.ApiKey = builder.Configuration.GetConnectionString(builder.Environment.IsProduction() ? "StripeLive" : "StripeTest");
 
 //Registrar servicios

@@ -12,7 +12,7 @@ using workcube_pagos.Data;
 namespace workcube_pagos.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20230623031107_01")]
+    [Migration("20230629162128_01")]
     partial class _01
     {
         /// <inheritdoc />

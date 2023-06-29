@@ -10,7 +10,7 @@ import { HistorialPagosComponent } from './pages/historial-pagos/historial-pagos
 import { PagarComponent } from './pages/pagar/pagar.component'
 import { PagesModule } from './pages/pages.module'
 import { AuthGuard } from './auth/guards/auth.guard'
-import { ClientComponent } from './pages/client/client.component'
+//import { ClientComponent } from './pages/client/client.component'
 import { PagoConfirmadoComponent } from './pages/pago-confirmado/pago-confirmado.component'
 
 const pahts: Routes = [
@@ -22,7 +22,7 @@ const pahts: Routes = [
     { path: 'historial/:id',    component: HistorialPagosComponent,     canActivate:[AuthGuard] },
     { path: 'pagar/:id',        component: PagarComponent,              canActivate:[AuthGuard] },
     { path: 'pago-confirmado',  component: PagoConfirmadoComponent,     canActivate:[AuthGuard] },
-    { path: 'cliente',          component: ClientComponent },
+    //{ path: 'cliente',          component: ClientComponent },
 ]
 
 
