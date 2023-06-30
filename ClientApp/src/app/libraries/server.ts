@@ -1,8 +1,10 @@
+import { getBaseUrl } from "src/main";
+
 export class Server {
 
     // OMITIR VERSION ANGULAR : ng config -g cli.warnings.versionMismatch false
     public static base(): string {
-        return "https://localhost:44484/"
+        return getBaseUrl()
     }
     
     public static ip() : string {

@@ -33,7 +33,7 @@ builder.Services.AddAuthentication(options =>
 });
 
 //connection to database
-builder.Services.AddDbContext<DataContext>(opt => opt.UseSqlServer(builder.Configuration.GetConnectionString(builder.Environment.IsProduction() ? "Production" : "Production")));
+builder.Services.AddDbContext<DataContext>(opt => opt.UseSqlServer(builder.Configuration.GetConnectionString(builder.Environment.IsProduction() ? "Production" : "Development")));
 //configuring stripe test key
 StripeConfiguration.ApiKey = builder.Configuration.GetConnectionString(builder.Environment.IsProduction() ? "StripeLive" : "StripeTest");
 
