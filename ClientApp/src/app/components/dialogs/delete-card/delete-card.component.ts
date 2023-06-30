@@ -28,7 +28,7 @@ export class DeleteCardComponent {
     this.tarjetasService.deleteCard(this.data)
       .subscribe(res => {
         this.thisDialog.close()
-        this.dataService.updateData('');
+        this.dataService.updateData('deleted');
               this.toast.success('Metodo de pago eliminado', {
                 style: {
                   border: '1px solid #3F51B5',

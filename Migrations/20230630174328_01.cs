@@ -19,10 +19,12 @@ namespace workcube_pagos.Migrations
                     Nombre = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ApellidoPat = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ApellidoMat = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    IsActive = table.Column<bool>(type: "bit", nullable: false),
                     Email = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     HashedPassword = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    RFC = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    RFC = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Telfono = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Dirección = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    IsActive = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {

@@ -19,7 +19,9 @@ export class HistorialPagosComponent implements OnInit, AfterViewInit{
   dataSource!: MatTableDataSource<any>
 
   displayedColumns: string[] = ['folio','fecha', 'monto', 'descuento', 'total', 'pago', 'imprimir'];
-  service!: any
+  service: any
+
+  isEmpty: boolean = false
 
   @ViewChild(MatPaginator) paginator!: MatPaginator
   @ViewChild(MatSort) sort!: MatSort
@@ -39,8 +41,17 @@ export class HistorialPagosComponent implements OnInit, AfterViewInit{
     this.spinner.show('historial-pagos')
     this.pagosService.getPaymentsList(this.id)
       .subscribe(res => {
-        this.spinner.hide('historial-pagos')
-        this.dataSource = new MatTableDataSource<any>(res.result)
+        if (res.action && res.session){
+          this.dataSource = new MatTableDataSource<any>(res.result)
+          this.spinner.hide('historial-pagos')
+          if(res.result.length == 0){
+            this.isEmpty = true
+          }else{
+            this.isEmpty = false
+          }
+        }else{
+          this.isEmpty = true;
+        }
       })
 
     this.serviciosService.getServiceDetails(this.id)

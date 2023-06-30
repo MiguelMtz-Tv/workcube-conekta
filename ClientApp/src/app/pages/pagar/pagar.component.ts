@@ -72,7 +72,7 @@ export class PagarComponent implements OnInit {
 
   ngOnInit() {
     this.serviciosService.getServiceDetails(this.id).subscribe(res => {
-      if(res.action){
+      if(res.action && res.session){
         this.servicio = res.result
       }else{
         this.router.navigateByUrl('/servicios')

@@ -239,6 +239,9 @@ namespace workcube_pagos.Migrations
                     b.Property<string>("ApellidoPat")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Dirección")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Email")
                         .HasColumnType("nvarchar(max)");
 
@@ -252,6 +255,9 @@ namespace workcube_pagos.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("RFC")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Telfono")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("IdAspAdmin");

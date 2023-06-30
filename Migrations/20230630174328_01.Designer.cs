@@ -12,7 +12,7 @@ using workcube_pagos.Data;
 namespace workcube_pagos.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20230630173135_01")]
+    [Migration("20230630174328_01")]
     partial class _01
     {
         /// <inheritdoc />
@@ -242,6 +242,9 @@ namespace workcube_pagos.Migrations
                     b.Property<string>("ApellidoPat")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Dirección")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Email")
                         .HasColumnType("nvarchar(max)");
 
@@ -255,6 +258,9 @@ namespace workcube_pagos.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("RFC")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Telfono")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("IdAspAdmin");
