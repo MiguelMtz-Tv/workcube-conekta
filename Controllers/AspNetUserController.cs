@@ -51,7 +51,6 @@ namespace workcube_pagos.Controllers
 
                 var id = Globals.ParseGuid(dynamicDFata.id);
 
-                Console.WriteLine(id); 
                 var result = await _usersService.GetUser(id);
                 objReturn.Result = result;
                 objReturn.Success(SuccessMessage.REQUEST);

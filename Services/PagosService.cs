@@ -175,7 +175,7 @@ namespace workcube_pagos.Services
                 };
 
                 EmailManager objMailManager = new EmailManager(ConfigEmail.Data());
-                objMailManager.html(data.Email, "Confirmación de pago", body, pdf);
+                objMailManager.html(data.Email, "Confirmación de pago. Folio: " + data.Folio, body, pdf);
             }
             catch (Exception ex)
             {
