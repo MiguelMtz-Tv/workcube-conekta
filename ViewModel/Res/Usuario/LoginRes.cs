@@ -7,6 +7,7 @@
         public int IdCliente            { get; set; }
         public string NombreCompleto    { get; set; }
         public string Email             { get; set; }
+        public string StripePK          { get; set; }
         public DateTime Expires         { get; set; }
 
     }

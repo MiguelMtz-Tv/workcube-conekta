@@ -21,17 +21,22 @@ export class AuthService {
     return this.http.post<any>(this.baseUrl+'api/auth/login', objUser /*{UserName, Password}*/);
   }
 
-  storeData(token: string, id: string, nombreCompleto: string, idCliente: string, email: string){
-    localStorage.setItem('Token', token)
-    localStorage.setItem('Id', id)
-    localStorage.setItem('NombreCompleto', nombreCompleto),
-    localStorage.setItem('IdCliente', idCliente)
-    localStorage.setItem('Email', email)
+  storeData(token: string, id: string, nombreCompleto: string, idCliente: string, email: string, stripePk: string){
+    localStorage.setItem('Token',           token)
+    localStorage.setItem('Id',              id)
+    localStorage.setItem('NombreCompleto',  nombreCompleto)
+    localStorage.setItem('IdCliente',       idCliente)
+    localStorage.setItem('Email',           email)
+    localStorage.setItem('Spk',             stripePk)
   }
 
   removeData(){
     localStorage.clear()
     window.location.reload()
+  }
+
+  getSPK(){
+    return localStorage.getItem('Spk') || ''
   }
 
   getToken(){

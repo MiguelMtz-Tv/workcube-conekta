@@ -36,6 +36,7 @@ export class LoginComponent {
           res.nombreCompleto, 
           res.idCliente,
           res.email,
+          res.stripePK,
           )
         this.router.navigate(['/servicios'])
       },

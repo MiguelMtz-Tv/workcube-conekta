@@ -11,9 +11,11 @@ namespace workcube_pagos.Controllers
     {
         private readonly TarjetasService    _tarjetasService;
         private readonly string             NfMessage = "No se puedo encontrar al usuario en sesión";
+        private readonly IWebHostEnvironment _env;
 
-        public TarjetasController(TarjetasService tarjetasService)
+        public TarjetasController(TarjetasService tarjetasService, IWebHostEnvironment env)
         {
+            _env = env;
             _tarjetasService = tarjetasService;
         }
 

@@ -10,15 +10,27 @@ namespace workcube_pagos.TokenHandler
     {
         private const int JWT_TOKEN_VALIDITY_MINS = 60; // Tiempo de validez del token en minutos
         private const string JWT_SECURITY_KEY = "yPkCqn4kSWLtaJwXvN2jGzpQRyTZ3gdXkt7FeBJP";
+        private readonly IWebHostEnvironment _env;
 
-        public JwtTokenHandler() { }
+        public JwtTokenHandler(IWebHostEnvironment env) 
+        {
+            _env = env;
+        }
 
+        public string PK(){
+            var pk = _env.IsProduction() 
+                ? "pk_live_51NDAKSHo0a7qOJb8E18QKcih0kvvW4kgYtRDFbk2SoNYN8Zo4yrPsHMlEvlvg2ZMc2mPaMInR3T8RLUogOGwFGbU003Sqyrz6b" 
+                : "pk_test_51NDAKSHo0a7qOJb87jobsvr8AyT9MVHgf3a4vzvhkDLZIHuOUDnpYATHh7tkR2vQftqJBFkwJsvrxQuDOYGs4qyE00zIK6GN26";
+            return pk;
+        }
         public LoginRes GenerateToken(AspNetUser objAspNetUser)
         {
             var tokenIssuedAt =             DateTime.UtcNow;
             var tokenExpiration =           tokenIssuedAt.AddMinutes(JWT_TOKEN_VALIDITY_MINS);
             var securityKey =               new SymmetricSecurityKey(Encoding.UTF8.GetBytes(JWT_SECURITY_KEY));
             var signingCredentials =        new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
+
+            var pk = this.PK();
 
             var claims = new List<Claim>
             {
@@ -48,7 +60,8 @@ namespace workcube_pagos.TokenHandler
                 Id =                objAspNetUser.Id,
                 NombreCompleto =    objAspNetUser.NombreCompleto,
                 Email =             objAspNetUser.Email,
-                IdCliente =         objAspNetUser.IdCliente
+                IdCliente =         objAspNetUser.IdCliente,
+                StripePK =          pk,    
             };
         }
     }

@@ -28,7 +28,8 @@ export class AddCardComponent implements OnInit {
     ){ }
 
   ngOnInit() {
-    const stripePromise = loadStripe('pk_test_51NDAKSHo0a7qOJb87jobsvr8AyT9MVHgf3a4vzvhkDLZIHuOUDnpYATHh7tkR2vQftqJBFkwJsvrxQuDOYGs4qyE00zIK6GN26');
+    let pk = this.auth.getSPK(); 
+    let stripePromise = loadStripe(pk);
     stripePromise.then((stripe) => {
       this.stripe = stripe!;
       this.stripeElements = stripe!.elements()

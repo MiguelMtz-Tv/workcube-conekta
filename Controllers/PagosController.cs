@@ -60,6 +60,7 @@ namespace workcube_pagos.Controllers
             return objReturn.build();
         }
 
+        [Authorize(AuthenticationSchemes = "Bearer")]
         [HttpGet("file/{id}")]
         public dynamic Recibo(int id)
         {

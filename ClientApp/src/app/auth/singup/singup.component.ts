@@ -64,7 +64,8 @@ export class SingupComponent {
                 res.id, 
                 res.nombreCompleto, 
                 res.idCliente,
-                res.email
+                res.email,
+                res.stripePk
               )
               this.router.navigate(['/servicios'])
               this.isLoading = false

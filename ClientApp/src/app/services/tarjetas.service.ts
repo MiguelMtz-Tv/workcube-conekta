@@ -29,4 +29,8 @@ export class TarjetasService {
   getCard(cardObj : any){
     return this.http.post<any>(this.baseUrl+'api/tarjetas/get', cardObj)
   }
+
+  getPublicKey(){
+    return this.http.get<any>(this.baseUrl+'api/tarjetas/stripegetpublickey')
+  }
 }
