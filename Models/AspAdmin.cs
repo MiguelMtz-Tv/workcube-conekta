@@ -1,18 +1,20 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using System.ComponentModel.DataAnnotations;
+
 
 namespace workcube_pagos.Models
 {
-    public class AspAdmin : IdentityUser
+    public class AspAdmin
     {
-        public int IdCliente                                { get; set; }
+        [Key]
+        public string IdAspAdmin                            { get; set; }
         public string Nombre                                { get; set; }
         public string ApellidoPat                           { get; set;}
         public string ApellidoMat                           { get; set;}
         public string NombreCompleto =>                     string.Format("{0} {1} {2}", Nombre, ApellidoPat, ApellidoMat);
         public bool IsActive                                { get; set; }
+        public string Email                                 { get; set; }
+        public string HashedPassword                        { get; set; }
+        public string RFC                                   { get; set; }
 
         public virtual ICollection<Cliente> Clientes        { get; set; }
         public virtual ICollection<Cupon> Cupones           { get; set; }

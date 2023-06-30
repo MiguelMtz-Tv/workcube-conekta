@@ -1,9 +1,8 @@
 ﻿global using Microsoft.EntityFrameworkCore;
-using workcube_pagos.Models;
 
 namespace workcube_pagos.Data
 {
-    public class DataContext : IdentityDbContext //DbContext
+    public class DataContext : IdentityDbContext
     {
         public DataContext(DbContextOptions<DataContext> options): base(options)
         {}
@@ -15,6 +14,17 @@ namespace workcube_pagos.Data
             //relacion usuario/cliente 1:1
             modelBuilder.Entity<AspNetUser>().HasOne(u => u.Cliente).WithOne(c => c.Usuario).HasForeignKey<AspNetUser>(u => u.IdCliente);
             modelBuilder.Entity<Cliente>().HasIndex(c => c.NumeroContrato).IsUnique();
+
+            //AspAdmin relations
+            //relacion Cliente/AspAdmin N:1
+            modelBuilder.Entity<Cliente>().HasOne(c => c.AspAdmin).WithMany(a => a.Clientes).HasForeignKey(c => c.IdCreatedUser).OnDelete(DeleteBehavior.Restrict);
+            modelBuilder.Entity<Cliente>().HasOne(c => c.AspAdmin).WithMany(a => a.Clientes).HasForeignKey(c => c.IdUpdatedUser).OnDelete(DeleteBehavior.Restrict);
+            //relacion Cupon/AspAdmin N:1
+            modelBuilder.Entity<Cupon>().HasOne(c => c.AspAdmin).WithMany(a => a.Cupones).HasForeignKey(c => c.IdCreatedUser).OnDelete(DeleteBehavior.Restrict);
+            modelBuilder.Entity<Cupon>().HasOne(c => c.AspAdmin).WithMany(a => a.Cupones).HasForeignKey(c => c.IdUpdatedUser).OnDelete(DeleteBehavior.Restrict);
+            //relcion Servicio/AspAdmin N:1
+            modelBuilder.Entity<Servicio>().HasOne(s => s.AspAdmin).WithMany(a => a.Servicios).HasForeignKey(s => s.IdCreatedUser).OnDelete(DeleteBehavior.Restrict);
+            modelBuilder.Entity<Servicio>().HasOne(s => s.AspAdmin).WithMany(a => a.Servicios).HasForeignKey(s => s.IdUpdatedUser).OnDelete(DeleteBehavior.Restrict);
 
 
             //Relacion servicioTipo/servicio 1:N
@@ -39,18 +49,9 @@ namespace workcube_pagos.Data
             modelBuilder.Entity<Pago>().HasOne(p => p.Servicio).WithMany(s => s.Pagos).HasForeignKey(p => p.IdServicio).OnDelete(DeleteBehavior.Restrict);
 
 
-            //AspAdmin relations
-            //relacion Cliente/AspAdmin N:1
-            modelBuilder.Entity<Cliente>().HasOne(c => c.AspAdmin).WithMany(a => a.Clientes).HasForeignKey(c => c.IdCreatedUser).OnDelete(DeleteBehavior.Restrict);
-            modelBuilder.Entity<Cliente>().HasOne(c => c.AspAdmin).WithMany(a => a.Clientes).HasForeignKey(c => c.IdUpdatedUser).OnDelete(DeleteBehavior.Restrict);
-            //relacion Cupon/AspAdmin N:1
-            modelBuilder.Entity<Cupon>().HasOne(c => c.AspAdmin).WithMany(a => a.Cupones).HasForeignKey(c => c.IdCreatedUser).OnDelete(DeleteBehavior.Restrict);
-            modelBuilder.Entity<Cupon>().HasOne(c => c.AspAdmin).WithMany(a => a.Cupones).HasForeignKey(c => c.IdUpdatedUser).OnDelete(DeleteBehavior.Restrict);
-            //relcion Servicio/AspAdmin N:1
-            modelBuilder.Entity<Servicio>().HasOne(s => s.AspAdmin).WithMany(a => a.Servicios).HasForeignKey(s => s.IdCreatedUser).OnDelete(DeleteBehavior.Restrict);
-            modelBuilder.Entity<Servicio>().HasOne(s => s.AspAdmin).WithMany(a => a.Servicios).HasForeignKey(s => s.IdUpdatedUser).OnDelete(DeleteBehavior.Restrict);
         }
 
+        public DbSet<AspAdmin> AspAdmins                { get; set; }
         public DbSet<AspNetUser> AspNetUsers            { get; set; }
         public DbSet<Cliente> Clientes                  { get; set; }
         public DbSet<ServicioTipo> ServiciosTipos       { get; set; }
@@ -58,6 +59,5 @@ namespace workcube_pagos.Data
         public DbSet<Cupon> Cupones                     { get; set; }
         public DbSet<Periodo> Periodos                  { get; set; }
         public DbSet<Pago> Pagos                        { get; set; } 
-        public DbSet<AspAdmin> AspAdmins                { get; set; }
     }
 }

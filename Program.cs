@@ -33,7 +33,7 @@ builder.Services.AddAuthentication(options =>
 });
 
 //connection to database
-builder.Services.AddDbContext<DataContext>(opt => opt.UseSqlServer(builder.Configuration.GetConnectionString(builder.Environment.IsProduction() ? "Production" : "Production")));
+builder.Services.AddDbContext<DataContext>(opt => opt.UseSqlServer(builder.Configuration.GetConnectionString(builder.Environment.IsProduction() ? "Production" : "Development")));
 //configuring stripe test key
 StripeConfiguration.ApiKey = builder.Configuration.GetConnectionString(builder.Environment.IsProduction() ? "StripeLive" : "StripeTest");
 
@@ -60,12 +60,6 @@ builder.Services.AddIdentity<AspNetUser, IdentityRole>(options =>
 
 builder.Services.AddControllers();
 builder.Services.AddSingleton<JwtTokenHandler>();
-// Configurar las opciones de serialización globalmente
-//builder.Services.AddMvc().AddJsonOptions(options =>
-//{
-//    options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve;
-//    options.JsonSerializerOptions.MaxDepth = 32;
-//});
 
 var app = builder.Build();
 

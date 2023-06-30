@@ -228,6 +228,37 @@ namespace workcube_pagos.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("workcube_pagos.Models.AspAdmin", b =>
+                {
+                    b.Property<string>("IdAspAdmin")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("ApellidoMat")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ApellidoPat")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Email")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("HashedPassword")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Nombre")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("RFC")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("IdAspAdmin");
+
+                    b.ToTable("AspAdmins");
+                });
+
             modelBuilder.Entity("workcube_pagos.Models.Cliente", b =>
                 {
                     b.Property<int>("IdCliente")
@@ -553,28 +584,6 @@ namespace workcube_pagos.Migrations
                     b.ToTable("ServiciosTipos");
                 });
 
-            modelBuilder.Entity("workcube_pagos.Models.AspAdmin", b =>
-                {
-                    b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityUser");
-
-                    b.Property<string>("ApellidoMat")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ApellidoPat")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("IdCliente")
-                        .HasColumnType("int");
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("Nombre")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasDiscriminator().HasValue("AspAdmin");
-                });
-
             modelBuilder.Entity("workcube_pagos.Models.AspNetUser", b =>
                 {
                     b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityUser");
@@ -597,24 +606,6 @@ namespace workcube_pagos.Migrations
                     b.HasIndex("IdCliente")
                         .IsUnique()
                         .HasFilter("[IdCliente] IS NOT NULL");
-
-                    b.ToTable("AspNetUsers", t =>
-                        {
-                            t.Property("ApellidoMat")
-                                .HasColumnName("AspNetUser_ApellidoMat");
-
-                            t.Property("ApellidoPat")
-                                .HasColumnName("AspNetUser_ApellidoPat");
-
-                            t.Property("IdCliente")
-                                .HasColumnName("AspNetUser_IdCliente");
-
-                            t.Property("IsActive")
-                                .HasColumnName("AspNetUser_IsActive");
-
-                            t.Property("Nombre")
-                                .HasColumnName("AspNetUser_Nombre");
-                        });
 
                     b.HasDiscriminator().HasValue("AspNetUser");
                 });
@@ -770,6 +761,15 @@ namespace workcube_pagos.Migrations
                     b.Navigation("Cliente");
                 });
 
+            modelBuilder.Entity("workcube_pagos.Models.AspAdmin", b =>
+                {
+                    b.Navigation("Clientes");
+
+                    b.Navigation("Cupones");
+
+                    b.Navigation("Servicios");
+                });
+
             modelBuilder.Entity("workcube_pagos.Models.Cliente", b =>
                 {
                     b.Navigation("Cupones");
@@ -796,15 +796,6 @@ namespace workcube_pagos.Migrations
             modelBuilder.Entity("workcube_pagos.Models.ServicioTipo", b =>
                 {
                     b.Navigation("Servicio");
-                });
-
-            modelBuilder.Entity("workcube_pagos.Models.AspAdmin", b =>
-                {
-                    b.Navigation("Clientes");
-
-                    b.Navigation("Cupones");
-
-                    b.Navigation("Servicios");
                 });
 #pragma warning restore 612, 618
         }
