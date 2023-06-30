@@ -1,12 +1,12 @@
 ﻿using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Newtonsoft.Json;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 using System.Runtime.Serialization;
+using Workcube.Generic;
 
 namespace workcube_pagos.Models
 {
-    public class Servicio
+    public class Servicio : UserCreated
     {
         [Key]
         public int IdServicio                           { get; set; } 
@@ -33,8 +33,7 @@ namespace workcube_pagos.Models
         public bool IsCanceled                          { get; set; }
         public string KeyServicio                       { get; set; }
 
-        public string IdAspNetUser                      { get; set; }
-        public DateTime CreatedDate                     { get; set; }
-        public DateTime UpdatedDate                     { get; set; }
+        public virtual AspAdmin AspAdmin                { get; set;}
+        
     }
 }

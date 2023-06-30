@@ -1,10 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+using Workcube.Generic;
 
 namespace workcube_pagos.Models
 {
-    public class Cupon
+    public class Cupon : UserCreated
     {
         [Key]
         public int IdCupon                      { get; set; }
@@ -19,9 +19,7 @@ namespace workcube_pagos.Models
         public CuponEstatus Status              { get; set; }
         public DateTime Vigencia                { get; set; }
 
-        public string IdAspNetUser              { get; set; }
-        public DateTime CreatedDate             { get; set; }
-        public DateTime UpdatedDate             { get; set; } 
+        public virtual AspAdmin AspAdmin        { get; set; }
     }
 
     public enum CuponEstatus

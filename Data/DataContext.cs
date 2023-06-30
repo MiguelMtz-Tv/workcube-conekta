@@ -36,8 +36,19 @@ namespace workcube_pagos.Data
             //relacion pagos/clientes N:1
             modelBuilder.Entity<Pago>().HasOne(p => p.Cliente).WithMany(c => c.Pagos).HasForeignKey(p => p.IdCliente).OnDelete(DeleteBehavior.Restrict); ;
             //relacion pagos/servicios N:1 
-            modelBuilder.Entity<Pago>().HasOne(p => p.Servicio).WithMany(s => s.Pagos).HasForeignKey(p => p.IdServicio).OnDelete(DeleteBehavior.Restrict); ;
+            modelBuilder.Entity<Pago>().HasOne(p => p.Servicio).WithMany(s => s.Pagos).HasForeignKey(p => p.IdServicio).OnDelete(DeleteBehavior.Restrict);
 
+
+            //AspAdmin relations
+            //relacion Cliente/AspAdmin N:1
+            modelBuilder.Entity<Cliente>().HasOne(c => c.AspAdmin).WithMany(a => a.Clientes).HasForeignKey(c => c.IdCreatedUser).OnDelete(DeleteBehavior.Restrict);
+            modelBuilder.Entity<Cliente>().HasOne(c => c.AspAdmin).WithMany(a => a.Clientes).HasForeignKey(c => c.IdUpdatedUser).OnDelete(DeleteBehavior.Restrict);
+            //relacion Cupon/AspAdmin N:1
+            modelBuilder.Entity<Cupon>().HasOne(c => c.AspAdmin).WithMany(a => a.Cupones).HasForeignKey(c => c.IdCreatedUser).OnDelete(DeleteBehavior.Restrict);
+            modelBuilder.Entity<Cupon>().HasOne(c => c.AspAdmin).WithMany(a => a.Cupones).HasForeignKey(c => c.IdUpdatedUser).OnDelete(DeleteBehavior.Restrict);
+            //relcion Servicio/AspAdmin N:1
+            modelBuilder.Entity<Servicio>().HasOne(s => s.AspAdmin).WithMany(a => a.Servicios).HasForeignKey(s => s.IdCreatedUser).OnDelete(DeleteBehavior.Restrict);
+            modelBuilder.Entity<Servicio>().HasOne(s => s.AspAdmin).WithMany(a => a.Servicios).HasForeignKey(s => s.IdUpdatedUser).OnDelete(DeleteBehavior.Restrict);
         }
 
         public DbSet<AspNetUser> AspNetUsers            { get; set; }
@@ -47,5 +58,6 @@ namespace workcube_pagos.Data
         public DbSet<Cupon> Cupones                     { get; set; }
         public DbSet<Periodo> Periodos                  { get; set; }
         public DbSet<Pago> Pagos                        { get; set; } 
+        public DbSet<AspAdmin> AspAdmins                { get; set; }
     }
 }

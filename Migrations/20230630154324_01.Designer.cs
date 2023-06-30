@@ -12,8 +12,8 @@ using workcube_pagos.Data;
 namespace workcube_pagos.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20230629185008_02")]
-    partial class _02
+    [Migration("20230630154324_01")]
+    partial class _01
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -248,14 +248,23 @@ namespace workcube_pagos.Migrations
                     b.Property<string>("Correo")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("CreatedDate")
+                    b.Property<DateTime>("CreatedFecha")
                         .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatedUserName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("Deleted")
+                        .HasColumnType("bit");
 
                     b.Property<string>("Direccion")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("IdAspNetUser")
+                    b.Property<string>("IdCreatedUser")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("IdUpdatedUser")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
@@ -264,7 +273,7 @@ namespace workcube_pagos.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("NumeroContrato")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("RFC")
                         .HasColumnType("nvarchar(max)");
@@ -278,10 +287,19 @@ namespace workcube_pagos.Migrations
                     b.Property<string>("Telefono")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("UpdatedDate")
+                    b.Property<DateTime>("UpdatedFecha")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("UpdatedUserName")
+                        .HasColumnType("nvarchar(max)");
+
                     b.HasKey("IdCliente");
+
+                    b.HasIndex("IdUpdatedUser");
+
+                    b.HasIndex("NumeroContrato")
+                        .IsUnique()
+                        .HasFilter("[NumeroContrato] IS NOT NULL");
 
                     b.ToTable("Clientes");
                 });
@@ -297,20 +315,29 @@ namespace workcube_pagos.Migrations
                     b.Property<string>("Codigo")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("CreatedDate")
+                    b.Property<DateTime>("CreatedFecha")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("Descripcion")
+                    b.Property<string>("CreatedUserName")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("IdAspNetUser")
+                    b.Property<bool>("Deleted")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Descripcion")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("IdCliente")
                         .HasColumnType("int");
 
+                    b.Property<string>("IdCreatedUser")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("IdServicio")
                         .HasColumnType("int");
+
+                    b.Property<string>("IdUpdatedUser")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<long>("Monto")
                         .HasColumnType("bigint");
@@ -318,8 +345,11 @@ namespace workcube_pagos.Migrations
                     b.Property<int>("Status")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("UpdatedDate")
+                    b.Property<DateTime>("UpdatedFecha")
                         .HasColumnType("datetime2");
+
+                    b.Property<string>("UpdatedUserName")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("Vigencia")
                         .HasColumnType("datetime2");
@@ -329,6 +359,8 @@ namespace workcube_pagos.Migrations
                     b.HasIndex("IdCliente");
 
                     b.HasIndex("IdServicio");
+
+                    b.HasIndex("IdUpdatedUser");
 
                     b.ToTable("Cupones");
                 });
@@ -438,20 +470,29 @@ namespace workcube_pagos.Migrations
                     b.Property<string>("ClienteRazonSocial")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("CreatedDate")
+                    b.Property<DateTime>("CreatedFecha")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("IdAspNetUser")
+                    b.Property<string>("CreatedUserName")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("Deleted")
+                        .HasColumnType("bit");
 
                     b.Property<int>("IdCliente")
                         .HasColumnType("int");
+
+                    b.Property<string>("IdCreatedUser")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("IdPeriodo")
                         .HasColumnType("int");
 
                     b.Property<int>("IdServicioTipo")
                         .HasColumnType("int");
+
+                    b.Property<string>("IdUpdatedUser")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<bool>("IsCanceled")
                         .HasColumnType("bit");
@@ -471,8 +512,11 @@ namespace workcube_pagos.Migrations
                     b.Property<string>("ServicioTipoName")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("UpdatedDate")
+                    b.Property<DateTime>("UpdatedFecha")
                         .HasColumnType("datetime2");
+
+                    b.Property<string>("UpdatedUserName")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("Vigencia")
                         .HasColumnType("datetime2");
@@ -484,6 +528,8 @@ namespace workcube_pagos.Migrations
                     b.HasIndex("IdPeriodo");
 
                     b.HasIndex("IdServicioTipo");
+
+                    b.HasIndex("IdUpdatedUser");
 
                     b.ToTable("Servicios");
                 });
@@ -510,6 +556,28 @@ namespace workcube_pagos.Migrations
                     b.ToTable("ServiciosTipos");
                 });
 
+            modelBuilder.Entity("workcube_pagos.Models.AspAdmin", b =>
+                {
+                    b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityUser");
+
+                    b.Property<string>("ApellidoMat")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ApellidoPat")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("IdCliente")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Nombre")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasDiscriminator().HasValue("AspAdmin");
+                });
+
             modelBuilder.Entity("workcube_pagos.Models.AspNetUser", b =>
                 {
                     b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityUser");
@@ -532,6 +600,24 @@ namespace workcube_pagos.Migrations
                     b.HasIndex("IdCliente")
                         .IsUnique()
                         .HasFilter("[IdCliente] IS NOT NULL");
+
+                    b.ToTable("AspNetUsers", t =>
+                        {
+                            t.Property("ApellidoMat")
+                                .HasColumnName("AspNetUser_ApellidoMat");
+
+                            t.Property("ApellidoPat")
+                                .HasColumnName("AspNetUser_ApellidoPat");
+
+                            t.Property("IdCliente")
+                                .HasColumnName("AspNetUser_IdCliente");
+
+                            t.Property("IsActive")
+                                .HasColumnName("AspNetUser_IsActive");
+
+                            t.Property("Nombre")
+                                .HasColumnName("AspNetUser_Nombre");
+                        });
 
                     b.HasDiscriminator().HasValue("AspNetUser");
                 });
@@ -587,6 +673,16 @@ namespace workcube_pagos.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("workcube_pagos.Models.Cliente", b =>
+                {
+                    b.HasOne("workcube_pagos.Models.AspAdmin", "AspAdmin")
+                        .WithMany("Clientes")
+                        .HasForeignKey("IdUpdatedUser")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.Navigation("AspAdmin");
+                });
+
             modelBuilder.Entity("workcube_pagos.Models.Cupon", b =>
                 {
                     b.HasOne("workcube_pagos.Models.Cliente", "Cliente")
@@ -600,6 +696,13 @@ namespace workcube_pagos.Migrations
                         .HasForeignKey("IdServicio")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
+
+                    b.HasOne("workcube_pagos.Models.AspAdmin", "AspAdmin")
+                        .WithMany("Cupones")
+                        .HasForeignKey("IdUpdatedUser")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.Navigation("AspAdmin");
 
                     b.Navigation("Cliente");
 
@@ -645,6 +748,13 @@ namespace workcube_pagos.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("workcube_pagos.Models.AspAdmin", "AspAdmin")
+                        .WithMany("Servicios")
+                        .HasForeignKey("IdUpdatedUser")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.Navigation("AspAdmin");
+
                     b.Navigation("Cliente");
 
                     b.Navigation("Periodo");
@@ -689,6 +799,15 @@ namespace workcube_pagos.Migrations
             modelBuilder.Entity("workcube_pagos.Models.ServicioTipo", b =>
                 {
                     b.Navigation("Servicio");
+                });
+
+            modelBuilder.Entity("workcube_pagos.Models.AspAdmin", b =>
+                {
+                    b.Navigation("Clientes");
+
+                    b.Navigation("Cupones");
+
+                    b.Navigation("Servicios");
                 });
 #pragma warning restore 612, 618
         }

@@ -26,32 +26,6 @@ namespace workcube_pagos.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Clientes",
-                columns: table => new
-                {
-                    IdCliente = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    StripeCustomerID = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    RFC = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    RazonSocial = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    NombreComercial = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    NumeroContrato = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Telefono = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Correo = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Direccion = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    CodigoPostal = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Code = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    IsActive = table.Column<bool>(type: "bit", nullable: false),
-                    IdAspNetUser = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    UpdatedDate = table.Column<DateTime>(type: "datetime2", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Clientes", x => x.IdCliente);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Periodos",
                 columns: table => new
                 {
@@ -101,87 +75,6 @@ namespace workcube_pagos.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "AspNetUsers",
-                columns: table => new
-                {
-                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    Discriminator = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    IdCliente = table.Column<int>(type: "int", nullable: true),
-                    Nombre = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ApellidoPat = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ApellidoMat = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    IsActive = table.Column<bool>(type: "bit", nullable: true),
-                    UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    NormalizedEmail = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    EmailConfirmed = table.Column<bool>(type: "bit", nullable: false),
-                    PasswordHash = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    SecurityStamp = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    PhoneNumberConfirmed = table.Column<bool>(type: "bit", nullable: false),
-                    TwoFactorEnabled = table.Column<bool>(type: "bit", nullable: false),
-                    LockoutEnd = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
-                    LockoutEnabled = table.Column<bool>(type: "bit", nullable: false),
-                    AccessFailedCount = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_AspNetUsers", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_AspNetUsers_Clientes_IdCliente",
-                        column: x => x.IdCliente,
-                        principalTable: "Clientes",
-                        principalColumn: "IdCliente",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Servicios",
-                columns: table => new
-                {
-                    IdServicio = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    IdServicioTipo = table.Column<int>(type: "int", nullable: false),
-                    ServicioTipoName = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ServicioTipoDescripcion = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ServicioTipoCosto = table.Column<long>(type: "bigint", nullable: false),
-                    IdCliente = table.Column<int>(type: "int", nullable: false),
-                    ClienteRazonSocial = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    IdPeriodo = table.Column<int>(type: "int", nullable: false),
-                    PeriodoName = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Vigencia = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    IsCanceled = table.Column<bool>(type: "bit", nullable: false),
-                    KeyServicio = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    IdAspNetUser = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    UpdatedDate = table.Column<DateTime>(type: "datetime2", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Servicios", x => x.IdServicio);
-                    table.ForeignKey(
-                        name: "FK_Servicios_Clientes_IdCliente",
-                        column: x => x.IdCliente,
-                        principalTable: "Clientes",
-                        principalColumn: "IdCliente",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Servicios_Periodos_IdPeriodo",
-                        column: x => x.IdPeriodo,
-                        principalTable: "Periodos",
-                        principalColumn: "IdPeriodo",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Servicios_ServiciosTipos_IdServicioTipo",
-                        column: x => x.IdServicioTipo,
-                        principalTable: "ServiciosTipos",
-                        principalColumn: "IdServicioTipo",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "AspNetUserClaims",
                 columns: table => new
                 {
@@ -194,12 +87,6 @@ namespace workcube_pagos.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AspNetUserClaims", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_AspNetUserClaims_AspNetUsers_UserId",
-                        column: x => x.UserId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -214,12 +101,6 @@ namespace workcube_pagos.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AspNetUserLogins", x => new { x.LoginProvider, x.ProviderKey });
-                    table.ForeignKey(
-                        name: "FK_AspNetUserLogins_AspNetUsers_UserId",
-                        column: x => x.UserId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -238,12 +119,42 @@ namespace workcube_pagos.Migrations
                         principalTable: "AspNetRoles",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_AspNetUserRoles_AspNetUsers_UserId",
-                        column: x => x.UserId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "AspNetUsers",
+                columns: table => new
+                {
+                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Discriminator = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    IdCliente = table.Column<int>(type: "int", nullable: true),
+                    Nombre = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ApellidoPat = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ApellidoMat = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    IsActive = table.Column<bool>(type: "bit", nullable: true),
+                    AspNetUser_IdCliente = table.Column<int>(type: "int", nullable: true),
+                    AspNetUser_Nombre = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    AspNetUser_ApellidoPat = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    AspNetUser_ApellidoMat = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    AspNetUser_IsActive = table.Column<bool>(type: "bit", nullable: true),
+                    UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    NormalizedEmail = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    EmailConfirmed = table.Column<bool>(type: "bit", nullable: false),
+                    PasswordHash = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    SecurityStamp = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    PhoneNumberConfirmed = table.Column<bool>(type: "bit", nullable: false),
+                    TwoFactorEnabled = table.Column<bool>(type: "bit", nullable: false),
+                    LockoutEnd = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
+                    LockoutEnabled = table.Column<bool>(type: "bit", nullable: false),
+                    AccessFailedCount = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AspNetUsers", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -267,6 +178,96 @@ namespace workcube_pagos.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Clientes",
+                columns: table => new
+                {
+                    IdCliente = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    StripeCustomerID = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    RFC = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    RazonSocial = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    NombreComercial = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    NumeroContrato = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    Telefono = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Correo = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Direccion = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CodigoPostal = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Code = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    IsActive = table.Column<bool>(type: "bit", nullable: false),
+                    IdCreatedUser = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CreatedUserName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CreatedFecha = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    IdUpdatedUser = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    UpdatedUserName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    UpdatedFecha = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Deleted = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Clientes", x => x.IdCliente);
+                    table.ForeignKey(
+                        name: "FK_Clientes_AspNetUsers_IdUpdatedUser",
+                        column: x => x.IdUpdatedUser,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Servicios",
+                columns: table => new
+                {
+                    IdServicio = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    IdServicioTipo = table.Column<int>(type: "int", nullable: false),
+                    ServicioTipoName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ServicioTipoDescripcion = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ServicioTipoCosto = table.Column<long>(type: "bigint", nullable: false),
+                    IdCliente = table.Column<int>(type: "int", nullable: false),
+                    ClienteRazonSocial = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    IdPeriodo = table.Column<int>(type: "int", nullable: false),
+                    PeriodoName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Vigencia = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    IsCanceled = table.Column<bool>(type: "bit", nullable: false),
+                    KeyServicio = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    IdCreatedUser = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CreatedUserName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CreatedFecha = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    IdUpdatedUser = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    UpdatedUserName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    UpdatedFecha = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Deleted = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Servicios", x => x.IdServicio);
+                    table.ForeignKey(
+                        name: "FK_Servicios_AspNetUsers_IdUpdatedUser",
+                        column: x => x.IdUpdatedUser,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Servicios_Clientes_IdCliente",
+                        column: x => x.IdCliente,
+                        principalTable: "Clientes",
+                        principalColumn: "IdCliente",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Servicios_Periodos_IdPeriodo",
+                        column: x => x.IdPeriodo,
+                        principalTable: "Periodos",
+                        principalColumn: "IdPeriodo",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Servicios_ServiciosTipos_IdServicioTipo",
+                        column: x => x.IdServicioTipo,
+                        principalTable: "ServiciosTipos",
+                        principalColumn: "IdServicioTipo",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Cupones",
                 columns: table => new
                 {
@@ -279,13 +280,23 @@ namespace workcube_pagos.Migrations
                     Monto = table.Column<long>(type: "bigint", nullable: false),
                     Status = table.Column<int>(type: "int", nullable: false),
                     Vigencia = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    IdAspNetUser = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    UpdatedDate = table.Column<DateTime>(type: "datetime2", nullable: false)
+                    IdCreatedUser = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CreatedUserName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CreatedFecha = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    IdUpdatedUser = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    UpdatedUserName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    UpdatedFecha = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Deleted = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Cupones", x => x.IdCupon);
+                    table.ForeignKey(
+                        name: "FK_Cupones_AspNetUsers_IdUpdatedUser",
+                        column: x => x.IdUpdatedUser,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Cupones_Clientes_IdCliente",
                         column: x => x.IdCliente,
@@ -376,9 +387,9 @@ namespace workcube_pagos.Migrations
                 column: "NormalizedEmail");
 
             migrationBuilder.CreateIndex(
-                name: "IX_AspNetUsers_IdCliente",
+                name: "IX_AspNetUsers_AspNetUser_IdCliente",
                 table: "AspNetUsers",
-                column: "IdCliente",
+                column: "AspNetUser_IdCliente",
                 unique: true,
                 filter: "[IdCliente] IS NOT NULL");
 
@@ -390,6 +401,18 @@ namespace workcube_pagos.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Clientes_IdUpdatedUser",
+                table: "Clientes",
+                column: "IdUpdatedUser");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Clientes_NumeroContrato",
+                table: "Clientes",
+                column: "NumeroContrato",
+                unique: true,
+                filter: "[NumeroContrato] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Cupones_IdCliente",
                 table: "Cupones",
                 column: "IdCliente");
@@ -398,6 +421,11 @@ namespace workcube_pagos.Migrations
                 name: "IX_Cupones_IdServicio",
                 table: "Cupones",
                 column: "IdServicio");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Cupones_IdUpdatedUser",
+                table: "Cupones",
+                column: "IdUpdatedUser");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Pagos_Folio",
@@ -430,11 +458,52 @@ namespace workcube_pagos.Migrations
                 name: "IX_Servicios_IdServicioTipo",
                 table: "Servicios",
                 column: "IdServicioTipo");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Servicios_IdUpdatedUser",
+                table: "Servicios",
+                column: "IdUpdatedUser");
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_AspNetUserClaims_AspNetUsers_UserId",
+                table: "AspNetUserClaims",
+                column: "UserId",
+                principalTable: "AspNetUsers",
+                principalColumn: "Id",
+                onDelete: ReferentialAction.Cascade);
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_AspNetUserLogins_AspNetUsers_UserId",
+                table: "AspNetUserLogins",
+                column: "UserId",
+                principalTable: "AspNetUsers",
+                principalColumn: "Id",
+                onDelete: ReferentialAction.Cascade);
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_AspNetUserRoles_AspNetUsers_UserId",
+                table: "AspNetUserRoles",
+                column: "UserId",
+                principalTable: "AspNetUsers",
+                principalColumn: "Id",
+                onDelete: ReferentialAction.Cascade);
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_AspNetUsers_Clientes_AspNetUser_IdCliente",
+                table: "AspNetUsers",
+                column: "AspNetUser_IdCliente",
+                principalTable: "Clientes",
+                principalColumn: "IdCliente",
+                onDelete: ReferentialAction.Cascade);
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropForeignKey(
+                name: "FK_Clientes_AspNetUsers_IdUpdatedUser",
+                table: "Clientes");
+
             migrationBuilder.DropTable(
                 name: "AspNetRoleClaims");
 
@@ -460,19 +529,19 @@ namespace workcube_pagos.Migrations
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
-                name: "AspNetUsers");
-
-            migrationBuilder.DropTable(
                 name: "Servicios");
-
-            migrationBuilder.DropTable(
-                name: "Clientes");
 
             migrationBuilder.DropTable(
                 name: "Periodos");
 
             migrationBuilder.DropTable(
                 name: "ServiciosTipos");
+
+            migrationBuilder.DropTable(
+                name: "AspNetUsers");
+
+            migrationBuilder.DropTable(
+                name: "Clientes");
         }
     }
 }

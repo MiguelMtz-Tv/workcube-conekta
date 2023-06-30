@@ -1,10 +1,11 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.Runtime.Serialization;
 using System.Text.Json.Serialization;
+using Workcube.Generic;
 
 namespace workcube_pagos.Models
 {
-    public class Cliente
+    public class Cliente : UserCreated
     {
         [Key] 
         public int IdCliente                                { get; set; }
@@ -29,8 +30,6 @@ namespace workcube_pagos.Models
         public string Code                                  { get; set; }  
         public bool IsActive                                { get; set; }
 
-        public string IdAspNetUser                          { get; set; }
-        public DateTime CreatedDate                         { get; set; }
-        public DateTime UpdatedDate                         { get; set; }
+        public virtual AspAdmin AspAdmin             { get; set; }
     }
 }
