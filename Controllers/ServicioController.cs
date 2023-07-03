@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Mvc;
 using workcube_pagos.Services;
 using workcube_pagos.ViewModel.Req.Servicio;
 using Workcube.Libraries;
-using Microsoft.JSInterop.Implementation;
 
 namespace workcube_pagos.Controllers
 {

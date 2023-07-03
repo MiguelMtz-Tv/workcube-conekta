@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Server } from '../libraries/server';
 import { Sessions } from '../applicationConfig/application-service';
-import id from 'date-fns/locale/id/index';
 
 @Injectable({
   providedIn: 'root'
@@ -20,6 +19,6 @@ export class PagosService {
   }
 
   getPdfFile(idFile : number){
-    return this.http.get<any>(this.baseUrl+'api/pagos/file/'+idFile)
+    return this.http.get(this.baseUrl+'api/pagos/file/'+idFile, {responseType: 'blob'})
   }
 }
