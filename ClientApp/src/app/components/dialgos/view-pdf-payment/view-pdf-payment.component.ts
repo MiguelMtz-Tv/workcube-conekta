@@ -1,6 +1,5 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { Server } from 'src/app/libraries/server';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { PagosService } from 'src/app/services/pagos.service';
 

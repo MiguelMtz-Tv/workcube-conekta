@@ -41,7 +41,6 @@ export class SingupComponent {
   comparePassword(){
     if(this.setPassword === this.confirmPassword){
       this.canConfirm = true
-      console.log('match')
     }else{
       this.canConfirm = false
     }
@@ -52,7 +51,6 @@ export class SingupComponent {
     this.aspNetUserService.createNewUser(this.form.value)
     .subscribe(res =>{
         this.isLoading = false
-        console.log(res)
         if(res.action){
           this.auth.login({
             UserName: this.form.value.UserName,
@@ -73,7 +71,6 @@ export class SingupComponent {
         }else{
           this.singupError = true
           this.singupErrorMessage = res.message
-          console.log()
           setTimeout(() => {
             this.singupError = false
           }, 3000)

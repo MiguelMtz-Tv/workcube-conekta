@@ -26,7 +26,6 @@ export class ServiciosComponent implements OnInit {
       if(res.result.length == 0){
         this.emptyServices = true
       }else{
-        console.log(res.result)
         this.services = res.result
         this.areServices = true
       }

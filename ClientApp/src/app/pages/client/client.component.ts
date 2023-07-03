@@ -39,7 +39,6 @@ export class ClientComponent {
     this.isLoading = true
     this.clienteService.addClient(this.form.value).subscribe( 
       res => {
-        console.log(res)
         this.isLoading = false
         this.route.navigateByUrl('/registro');
       },

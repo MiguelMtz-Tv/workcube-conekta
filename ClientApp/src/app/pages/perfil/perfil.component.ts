@@ -139,7 +139,6 @@ export class PerfilComponent implements OnInit {
         })
       }
       this.userIsLoading = false
-      console.log(res)
     })
   }
 

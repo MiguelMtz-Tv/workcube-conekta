@@ -24,7 +24,6 @@ export class ConfirmarPagoComponent {
     ){}
 
   confirmPayment(){
-    console.log(this.data)
     this.spinner.show()
     this.pagosService.confirmPayment(this.data)
       .pipe(

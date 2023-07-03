@@ -51,7 +51,6 @@ export class ServiceCardComponent implements OnInit, OnChanges{
   }
 
   ngOnInit(){
-    console.log({canceled: this.isCanceled, vigente: this.isVigente})
     //get remaining days
     let closeDate = add(new Date(this.startDate), { days: 30 })
     let daysToDate = differenceInDays(closeDate, new Date())

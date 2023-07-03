@@ -62,7 +62,6 @@ export class UpdateCardComponent implements OnInit {
       ExpYear: this.form.value.expYear,
     })
     .subscribe(res => {
-      console.log(res)
       this.thisDialog.close()
       this.dataService.updateData('');
               this.toast.success('Metodo de pago actualizado', {

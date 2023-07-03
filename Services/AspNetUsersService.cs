@@ -131,6 +131,26 @@ namespace workcube_pagos.Services
             var loginTransacction = _context.Database.BeginTransaction();
             await _context.AspNetUsers.AddAsync(NewUser);
             await _context.SaveChangesAsync();
+
+            if (string.IsNullOrEmpty(Cliente.StripeCustomerID)){ //verifica si el cliente tiene asignado un Id en stripe, si no, asigna uno
+                var service = new CustomerService();
+                var options = new CustomerCreateOptions{
+                    Name =  Cliente.NombreComercial,
+                    Email = Cliente.Correo,
+                    Phone = Cliente.Telefono
+                };
+
+                try{
+                    var stripeClient = service.Create(options);
+                    Cliente.StripeCustomerID = stripeClient.Id;
+                    await _context.SaveChangesAsync();    
+                }
+                catch( StripeException ex)
+                {
+                    throw new ArgumentException("Ocurrió un error al añadir el usuario: " + ex.Message);
+                }
+            }
+
             loginTransacction.Commit();
 
             return NewUser;

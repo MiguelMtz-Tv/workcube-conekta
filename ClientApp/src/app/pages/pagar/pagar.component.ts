@@ -107,7 +107,6 @@ export class PagarComponent implements OnInit {
     this.cuponIsLoading = true
     this.cuponesService.getCupon(this.cuponForm.value.code, this.id)
     .subscribe(res => {
-      console.log(res)
       if(res.action){
         this.idCupon =      res.result.idCupon,
         this.descuento =    res.result.monto
