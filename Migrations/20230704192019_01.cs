@@ -66,7 +66,7 @@ namespace workcube_pagos.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Nombre = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Costo = table.Column<long>(type: "bigint", nullable: false)
+                    Costo = table.Column<decimal>(type: "decimal(18,2)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -176,7 +176,7 @@ namespace workcube_pagos.Migrations
                     IdServicioTipo = table.Column<int>(type: "int", nullable: false),
                     ServicioTipoName = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ServicioTipoDescripcion = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ServicioTipoCosto = table.Column<long>(type: "bigint", nullable: false),
+                    ServicioTipoCosto = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     IdCliente = table.Column<int>(type: "int", nullable: false),
                     ClienteRazonSocial = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     IdPeriodo = table.Column<int>(type: "int", nullable: false),
@@ -316,7 +316,7 @@ namespace workcube_pagos.Migrations
                     Descripcion = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     IdServicio = table.Column<int>(type: "int", nullable: false),
                     IdCliente = table.Column<int>(type: "int", nullable: false),
-                    Monto = table.Column<long>(type: "bigint", nullable: false),
+                    Monto = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     Status = table.Column<int>(type: "int", nullable: false),
                     Vigencia = table.Column<DateTime>(type: "datetime2", nullable: false),
                     IdCreatedUser = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -370,9 +370,9 @@ namespace workcube_pagos.Migrations
                     TarjetaBanco = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     TarjetaTitular = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     IdStripeCharge = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Monto = table.Column<long>(type: "bigint", nullable: false),
-                    Descuento = table.Column<long>(type: "bigint", nullable: false),
-                    Total = table.Column<long>(type: "bigint", nullable: false),
+                    Monto = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    Descuento = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    Total = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     CargoObj = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Folio = table.Column<string>(type: "nvarchar(450)", nullable: true)
                 },

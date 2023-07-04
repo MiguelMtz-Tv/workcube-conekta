@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Newtonsoft.Json;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Runtime.Serialization;
 using Workcube.Generic;
 
@@ -15,7 +16,9 @@ namespace workcube_pagos.Models
         public int IdServicioTipo                       { get; set; } 
         public string ServicioTipoName                  { get; set; } 
         public string ServicioTipoDescripcion           { get; set; }
-        public long ServicioTipoCosto                   { get; set; }
+        
+        [Column(TypeName = "decimal(18, 2)")]
+        public decimal ServicioTipoCosto                   { get; set; }
       
         public virtual Cliente Cliente                  { get; set; }
         [JsonIgnore]

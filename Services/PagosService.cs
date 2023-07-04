@@ -40,18 +40,18 @@ namespace workcube_pagos.Services
             //obtener al cliente
             var client = await _context.Clientes.FindAsync(chargeObj.IdCliente) ?? throw new ArgumentException("Error en pago: P-02 - Cliente nulo");
             var customer = client.StripeCustomerID;
-            long amount = serviceToPay.ServicioTipoCosto;
-            long total;
+            decimal amount = serviceToPay.ServicioTipoCosto;
+            decimal total;
 
             //obtener el cupon (si existe) y realizar el descuento
-            long descuento =    0;
+            decimal descuento =    0;
             var cupon =         new Cupon();
 
             if (chargeObj.AreCupon && chargeObj.IdCupon > 0)
             {
                 cupon =         await _context.Cupones.FindAsync(chargeObj.IdCupon);
                 descuento =     cupon.Monto;
-                total =         amount - descuento;
+                total =         (amount - descuento);
             }
             else { total = amount; }
 
@@ -91,11 +91,12 @@ namespace workcube_pagos.Services
 
             //Creamos el cargo en la api de stripe
             var result = new Charge();
+            var totalToLong = (long)(100*total);
             try
             {
                 var options = new ChargeCreateOptions
                 {
-                    Amount = total,
+                    Amount = totalToLong,
                     Currency = "mxn",
                     Source = chargeObj.IdCard,
                     Customer = customer,

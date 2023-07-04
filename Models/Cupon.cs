@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using Workcube.Generic;
 
 namespace workcube_pagos.Models
@@ -14,7 +15,10 @@ namespace workcube_pagos.Models
         public virtual Servicio Servicio        { get; set; }
         public int IdCliente                    { get; set; }
         public Cliente Cliente                  { get; set; }
-        public long Monto                       { get; set; }
+
+        [Column(TypeName = "decimal(18, 2)")]
+        public decimal Monto                       { get; set; }
+        
         [EnumDataType(typeof(CuponEstatus))]
         public CuponEstatus Status              { get; set; }
         public DateTime Vigencia                { get; set; }

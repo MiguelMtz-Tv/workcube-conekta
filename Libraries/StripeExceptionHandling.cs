@@ -47,7 +47,7 @@ namespace workcube_pagos.Libraries
                 switch(e.StripeError.Type)
                 {
                     case "invalid_request_error":
-                        throw new ArgumentException("Se realizó una solicitud invalida.");
+                        throw new ArgumentException("Se realizó una solicitud invalida:" + e.StripeError.DeclineCode);
                     case "api_connection_error":
                         throw new ArgumentException("Ha ocurrido un problema de conexión con el metodo de pago, intentalo más tarde.");
                     case "api_error":

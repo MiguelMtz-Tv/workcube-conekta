@@ -147,7 +147,7 @@ namespace workcube_pagos.Services
                 }
                 catch( StripeException ex)
                 {
-                    throw new ArgumentException("Ocurrió un error al añadir el usuario: " + ex.Message);
+                    throw new ArgumentException("Ocurrió un error al añadir el usuario: ASP-1 " + ex.Message);
                 }
             }
 

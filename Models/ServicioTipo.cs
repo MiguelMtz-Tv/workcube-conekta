@@ -13,7 +13,9 @@ namespace workcube_pagos.Models
         public List<Servicio> Servicio          { get; set; }
         public string Nombre                    { get; set; }
         public string Description               { get; set;}
-        public long Costo                       { get; set; }
+        
+        [Column(TypeName = "decimal(18, 2)")]
+        public decimal Costo                    { get; set; }
 
         
     }

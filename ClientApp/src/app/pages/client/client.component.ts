@@ -39,12 +39,14 @@ export class ClientComponent {
     this.isLoading = true
     this.clienteService.addClient(this.form.value).subscribe( 
       res => {
-        this.isLoading = false
-        this.route.navigateByUrl('/registro');
-      },
-      error => {
-        this.isLoading = false
-        this.toast.error(error)
+        if(res.action){
+          this.isLoading = false
+          this.route.navigateByUrl('/registro')
+          this.isLoading = false
+        }else{
+          console.log({Title: res.title, Message: res.message})
+          this.isLoading = false
+        }
       }
     )
   }
