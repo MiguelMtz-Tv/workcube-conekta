@@ -203,7 +203,7 @@ namespace workcube_pagos.Services
 
                 table = new PdfPTable(1);
 
-                string imageFile = Path.Combine(_root.ContentRootPath + "\\Images\\LOGOPIXL.png");
+                string imageFile = Path.Combine(_root.WebRootPath + "\\Images\\LOGOPIXL.png");
                 Image image = Image.GetInstance(imageFile);
                 image.ScaleToFit(30f, 30f);
                 image.Alignment = Element.ALIGN_CENTER;
