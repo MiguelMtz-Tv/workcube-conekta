@@ -39,6 +39,7 @@ export class LoginComponent {
           res.stripePK,
           )
         this.router.navigate(['/servicios'])
+        this.isLoading = false
       },
       error => {
         this.errorMssg = error.error
