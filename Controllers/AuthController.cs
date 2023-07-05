@@ -25,7 +25,7 @@ namespace workcube_pagos.Controllers
         {
             var user = await _aspNetUsersService.FindLogin(model.UserName);
 
-            if (user == null)   { return Unauthorized("Usuario incorrecto o no encontrado"); }
+            if (user == null)   { return Unauthorized("Usuario o contraseña incorrectos"); }
 
             if(!user.IsActive)  { return Unauthorized("Este usuario se encuentra desactivado"); }
 
@@ -33,7 +33,7 @@ namespace workcube_pagos.Controllers
 
             if (result.Succeeded) { return _jwtTokenHandler.GenerateToken(user);}
             
-            return Unauthorized("usuario o contraseña incorrectos");
+            return Unauthorized("Usuario o contraseña incorrectos");
         }
     }
 }

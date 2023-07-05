@@ -124,31 +124,38 @@ namespace workcube_pagos.Services
             await _context.SaveChangesAsync();
             loginTransaction.Commit();
 
-            //generacion de pdf
-            byte[] pdfBytes = Recibopdf(newPayment.IdPago);
-
-            //datos para envio de correo
-            string claimEmail = Globals.GetClaim("Email", user);
-            var reciboData = new ConfirmationEmailReq
+            try
             {
-                Email = claimEmail,
-                RazonSocial = client.RazonSocial,
-                ServicioName = serviceToPay.ServicioTipoName,
-                Last4 = result.PaymentMethodDetails.Card.Last4,
-                CardBrand = result.PaymentMethodDetails.Card.Brand,
-                CardFunding = result.PaymentMethodDetails.Card.Funding,
-                Fecha = dateTime,
-                Monto = amount,
-                Descuento = descuento,
-                Total = total,
-                Direccion = client.Direccion,
-                Folio = folio,
-            };
+                //generacion de pdf
+                byte[] pdfBytes = Recibopdf(newPayment.IdPago);
 
-            //Correo de confirmación
-            Action b = () => ConfirmationEmail(reciboData, pdfBytes);
-            //envio de correo en segundo plano
-            var send = Task.Run((Action) b);
+                //datos para envio de correo
+                string claimEmail = Globals.GetClaim("Email", user);
+                var reciboData = new ConfirmationEmailReq
+                {
+                    Email = claimEmail,
+                    RazonSocial = client.RazonSocial,
+                    ServicioName = serviceToPay.ServicioTipoName,
+                    Last4 = result.PaymentMethodDetails.Card.Last4,
+                    CardBrand = result.PaymentMethodDetails.Card.Brand,
+                    CardFunding = result.PaymentMethodDetails.Card.Funding,
+                    Fecha = dateTime,
+                    Monto = amount,
+                    Descuento = descuento,
+                    Total = total,
+                    Direccion = client.Direccion,
+                    Folio = folio,
+                };
+
+                //Correo de confirmación
+                Action b = () => ConfirmationEmail(reciboData, pdfBytes);
+                //envio de correo en segundo plano
+                var send = Task.Run((Action)b);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Ocurrió un error durante el envio del correo: " + ex.Message);
+            }
 
             return new 
             {
